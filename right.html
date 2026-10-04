@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>मान्यता एवं वैधानिक प्रमाण</title>
+    <link href="https://fonts.googleapis.com/css2?family=Martel:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --saffron: #FF9933;
+            --orange:  #FF6600;
+            --gold:    #FFD700;
+            --maroon:  #800000;
+            --cream:   #FFF9F2;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: var(--cream); }
+
+        /* ── BANNER HEADER ── */
+        .banner-header {
+            background: linear-gradient(135deg, #4a0000 0%, var(--maroon) 40%, #a03000 80%, var(--orange) 100%);
+            padding: 48px 40px 36px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .banner-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M30 0L60 30 30 60 0 30z'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        .banner-header .om {
+            font-size: 2rem;
+            color: var(--gold);
+            display: block;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .banner-header h2 {
+            font-family: 'Martel', serif;
+            font-size: clamp(1.4rem, 4vw, 2.2rem);
+            color: #fff;
+            position: relative;
+            line-height: 1.3;
+        }
+        .banner-header h2 span {
+            color: var(--gold);
+        }
+        .banner-header p {
+            color: rgba(255,255,255,0.75);
+            font-size: 0.9rem;
+            margin-top: 8px;
+            position: relative;
+            letter-spacing: 1px;
+        }
+        /* decorative bottom border */
+        .banner-header::after {
+            content: '';
+            display: block;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--gold), var(--saffron), var(--gold), transparent);
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+        }
+
+        /* ── CREDENTIALS GRID ── */
+        .cred-section {
+            padding: 48px 32px 60px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .cred-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .cred-card {
+            background: #fff;
+            border-radius: 14px;
+            border-left: 5px solid var(--saffron);
+            box-shadow: 0 4px 20px rgba(128,0,0,0.08);
+            padding: 22px 24px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .cred-card::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 80px; height: 80px;
+            background: radial-gradient(circle at top right, rgba(255,153,51,0.08), transparent 70%);
+        }
+        .cred-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(128,0,0,0.13);
+        }
+        .cred-card.wide {
+            grid-column: 1 / -1;
+            border-left-color: var(--maroon);
+        }
+
+        .cred-icon {
+            width: 44px; height: 44px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--saffron), var(--orange));
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 14px;
+        }
+        .cred-icon i { color: #fff; font-size: 1.1rem; }
+
+        .cred-card h3 {
+            font-family: 'Martel', serif;
+            font-size: 1rem;
+            color: var(--maroon);
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        .cred-card p {
+            font-size: 0.83rem;
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .cred-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #fff5e6, #ffe0b2);
+            border: 1px solid var(--saffron);
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--maroon);
+            margin-top: 4px;
+            word-break: break-all;
+        }
+        .cred-badge i { color: var(--orange); flex-shrink: 0; }
+
+        /* ── BOTTOM STRIP ── */
+        .bottom-strip {
+            background: var(--maroon);
+            padding: 20px 32px;
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.82rem;
+            letter-spacing: 0.5px;
+        }
+        .bottom-strip span { color: var(--gold); font-weight: 600; }
+
+        @media (max-width: 600px) {
+            .banner-header { padding: 36px 20px 28px; }
+            .cred-section  { padding: 30px 16px 40px; }
+            .cred-card     { padding: 18px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── BANNER HEADER ── -->
+<div class="banner-header">
+    <span class="om">ॐ</span>
+    <h2>मान्यता एवं वैधानिक प्रमाण<br><span>Recognition & Legal Credentials</span></h2>
+    <p>हिंदू रक्षा शक्ति संघ — भारत सरकार द्वारा अधिकृत एवं पंजीकृत संगठन</p>
+</div>
+
+<!-- ── CREDENTIALS ── -->
+<div class="cred-section">
+    <div class="cred-grid">
+
+        <!-- 1. Trust Registration -->
+        <div class="cred-card">
+            <div class="cred-icon"><i class="fas fa-landmark"></i></div>
+            <h3>भारत सरकार द्वारा पंजीकृत ट्रस्ट</h3>
+            <p>हमारा संगठन 'हिन्दू रक्षा शक्ति संघ' भारतीय ट्रस्ट अधिनियम के तहत आधिकारिक रूप से पंजीकृत है।</p>
+            <div class="cred-badge"><i class="fas fa-hashtag"></i> रजिस्ट्रेशन नंबर: 06</div><br>
+            <div class="cred-badge"><i class="fas fa-certificate"></i> ई-स्टाम्प: IN-UP62996610731781V</div><br>
+            <div class="cred-badge"><i class="fas fa-calendar-alt"></i> पंजीकरण तिथि: 21 मार्च, 2023</div>
+        </div>
+
+        <!-- 2. MSME -->
+        <div class="cred-card">
+            <div class="cred-icon"><i class="fas fa-industry"></i></div>
+            <h3>MSME पंजीकरण</h3>
+            <p>संगठन भारत सरकार के उद्यम पोर्टल के तहत पंजीकृत है, जो इसकी आधिकारिक पहचान और कार्यक्षमता को प्रमाणित करता है।</p>
+            <div class="cred-badge"><i class="fas fa-id-card"></i> UDYAM-UP-10-0014716</div>
+        </div>
+
+        <!-- 3. PMO -->
+        <div class="cred-card">
+            <div class="cred-icon"><i class="fas fa-flag"></i></div>
+            <h3>प्रधानमंत्री कार्यालय (PMO) को सूचना</h3>
+            <p>संगठन की सामाजिक और धार्मिक गतिविधियों की पूर्ण जानकारी प्रधानमंत्री कार्यालय को दी जा चुकी है।</p>
+            <div class="cred-badge"><i class="fas fa-file-alt"></i> PMOPG/E/2024/0161847</div>
+        </div>
+
+        <!-- 4. Police -->
+        <div class="cred-card">
+            <div class="cred-icon"><i class="fas fa-shield-alt"></i></div>
+            <h3>पुलिस एवं प्रशासन द्वारा स्वीकृत</h3>
+            <p>उत्तर प्रदेश पुलिस और प्रशासन द्वारा की गई जाँच में संगठन की गतिविधियों को पूर्णतः धार्मिक और शांतिपूर्ण पाया गया है।</p>
+            <div class="cred-badge"><i class="fas fa-file-signature"></i> IGRS संदर्भ: 60000240217225</div>
+        </div>
+
+        <!-- 5. PAN -->
+        <div class="cred-card">
+            <div class="cred-icon"><i class="fas fa-rupee-sign"></i></div>
+            <h3>आयकर विभाग — PAN</h3>
+            <p>संगठन वित्तीय और प्रशासनिक रूप से पारदर्शी है। भारत सरकार के आयकर विभाग द्वारा स्थायी खाता संख्या जारी किया गया है।</p>
+            <div class="cred-badge"><i class="fas fa-id-badge"></i> PAN: AACTH9535R</div>
+        </div>
+
+        <!-- 6. Legal Rights - Wide Card -->
+        <div class="cred-card wide">
+            <div class="cred-icon"><i class="fas fa-gavel"></i></div>
+            <h3>विधिक अधिकार एवं धार्मिक स्वतंत्रता</h3>
+            <p>संगठन की नियमावली के अनुसार, प्रत्येक सदस्य को अपनी सुरक्षा और धार्मिक परंपरा के निर्वहन हेतु <strong>धार मुक्त तलवार, गदा और त्रिशूल</strong> जैसे प्रतीक रखने का विधिक अधिकार प्राप्त है, जिसके लिए संगठन द्वारा आधिकारिक प्रमाण पत्र जारी किया जाता है।</p>
+        </div>
+
+    </div>
+</div>
+
+<!-- ── BOTTOM STRIP ── -->
+<div class="bottom-strip">
+    <span>धर्मो रक्षति रक्षितः</span> &nbsp;|&nbsp; हिंदू रक्षा शक्ति संघ — पंजीकृत ट्रस्ट &nbsp;|&nbsp; <span>Reg. No. 06</span> &nbsp;|&nbsp; <span>PAN: AACTH9535R</span>
+</div>
+
+</body>
+</html>
