@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HRSS — हमारे सदस्य</title>
+<link rel="icon" type="image/png" href="https://iili.io/q3JiQqP.png">
+<link href="https://fonts.googleapis.com/css2?family=Martel:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{
+  --saffron:#E8700A;--saffron-lt:#FF9933;--gold:#C8900A;--gold-lt:#F0B030;
+  --maroon:#8B1A1A;--maroon-lt:#B02828;--cream:#FFF6EC;--cream2:#FFF0DC;
+  --parchment:#FDEBD0;--card-bg:#FFFAF4;--text:#2C1005;--text2:#4A2010;
+  --dim:#9A6030;--bord:rgba(180,90,10,0.18);--bord2:rgba(180,90,10,0.35);
+  --gc:linear-gradient(135deg,#E8700A,#C8900A);
+  --gm:linear-gradient(135deg,#8B1A1A,#CC4400);
+  --gsaffron:linear-gradient(135deg,#FF9933,#FFD700);
+  --shadow:rgba(100,30,0,0.12);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--cream);background-image:radial-gradient(ellipse at 10% 5%,rgba(255,153,51,0.10) 0%,transparent 40%),radial-gradient(ellipse at 90% 15%,rgba(200,90,10,0.07) 0%,transparent 35%),radial-gradient(ellipse at 50% 80%,rgba(139,26,26,0.05) 0%,transparent 40%);color:var(--text);font-family:'Poppins',sans-serif;overflow-x:hidden;cursor:default;min-height:100vh;}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-thumb{background:var(--saffron-lt);}
+#cur,#cur2{display:none;}
+#bgc{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.5;}
+
+/* NAV */
+nav{position:fixed;top:0;width:100%;z-index:1000;background:linear-gradient(160deg,#3D0F00,#5A1800,#3D0F00);backdrop-filter:blur(20px);border-bottom:2px solid var(--saffron-lt);height:156px;display:flex;align-items:center;box-shadow:0 2px 20px rgba(100,30,0,.08);}
+.nav-inner{max-width:1200px;margin:auto;padding:0 2rem;display:flex;justify-content:space-between;align-items:center;width:100%;}
+.nav-logo{display:flex;align-items:center;text-decoration:none;}
+.nav-back{padding:8px 20px;border:1.5px solid rgba(255,153,51,.4);color:var(--saffron-lt);text-decoration:none;border-radius:4px;font-size:.84rem;letter-spacing:2px;font-weight:700;text-transform:uppercase;transition:.3s;display:flex;align-items:center;gap:8px;}
+.nav-back:hover{background:var(--gc);color:#fff;border-color:transparent;}
+
+/* HERO */
+.hero{padding:180px 2rem 70px;text-align:center;position:relative;z-index:2;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(255,153,51,.12),transparent 65%),radial-gradient(ellipse 50% 40% at 0% 100%,rgba(139,26,26,.06),transparent 55%),radial-gradient(ellipse 50% 40% at 100% 80%,rgba(200,100,0,.07),transparent 50%);pointer-events:none;}
+.om-bg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Tiro Devanagari Hindi',serif;font-size:clamp(200px,35vw,340px);color:rgba(200,100,0,.06);pointer-events:none;line-height:1;user-select:none;animation:omFloat 8s ease-in-out infinite alternate;}
+@keyframes omFloat{from{transform:translate(-50%,-50%) scale(1);}to{transform:translate(-50%,-50%) scale(1.04);}}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:'Tiro Devanagari Hindi',serif;font-size:.88rem;color:var(--saffron);letter-spacing:4px;margin-bottom:20px;animation:fadeUp .7s .1s both;}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'◆';font-size:.5rem;color:var(--gold);}
+.hero-title{font-family:'Martel',serif;font-size:clamp(2.2rem,6vw,4.5rem);font-weight:900;line-height:1.1;color:var(--text);margin-bottom:14px;animation:fadeUp .7s .25s both;}
+.hero-title span{background:var(--gc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-line{width:50px;height:2px;background:var(--gsaffron);margin:0 auto 20px;animation:fadeUp .7s .3s both;position:relative;}
+.hero-line::before,.hero-line::after{content:'◆';position:absolute;top:50%;transform:translateY(-50%);font-size:.4rem;color:var(--saffron-lt);}
+.hero-line::before{right:calc(100% + 6px);}
+.hero-line::after{left:calc(100% + 6px);}
+.hero-sub{font-family:'Tiro Devanagari Hindi',serif;font-size:1rem;color:var(--dim);max-width:480px;margin:0 auto;line-height:1.85;animation:fadeUp .7s .4s both;}
+
+/* STATS */
+.stats{max-width:1200px;margin:0 auto 56px;padding:0 2rem;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;position:relative;z-index:2;animation:fadeUp .7s .5s both;}
+.stat{padding:22px 16px;text-align:center;background:linear-gradient(145deg,#fff8ee,#fff2e0);border:1px solid rgba(200,120,20,.2);border-radius:10px;position:relative;overflow:hidden;transition:.3s;box-shadow:0 3px 16px var(--shadow);}
+.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gsaffron);}
+.stat:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(150,60,0,.12);}
+.stat-n{font-family:'Martel',serif;font-size:2rem;font-weight:900;display:block;background:var(--gc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.stat-l{font-size:.6rem;color:var(--dim);letter-spacing:3px;text-transform:uppercase;margin-top:3px;font-weight:600;}
+
+/* CONTROLS */
+.controls{max-width:1200px;margin:0 auto 44px;padding:0 2rem;display:flex;gap:12px;flex-wrap:wrap;align-items:center;position:relative;z-index:2;animation:fadeUp .7s .6s both;}
+.search-wrap{width:200px;min-width:unset;position:relative;}
+.search-wrap input{width:100%;background:#fff;border:1.5px solid rgba(180,90,10,.2);border-radius:6px;padding:10px 14px;color:var(--text);font-family:'Poppins',sans-serif;font-size:.85rem;outline:none;transition:.3s;box-shadow:0 2px 8px rgba(100,30,0,.05);}
+.search-wrap input::placeholder{color:var(--dim);}
+.search-wrap input:focus{border-color:var(--saffron);box-shadow:0 0 0 3px rgba(232,112,10,.08);}
+.filters{display:flex;gap:8px;flex:1;}
+.flt{flex:1;padding:13px 8px;background:#fff;border:1.5px solid rgba(180,90,10,.2);border-radius:6px;color:var(--dim);font-size:.91rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;cursor:pointer;transition:.25s;box-shadow:0 2px 8px rgba(100,30,0,.05);text-align:center;}
+.flt:hover,.flt.on{border-color:var(--saffron-lt);color:var(--maroon);background:linear-gradient(135deg,rgba(255,200,80,.15),rgba(255,153,51,.1));}
+
+/* GRID */
+.grid-wrap{max-width:1200px;margin:0 auto;padding:0 2rem 90px;position:relative;z-index:2;}
+.members-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;}
+
+/* CARD */
+.mcard{background:var(--card-bg);border:1px solid rgba(180,90,10,.16);border-radius:12px;overflow:hidden;transition:all .35s cubic-bezier(.22,1,.36,1);opacity:0;animation:fadeUp .5s ease both;position:relative;box-shadow:0 4px 20px rgba(100,30,0,.08);}
+.mcard:hover{transform:translateY(-7px);border-color:rgba(232,112,10,.4);box-shadow:0 16px 48px rgba(100,30,0,.18);}
+.mcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gsaffron);z-index:2;transform:scaleX(0);transform-origin:left;transition:.4s;}
+.mcard:hover::before{transform:scaleX(1);}
+.card-top{display:flex;}
+.card-photo{width:130px;min-width:130px;aspect-ratio:3/4;background:linear-gradient(160deg,#ffe5c0,#ffd090);overflow:hidden;flex-shrink:0;position:relative;}
+.card-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease;}
+.mcard:hover .card-photo img{transform:scale(1.05);}
+.card-photo .no-img{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:3rem;color:rgba(200,100,20,.25);background:linear-gradient(160deg,#ffecd8,#ffddb8);}
+.photo-dept{position:absolute;bottom:0;left:0;right:0;padding:7px 10px;background:linear-gradient(0deg,rgba(80,20,0,.75),transparent);font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#FFD070;}
+.card-info{flex:1;padding:14px;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(135deg,#fffaf2,#fff5e6);}
+.card-name{font-family:'Martel',serif;font-size:1.05rem;font-weight:900;color:var(--maroon);line-height:1.2;margin-bottom:10px;border-bottom:1px solid rgba(180,90,10,.12);padding-bottom:8px;}
+.card-row{display:flex;align-items:flex-start;gap:7px;font-size:.80rem;color:var(--text2);margin-bottom:5px;line-height:1.4;font-family:'Tiro Devanagari Hindi',serif;}
+.card-row i{color:var(--saffron);font-size:.72rem;margin-top:3px;flex-shrink:0;width:14px;}
+.card-row span{color:var(--dim);font-weight:600;margin-right:4px;}
+.card-row a{color:var(--maroon);text-decoration:none;font-weight:600;}
+
+/* LOADING */
+.loading{text-align:center;padding:80px 20px;display:none;}
+.loading i{font-size:2rem;color:var(--saffron);animation:spin 1s linear infinite;display:block;margin-bottom:12px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading p{font-family:'Tiro Devanagari Hindi',serif;font-size:.95rem;color:var(--dim);}
+
+/* EMPTY */
+.empty{text-align:center;padding:80px 20px;display:none;}
+.empty i{font-size:2.5rem;color:rgba(200,100,20,.25);margin-bottom:12px;display:block;}
+.empty p{font-family:'Tiro Devanagari Hindi',serif;font-size:.95rem;color:var(--dim);letter-spacing:3px;}
+
+/* ERROR */
+.error-box{text-align:center;padding:60px 20px;display:none;background:rgba(139,26,26,.05);border:1px solid rgba(139,26,26,.15);border-radius:12px;margin:20px;}
+.error-box i{font-size:2rem;color:var(--maroon);margin-bottom:10px;display:block;}
+.error-box p{font-family:'Tiro Devanagari Hindi',serif;font-size:.9rem;color:var(--maroon);}
+
+/* FOOTER */
+footer{background:linear-gradient(160deg,#3D0F00,#5A1800,#3D0F00);border-top:3px solid var(--saffron-lt);padding:40px 2rem 28px;text-align:center;position:relative;z-index:2;box-shadow:0 -4px 30px rgba(100,20,0,.15);}
+.foot-om{font-family:'Tiro Devanagari Hindi',serif;font-size:1.79rem;color:rgba(255,200,80,.3);letter-spacing:8px;margin-bottom:14px;display:block;}
+.foot-logo{font-family:'Martel',serif;font-size:1.39rem;font-weight:900;background:var(--gsaffron);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:7px;letter-spacing:3px;}
+.foot-copy{color:rgba(255,220,160,.5);font-size:.65rem;letter-spacing:2px;}
+.foot-copy span{color:var(--saffron-lt);}
+.foot-tagline{font-family:'Tiro Devanagari Hindi',serif;font-size:.82rem;color:rgba(255,200,80,.3);letter-spacing:4px;margin-top:8px;display:block;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+@media(max-width:900px){
+  nav{height:110px;}
+  .hero{padding:130px 2rem 60px;}
+  .stats{grid-template-columns:1fr 1fr;}
+  .controls{flex-wrap:wrap;}
+  .filters{flex-wrap:wrap;}
+  .flt{font-size:.75rem;padding:10px 6px;}
+}
+@media(max-width:600px){
+  nav{height:90px;}
+  .hero{padding:110px 1rem 50px;}
+  .hero-title{font-size:clamp(1.5rem,8vw,2.5rem);}
+  .hero-sub{font-size:.88rem;}
+  nav .nav-inner div[style]{font-size:clamp(1.3rem,7vw,2rem) !important;}
+  img[alt="HRSS Logo"]{height:80px !important;}
+  .nav-back{font-size:.6rem;padding:6px 12px;}
+  .stats{grid-template-columns:1fr 1fr;gap:8px;}
+  .stat{padding:14px 10px;}
+  .stat-n{font-size:1.5rem;}
+  .members-grid{grid-template-columns:1fr;}
+  .controls{flex-direction:column;gap:8px;}
+  .search-wrap{width:100%;}
+  .filters{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+  .flt{font-size:.72rem;padding:10px 4px;letter-spacing:1px;}
+  .card-photo{width:100px;min-width:100px;}
+  .card-name{font-size:.95rem;}
+  .card-row{font-size:.75rem;}
+}
+@media(max-width:380px){
+  .filters{grid-template-columns:1fr 1fr;}
+  .card-photo{width:85px;min-width:85px;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="bgc"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="hrss.html" class="nav-logo">
+      <img src="https://iili.io/q3JiQqP.png" alt="HRSS Logo" style="height:140px;width:auto;display:block;">
+    </a>
+    <div style="flex:1;text-align:center;">
+      <div style="font-family:'Tiro Devanagari Hindi',serif;font-size:clamp(2.5rem,6vw,4.5rem);font-weight:700;color:#FFD700;letter-spacing:3px;text-shadow:0 2px 12px rgba(200,100,0,0.4);line-height:1.3;">हिंदू रक्षा शक्ति संघ</div>
+    </div>
+    <a href="index.html" class="nav-back"><i class="fas fa-arrow-left"></i> वापस</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="om-bg">ॐ</div>
+  <div class="hero-eyebrow">॥ हमारे वीर सदस्य ॥</div>
+  <h1 class="hero-title">संघ के <span>आधार स्तंभ</span></h1>
+  <div class="hero-line"></div>
+  <p class="hero-sub">वे समर्पित सेवक जो धर्म, संस्कृति और समाज की रक्षा में अपना जीवन समर्पित करते हैं।</p>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><span class="stat-n" id="statTotal">—</span><div class="stat-l">कुल सदस्य</div></div>
+  <div class="stat"><span class="stat-n" id="statTech">—</span><div class="stat-l">तकनीकी सदस्य</div></div>
+  <div class="stat"><span class="stat-n" id="statSadasya">—</span><div class="stat-l">साधारण सदस्य</div></div>
+  <div class="stat"><span class="stat-n" id="statPad">—</span><div class="stat-l">पदाधिकारी</div></div>
+</div>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <div class="search-wrap">
+    <input type="text" id="searchInput" placeholder="नाम खोजें...">
+  </div>
+  <div class="filters">
+    <button class="flt on" data-filter="all">सभी</button>
+    <button class="flt" data-filter="padhadhikari">पदाधिकारी</button>
+    <button class="flt" data-filter="rakshak">हिंदू रक्षक</button>
+    <button class="flt" data-filter="sadasya">सदस्य</button>
+    <button class="flt" data-filter="technical">टेक्निकल</button>
+  </div>
+</div>
+
+<!-- GRID -->
+<div class="grid-wrap">
+  <div class="loading" id="loadingState">
+    <i class="fas fa-spinner"></i>
+    <p>सदस्य लोड हो रहे हैं...</p>
+  </div>
+  <div class="error-box" id="errorState">
+    <i class="fas fa-exclamation-circle"></i>
+    <p id="errorMsg">डेटा लोड नहीं हो सका। Sheet ID जाँचें।</p>
+  </div>
+  <div class="members-grid" id="membersGrid"></div>
+  <div class="empty" id="emptyState">
+    <i class="fas fa-user-slash"></i>
+    <p>कोई सदस्य नहीं मिला</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="foot-om">ॐ</span>
+  <div class="foot-logo">HRSS</div>
+  <p class="foot-copy">© <span id="yr"></span> <span>हिंदू रक्षा शक्ति संघ</span> — सर्वाधिकार सुरक्षित</p>
+  <span class="foot-tagline">धर्मो रक्षति रक्षितः</span>
+  <p style="margin-top:14px;font-size:.72rem;color:rgba(255,220,160,.5);letter-spacing:1px;font-weight:600;">
+    Designed & Developed by 
+    <a href="https://www.instagram.com/adrxsh.who/" target="_blank" 
+       style="color:var(--saffron-lt);text-decoration:none;font-weight:800;transition:.3s;"
+       onmouseover="this.style.color='#FFD700'" onmouseout="this.style.color='var(--saffron-lt)'">
+      Adarsh
+    </a>
+  </p>
+</footer>
+
+<script>
+// ════════════════════════════════════════════
+//  ⚙️  STEP 1: Apni Google Sheet ID yahan daalo
+//  Google Sheet URL mein:
+//  https://docs.google.com/spreadsheets/d/ [SHEET_ID] /edit
+// ════════════════════════════════════════════
+const SHEET_ID = '1e5-GjWpqgu2iSuBLumjQMdGBTvre9YilbZRYrQgqqGQ';
+
+// Sheet ka naam (default: Sheet1)
+const SHEET_NAME = 'Sheet1';
+
+// ════════════════════════════════════════════
+// Column mapping — Sheet mein yahi order rakho:
+// A=naam, B=pad, C=pita, D=aayu, E=mobile,
+// F=pata, G=vibhag, H=rajya, I=photo, J=dept_label
+// ════════════════════════════════════════════
+
+const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
+
+let allMembers = [];
+let activeFilter = 'all';
+
+// Dept class mapping
+const deptClassMap = {
+  'padhadhikari': 'dept-lead',
+  'rakshak':      'dept-dharma',
+  'sadasya':      'dept-seva',
+  'technical':    'dept-sangathan',
+};
+
+const deptLabelMap = {
+  'padhadhikari': 'पदाधिकारी',
+  'rakshak':      'हिंदू रक्षक',
+  'sadasya':      'सदस्य',
+  'technical':    'टेक्निकल',
+};
+
+// ── Fetch data from Google Sheet ──
+async function loadMembers() {
+  document.getElementById('loadingState').style.display = 'block';
+  document.getElementById('errorState').style.display   = 'none';
+  document.getElementById('membersGrid').innerHTML       = '';
+
+  try {
+    const res  = await fetch(API_URL);
+    const text = await res.text();
+
+    // Google wraps JSON in  /*O_o*/ google.visualization.Query.setResponse({...});
+    const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*?)\);/)[1]);
+    const rows = json.table.rows;
+
+    allMembers = rows
+      .filter(r => r.c[0] && r.c[0].v) // skip empty rows
+      .map((r, i) => ({
+        naam:       r.c[0]?.v || '',
+        pad:        r.c[1]?.v || '',
+        pita:       r.c[2]?.v || '',
+        aayu:       r.c[3]?.v || '',
+        mobile:     String(r.c[4]?.v || ''),
+        pata:       r.c[5]?.v || '',
+        vibhag:     String(r.c[6]?.v || 'sadasya').toLowerCase().trim(),
+        rajya:      String(r.c[7]?.v || '').toLowerCase().trim(),
+        photo:      r.c[8]?.v || '',
+        dept_label: r.c[9]?.v || '',
+        delay:      i * 0.05,
+      }));
+
+    document.getElementById('loadingState').style.display = 'none';
+    updateStats();
+    renderCards(allMembers);
+
+  } catch(e) {
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('errorState').style.display   = 'block';
+    document.getElementById('errorMsg').textContent =
+      'डेटा लोड नहीं हो सका। Sheet ID सही है? Sheet "Anyone with link" पर public है?';
+    console.error(e);
+  }
+}
+
+// ── Convert Google Drive link to direct image URL ──
+function driveUrl(url) {
+  if (!url) return '';
+  // Format: https://drive.google.com/file/d/FILE_ID/view
+  const m1 = url.match(/\/file\/d\/([^/]+)/);
+  if (m1) return `https://drive.google.com/thumbnail?id=${m1[1]}&sz=w400`;
+  // Format: https://drive.google.com/open?id=FILE_ID
+  const m2 = url.match(/[?&]id=([^&]+)/);
+  if (m2) return `https://drive.google.com/thumbnail?id=${m2[1]}&sz=w400`;
+  // Already a direct URL
+  return url;
+}
+function renderCards(members) {
+  const grid = document.getElementById('membersGrid');
+  grid.innerHTML = '';
+
+  if (!members.length) {
+    document.getElementById('emptyState').style.display = 'block';
+    return;
+  }
+  document.getElementById('emptyState').style.display = 'none';
+
+  members.forEach((m, i) => {
+    const deptClass = deptClassMap[m.vibhag] || 'dept-seva';
+    const deptLabel = m.dept_label || deptLabelMap[m.vibhag] || m.vibhag;
+    const photoSrc  = driveUrl(m.photo);
+    const mobileTel = m.mobile.replace(/\s+/g, '');
+
+    const card = document.createElement('div');
+    card.className   = 'mcard';
+    card.dataset.dept = m.vibhag;
+    card.dataset.name = m.naam.toLowerCase();
+    card.dataset.city = m.rajya;
+    card.style.animationDelay = m.delay + 's';
+
+    card.innerHTML = `
+      <div class="card-top">
+        <div class="card-photo">
+          ${photoSrc
+            ? `<img src="${photoSrc}" alt="${m.naam}" onerror="this.parentElement.innerHTML='<div class=no-img>👤</div>'">`
+            : `<div class="no-img">👤</div>`}
+          <div class="photo-dept ${deptClass}">${deptLabel}</div>
+        </div>
+        <div class="card-info">
+          <div class="card-name">${m.naam}</div>
+          <div class="card-row"><i class="fas fa-user-tie"></i><span>पद :</span> ${m.pad}</div>
+          <div class="card-row"><i class="fas fa-user"></i><span>पिता :</span> ${m.pita}</div>
+          <div class="card-row"><i class="fas fa-birthday-cake"></i><span>आयु :</span> ${m.aayu}</div>
+          <div class="card-row"><i class="fas fa-phone"></i><a href="tel:${mobileTel}">${m.mobile}</a></div>
+          <div class="card-row"><i class="fas fa-map-marker-alt"></i> ${m.pata}</div>
+        </div>
+      </div>`;
+
+    grid.appendChild(card);
+  });
+}
+
+// ── Update stats ──
+function updateStats() {
+  document.getElementById('statTotal').textContent   = allMembers.length;
+  document.getElementById('statTech').textContent    = allMembers.filter(m => m.vibhag === 'technical').length;
+  document.getElementById('statSadasya').textContent = allMembers.filter(m => m.vibhag === 'sadasya').length;
+  document.getElementById('statPad').textContent     = allMembers.filter(m => m.vibhag === 'padhadhikari').length;
+}
+
+// ── Filter + Search ──
+function filterCards() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = allMembers.filter(m => {
+    const deptMatch = activeFilter === 'all' || m.vibhag === activeFilter;
+    const nameMatch = !q || m.naam.toLowerCase().includes(q);
+    return deptMatch && nameMatch;
+  });
+  renderCards(filtered);
+}
+
+document.getElementById('searchInput').addEventListener('input', filterCards);
+document.querySelectorAll('.flt').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.flt').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    activeFilter = b.dataset.filter;
+    filterCards();
+  });
+});
+
+// ── Canvas BG ──
+const cv=document.getElementById('bgc'),ctx=cv.getContext('2d');
+let W,H,pts=[];
+function rsz(){W=cv.width=innerWidth;H=cv.height=innerHeight;}
+function mkPts(){pts=[];for(let i=0;i<Math.floor(W*H/16000);i++)pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,r:Math.random()*1.4+.3,a:Math.random()*.25+.06});}
+function draw(){ctx.clearRect(0,0,W,H);const t=Date.now()/10000;const g=ctx.createRadialGradient(W/2+Math.sin(t)*100,H*.3,0,W/2,H/2,W*.75);g.addColorStop(0,'rgba(160,50,0,0.06)');g.addColorStop(.5,'rgba(80,10,0,0.04)');g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.globalCompositeOperation='screen';pts.forEach((p,i)=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(220,100,20,${p.a})`;ctx.fill();for(let j=i+1;j<pts.length;j++){const d=Math.hypot(p.x-pts[j].x,p.y-pts[j].y);if(d<100){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle=`rgba(200,80,10,${.035*(1-d/100)})`;ctx.lineWidth=.6;ctx.stroke();}}});ctx.globalCompositeOperation='source-over';requestAnimationFrame(draw);}
+rsz();mkPts();draw();
+window.addEventListener('resize',()=>{rsz();mkPts();});
+
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+// ── Load on page open ──
+loadMembers();
+</script>
+</body>
+</html>
