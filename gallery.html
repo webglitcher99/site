@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>गैलरी | HRSS — हिन्दू रक्षा शक्ति संघ</title>
+    <link rel="icon" type="image/png" href="https://iili.io/q3JiQqP.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Tiro+Devanagari+Hindi:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        // Logo fallback chain: hosted logo -> logo.png -> built-in emblem
+        const FALLBACK_LOGO = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23121212'/%3E%3Ccircle cx='50' cy='50' r='44' fill='none' stroke='%23C7A15A' stroke-width='2'/%3E%3Cpath d='M50 18c8 12 14 18 14 30a14 14 0 0 1-28 0c0-12 6-18 14-30z' fill='%23E25822'/%3E%3Ctext x='50' y='80' font-family='Georgia,serif' font-size='16' font-weight='700' fill='%23C7A15A' text-anchor='middle'%3EHRSS%3C/text%3E%3C/svg%3E";
+        function logoFallback(img) {
+            if (!img.dataset.tried) { img.dataset.tried = '1'; img.src = 'logo.png'; }
+            else { img.onerror = null; img.src = FALLBACK_LOGO; }
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg-ivory: #F5F2EB;
+            --bg-charcoal: #121212;
+            --bg-charcoal-light: #1E1E1E;
+            --accent-saffron: #E25822;
+            --accent-gold: #C7A15A;
+            --text-dark: #1A1A1A;
+            --text-light: #F5F2EB;
+            --text-muted: #888888;
+            --font-display: 'Playfair Display', serif;
+            --font-hindi: 'Tiro Devanagari Hindi', serif;
+            --font-sans: 'Inter', 'Tiro Devanagari Hindi', sans-serif;
+            --border-thin: 1px solid rgba(26, 26, 26, 0.15);
+            --border-thin-light: 1px solid rgba(245, 242, 235, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-ivory);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        body.no-scroll { overflow: hidden; }
+        img { max-width: 100%; height: auto; display: block; }
+        a { text-decoration: none; color: inherit; transition: color 0.3s ease; }
+
+        .eyebrow {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 600;
+            color: var(--accent-gold);
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        /* ---------- NAV ---------- */
+        .navbar {
+            position: fixed; top: 0; left: 0; width: 100%;
+            padding: 1.5rem 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(18,18,18,0.85), rgba(18,18,18,0));
+            border-bottom: 1px solid transparent;
+            transition: background-color 0.4s ease, border-bottom 0.4s ease, padding 0.3s ease;
+        }
+        .navbar.scrolled {
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: var(--border-thin-light);
+            padding: 0.7rem 5%;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 14px; color: var(--text-light); }
+        .nav-logo {
+            height: 96px; width: auto; max-width: 220px; flex-shrink: 0;
+            object-fit: contain; border: none; border-radius: 0; background: none;
+            transition: height 0.3s;
+        }
+        .navbar.scrolled .nav-logo { height: 68px; width: auto; }
+        .nav-title { display: flex; flex-direction: column; line-height: 1.1; }
+        .nav-title strong { font-family: var(--font-display); font-size: 2.1rem; font-weight: 700; letter-spacing: 0.08em; }
+        .nav-title small { font-family: var(--font-hindi); font-size: 1rem; color: var(--accent-gold); margin-top: 2px; }
+        .btn-nav {
+            background-color: var(--accent-saffron); color: white;
+            padding: 0.6rem 1.5rem; border: 1px solid var(--accent-saffron);
+            font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500;
+            transition: background-color 0.3s, color 0.3s;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-nav:hover { background-color: transparent; color: var(--accent-saffron); }
+
+        /* ---------- HERO ---------- */
+        .hero {
+            background-color: var(--bg-charcoal);
+            position: relative;
+            padding: 12rem 5% 5rem;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at 70% 50%, rgba(226, 88, 34, 0.15) 0%, transparent 60%);
+        }
+        .hero-content { position: relative; max-width: 900px; }
+        .hero h1 {
+            font-family: var(--font-hindi); font-weight: normal; line-height: 1.25;
+            font-size: clamp(2.6rem, 6vw, 5rem);
+            color: var(--text-light); margin-bottom: 1.5rem;
+        }
+        .hero p {
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
+            color: rgba(245, 242, 235, 0.7);
+            max-width: 600px; font-weight: 300;
+        }
+
+        /* ---------- GALLERY ---------- */
+        .gallery-wrap { max-width: 1400px; margin: 0 auto; padding: 4rem 5% 7rem; }
+
+        .gallery-count {
+            font-family: var(--font-hindi);
+            font-size: 1.05rem;
+            color: #444;
+            border-top: 1px solid rgba(199, 161, 90, 0.5);
+            padding-top: 1rem;
+            margin-bottom: 2rem;
+        }
+        .gallery-count b { font-family: var(--font-display); color: var(--accent-saffron); font-size: 1.4rem; margin-right: 4px; }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .g-item {
+            display: block;
+            width: 100%;
+            text-align: left;
+            font: inherit;
+            color: inherit;
+            background: #FBF9F4;
+            border: var(--border-thin);
+            cursor: pointer;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeIn 0.5s ease both;
+            transition: border-color 0.3s;
+        }
+        .g-item:hover { border-color: var(--accent-saffron); }
+
+        .g-photo {
+            aspect-ratio: 4 / 5;
+            background: var(--bg-charcoal-light);
+            overflow: hidden;
+            position: relative;
+        }
+        .g-photo img {
+            width: 100%; height: 100%; object-fit: cover;
+            filter: grayscale(10%) sepia(6%);
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .g-item:hover .g-photo img { transform: scale(1.05); }
+
+        .g-zoom {
+            position: absolute; right: 12px; bottom: 12px;
+            width: 38px; height: 38px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(18,18,18,0.7);
+            border: 1px solid rgba(199,161,90,0.6);
+            color: var(--accent-gold);
+            font-size: 0.85rem;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .g-item:hover .g-zoom, .g-item:focus-visible .g-zoom { opacity: 1; }
+
+        .g-cap { padding: 1rem 1.1rem 1.2rem; border-top: 1px solid rgba(199, 161, 90, 0.5); }
+        .g-desc {
+            font-size: 0.92rem; color: #333; line-height: 1.6;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+            min-height: 3.2em;
+        }
+        .g-date { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; display: block; }
+
+        .state { text-align: center; padding: 5rem 1rem; color: var(--text-muted); display: none; }
+        .state i { font-size: 2rem; color: var(--accent-gold); display: block; margin-bottom: 1rem; }
+        .state p { font-family: var(--font-hindi); font-size: 1.05rem; }
+        #loadingState i { animation: spin 1s linear infinite; }
+        #errorState { border: 1px solid rgba(226, 88, 34, 0.4); color: var(--accent-saffron); }
+        #errorState i { color: var(--accent-saffron); }
+
+        /* ---------- LIGHTBOX ---------- */
+        .lb {
+            position: fixed; inset: 0; z-index: 3000;
+            background: rgba(10, 10, 10, 0.96);
+            display: none;
+            flex-direction: column; align-items: center; justify-content: center;
+            padding: 4.5rem 1rem 1.5rem;
+        }
+        .lb.open { display: flex; }
+
+        .lb-fig {
+            display: flex; flex-direction: column; align-items: center;
+            max-width: min(1100px, 100%); width: 100%;
+            max-height: 100%;
+        }
+        .lb-stage {
+            position: relative; width: 100%;
+            display: flex; align-items: center; justify-content: center;
+            min-height: 120px;
+        }
+        .lb-img {
+            max-width: 100%; max-height: calc(100vh - 17rem);
+            object-fit: contain;
+            opacity: 0; transition: opacity 0.3s;
+            border: 1px solid rgba(199, 161, 90, 0.3);
+        }
+        .lb-img.ready { opacity: 1; }
+        .lb-spin {
+            position: absolute; color: var(--accent-gold); font-size: 1.6rem;
+            animation: spin 1s linear infinite;
+        }
+        .lb-spin.hide { display: none; }
+
+        .lb-cap {
+            width: 100%; max-width: 760px;
+            margin-top: 1.2rem; text-align: center;
+            max-height: 7.5rem; overflow-y: auto;
+        }
+        .lb-desc { color: var(--text-light); font-size: 1rem; line-height: 1.7; white-space: pre-wrap; }
+        .lb-meta { display: block; margin-top: 0.5rem; font-size: 0.78rem; color: var(--accent-gold); letter-spacing: 0.08em; }
+
+        .lb-btn {
+            position: absolute;
+            background: rgba(18,18,18,0.7);
+            border: 1px solid rgba(199, 161, 90, 0.6);
+            color: var(--accent-gold);
+            width: 48px; height: 48px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .lb-btn:hover { background: var(--accent-saffron); border-color: var(--accent-saffron); color: #fff; }
+        .lb-close { top: 1rem; right: 1rem; }
+        .lb-prev { left: 1rem; top: 50%; transform: translateY(-50%); }
+        .lb-next { right: 1rem; top: 50%; transform: translateY(-50%); }
+        .lb-count { position: absolute; top: 1.7rem; left: 1.2rem; font-size: 0.85rem; color: var(--text-muted); letter-spacing: 0.1em; }
+
+        a:focus-visible, button:focus-visible { outline: 2px solid var(--accent-gold); outline-offset: 3px; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ---------- FOOTER ---------- */
+        .footer {
+            background-color: var(--bg-charcoal); color: var(--text-light);
+            padding: 3rem 5% 2rem; border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .footer-bottom {
+            max-width: 1400px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center;
+            gap: 1rem; flex-wrap: wrap; font-size: 0.8rem; color: #666;
+        }
+        .footer-bottom a { color: var(--accent-gold); font-weight: 500; }
+        .footer-bottom a:hover { color: var(--text-light); }
+
+        @media (max-width: 900px) {
+            .nav-logo { height: 64px; width: auto; }
+            .navbar.scrolled .nav-logo { height: 54px; width: auto; }
+            .nav-title strong { font-size: 1.5rem; }
+            .nav-title small { font-size: 0.82rem; }
+        }
+        @media (max-width: 600px) {
+            .hero { padding: 9rem 5% 3.5rem; }
+            .gallery-wrap { padding: 3rem 5% 5rem; }
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
+            .g-cap { padding: 0.7rem 0.7rem 0.9rem; }
+            .g-desc { font-size: 0.82rem; min-height: 3.2em; }
+            .btn-nav { padding: 0.5rem 1rem; font-size: 0.7rem; }
+            .lb { padding-top: 4rem; }
+            .lb-img { max-height: calc(100vh - 15rem); }
+            .lb-prev, .lb-next { top: auto; bottom: 1rem; transform: none; }
+            .lb-prev { left: 1rem; }
+            .lb-next { right: 1rem; }
+            .footer-bottom { flex-direction: column; text-align: center; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="nav-brand">
+            <img src="https://iili.io/q3JiQqP.png" alt="HRSS Logo" class="nav-logo" onerror="logoFallback(this)">
+            <span class="nav-title"><strong>HRSS</strong><small>हिन्दू रक्षा शक्ति संघ</small></span>
+        </a>
+        <a href="index.html" class="btn-nav"><i class="fas fa-arrow-left"></i> वापस</a>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero">
+        <div class="hero-content">
+            <span class="eyebrow">हमारी गैलरी</span>
+            <h1>पलों की झलक।</h1>
+            <p>संघ के कार्यक्रमों, सेवा कार्यों और आयोजनों की तस्वीरें। किसी भी फोटो पर टैप करके उसे बड़ा देखें।</p>
+        </div>
+    </header>
+
+    <!-- GALLERY -->
+    <main class="gallery-wrap">
+        <div class="gallery-count" id="countBar" style="display:none"><b id="countNum">0</b> फोटो</div>
+
+        <div class="state" id="loadingState">
+            <i class="fas fa-spinner"></i>
+            <p>फोटो लोड हो रही हैं...</p>
+        </div>
+        <div class="state" id="errorState">
+            <i class="fas fa-exclamation-circle"></i>
+            <p id="errorMsg">फोटो लोड नहीं हो सकीं।</p>
+        </div>
+        <div class="gallery-grid" id="galleryGrid"></div>
+        <div class="state" id="emptyState">
+            <i class="fas fa-images"></i>
+            <p>अभी कोई फोटो नहीं है</p>
+        </div>
+    </main>
+
+    <!-- LIGHTBOX -->
+    <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="फोटो देखें">
+        <span class="lb-count" id="lbCount"></span>
+        <button class="lb-btn lb-close" id="lbClose" type="button" aria-label="बंद करें"><i class="fas fa-xmark"></i></button>
+        <button class="lb-btn lb-prev" id="lbPrev" type="button" aria-label="पिछली फोटो"><i class="fas fa-chevron-left"></i></button>
+        <button class="lb-btn lb-next" id="lbNext" type="button" aria-label="अगली फोटो"><i class="fas fa-chevron-right"></i></button>
+        <figure class="lb-fig">
+            <div class="lb-stage">
+                <i class="fas fa-spinner lb-spin" id="lbSpin"></i>
+                <img class="lb-img" id="lbImg" alt="">
+            </div>
+            <figcaption class="lb-cap">
+                <p class="lb-desc" id="lbDesc"></p>
+                <span class="lb-meta" id="lbMeta"></span>
+            </figcaption>
+        </figure>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>&copy; <span id="yr"></span> Hindu Raksha Shakti Sangh. सर्वाधिकार सुरक्षित।</p>
+            <p>Designed &amp; Developed by <a href="https://www.instagram.com/adrxsh.who/" target="_blank" rel="noopener">Adarsh</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Same Apps Script link as the website forms
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyUwJiMyVFwQk1mxJnAEbB5CNwlb1Em0N6YrloT3Y-thhHKfOKGiR1I-HtJJMB8xLbe/exec';
+
+        const navbar = document.getElementById('navbar');
+        const onScroll = () => navbar.classList.toggle('scrolled', window.scrollY > 50);
+        window.addEventListener('scroll', onScroll);
+        onScroll();
+        document.getElementById('yr').textContent = new Date().getFullYear();
+
+        const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        const thumb = (id, w) => `https://drive.google.com/thumbnail?id=${encodeURIComponent(id)}&sz=w${w}`;
+        const direct = id => `https://drive.google.com/uc?export=view&id=${encodeURIComponent(id)}`;
+        const dateOnly = t => String(t || '').split(' ')[0];
+
+        let photos = [];
+        let current = -1;
+
+        const $ = id => document.getElementById(id);
+
+        async function loadGallery() {
+            $('loadingState').style.display = 'block';
+            try {
+                const res = await fetch(API_URL + '?action=gallery');
+                const out = await res.json();
+                if (!out.ok) throw new Error(out.error || 'Server error');
+                photos = out.photos || [];
+                $('loadingState').style.display = 'none';
+                render();
+            } catch (err) {
+                console.error('Gallery error:', err);
+                $('loadingState').style.display = 'none';
+                $('errorState').style.display = 'block';
+                $('errorMsg').textContent = 'फोटो लोड नहीं हो सकीं। कृपया बाद में प्रयास करें।';
+            }
+        }
+
+        function render() {
+            const grid = $('galleryGrid');
+            grid.innerHTML = '';
+            if (!photos.length) { $('emptyState').style.display = 'block'; return; }
+            $('countBar').style.display = 'block';
+            $('countNum').textContent = photos.length;
+
+            photos.forEach((p, i) => {
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'g-item';
+                b.style.animationDelay = Math.min(i, 16) * 0.04 + 's';
+                b.setAttribute('aria-label', 'फोटो बड़ी करें: ' + (p.description || 'फोटो ' + (i + 1)));
+                b.innerHTML = `
+                    <div class="g-photo">
+                        <img src="${esc(thumb(p.fileId, 600))}" alt="${esc(p.description || 'HRSS फोटो')}" loading="lazy">
+                        <span class="g-zoom"><i class="fas fa-expand"></i></span>
+                    </div>
+                    <div class="g-cap">
+                        <p class="g-desc">${esc(p.description)}</p>
+                        <span class="g-date">${esc(dateOnly(p.time))}</span>
+                    </div>`;
+                b.querySelector('img').addEventListener('error', function () {
+                    if (!this.dataset.t) { this.dataset.t = '1'; this.src = direct(p.fileId); }
+                });
+                b.addEventListener('click', () => openLb(i));
+                grid.appendChild(b);
+            });
+        }
+
+        /* ---------- Lightbox ---------- */
+        const lb = $('lb'), lbImg = $('lbImg'), lbSpin = $('lbSpin');
+        let lastFocus = null;
+
+        function showPhoto(i) {
+            current = (i + photos.length) % photos.length;
+            const p = photos[current];
+            lbImg.classList.remove('ready');
+            lbSpin.classList.remove('hide');
+            lbImg.dataset.t = '';
+            lbImg.alt = p.description || 'HRSS फोटो';
+            lbImg.src = thumb(p.fileId, 1600);
+            $('lbDesc').textContent = p.description || '';
+            $('lbMeta').textContent = dateOnly(p.time);
+            $('lbCount').textContent = (current + 1) + ' / ' + photos.length;
+            const multi = photos.length > 1;
+            $('lbPrev').style.display = $('lbNext').style.display = multi ? 'flex' : 'none';
+            // preload neighbours
+            if (multi) [current + 1, current - 1].forEach(n => {
+                const q = photos[(n + photos.length) % photos.length];
+                new Image().src = thumb(q.fileId, 1600);
+            });
+        }
+
+        lbImg.addEventListener('load', () => { lbImg.classList.add('ready'); lbSpin.classList.add('hide'); });
+        lbImg.addEventListener('error', () => {
+            if (!lbImg.dataset.t && photos[current]) { lbImg.dataset.t = '1'; lbImg.src = direct(photos[current].fileId); }
+            else lbSpin.classList.add('hide');
+        });
+
+        function openLb(i) {
+            lastFocus = document.activeElement;
+            lb.classList.add('open');
+            document.body.classList.add('no-scroll');
+            showPhoto(i);
+            $('lbClose').focus();
+        }
+        function closeLb() {
+            lb.classList.remove('open');
+            document.body.classList.remove('no-scroll');
+            lbImg.removeAttribute('src');
+            if (lastFocus) lastFocus.focus();
+        }
+        const step = d => showPhoto(current + d);
+
+        $('lbClose').addEventListener('click', closeLb);
+        $('lbPrev').addEventListener('click', () => step(-1));
+        $('lbNext').addEventListener('click', () => step(1));
+        lb.addEventListener('click', e => { if (e.target === lb || e.target.classList.contains('lb-stage') || e.target.classList.contains('lb-fig')) closeLb(); });
+        document.addEventListener('keydown', e => {
+            if (!lb.classList.contains('open')) return;
+            if (e.key === 'Escape') closeLb();
+            else if (e.key === 'ArrowLeft') step(-1);
+            else if (e.key === 'ArrowRight') step(1);
+        });
+
+        // swipe on touch screens
+        let sx = 0, sy = 0;
+        lb.addEventListener('touchstart', e => { sx = e.changedTouches[0].clientX; sy = e.changedTouches[0].clientY; }, { passive: true });
+        lb.addEventListener('touchend', e => {
+            const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+            if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) step(dx < 0 ? 1 : -1);
+        }, { passive: true });
+
+        loadGallery();
+    </script>
+</body>
+</html>
