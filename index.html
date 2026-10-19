@@ -3,367 +3,1172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HRSS | हिंदू रक्षा शक्ति संघ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;600&family=Martel:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <title>Hindu Raksha Shakti Sangh | हिन्दू रक्षा शक्ति संघ</title>
+    <meta name="description" content="Hindu Raksha Shakti Sangh - धर्म, संस्कृति और राष्ट्र रक्षा के लिए समर्पित संगठन।">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Tiro+Devanagari+Hindi:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        // Logo fallback chain: hosted logo -> logo.png -> built-in emblem
+        const FALLBACK_LOGO = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23121212'/%3E%3Ccircle cx='50' cy='50' r='44' fill='none' stroke='%23C7A15A' stroke-width='2'/%3E%3Cpath d='M50 18c8 12 14 18 14 30a14 14 0 0 1-28 0c0-12 6-18 14-30z' fill='%23E25822'/%3E%3Ctext x='50' y='80' font-family='Georgia%2Cserif' font-size='16' font-weight='700' fill='%23C7A15A' text-anchor='middle'%3EHRSS%3C/text%3E%3C/svg%3E";
+        function logoFallback(img) {
+            if (!img.dataset.tried) { img.dataset.tried = '1'; img.src = 'logo.png'; }
+            else { img.onerror = null; img.src = FALLBACK_LOGO; }
+        }
+    </script>
+
     <style>
+        /* =========================================
+           CSS VARIABLES & RESET
+           ========================================= */
         :root {
-            --saffron: #FF9933;
-            --deep-saffron: #FF6600;
-            --gold: #FFD700;
-            --maroon: #800000;
-            --cream: #FFF9F2;
-            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --bg-ivory: #F5F2EB;
+            --bg-charcoal: #121212;
+            --bg-charcoal-light: #1E1E1E;
+            --accent-saffron: #E25822;
+            --accent-gold: #C7A15A;
+            --text-dark: #1A1A1A;
+            --text-light: #F5F2EB;
+            --text-muted: #888888;
+            --font-display: 'Playfair Display', serif;
+            --font-hindi: 'Tiro Devanagari Hindi', serif;
+            --font-sans: 'Inter', sans-serif;
+            --border-thin: 1px solid rgba(26, 26, 26, 0.15);
+            --border-thin-light: 1px solid rgba(245, 242, 235, 0.15);
         }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
         body {
-            font-family: 'Poppins', 'Arial', sans-serif;
-            background-color: var(--cream);
-            color: #333;
+            font-family: var(--font-sans);
+            background-color: var(--bg-ivory);
+            color: var(--text-dark);
+            line-height: 1.6;
             overflow-x: hidden;
-            background-image: url('https://www.transparenttextures.com/patterns/mandala.png');
+            -webkit-font-smoothing: antialiased;
         }
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 5%;
-            background: white;
-            box-shadow: var(--shadow);
-            border-bottom: 4px solid var(--saffron);
-            position: static;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-        }
-        .logo-box {
-            height: 160px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.3s;
-        }
-        .logo-box img {
-            height: 100%;
-            width: auto;
+
+        img {
+            max-width: 100%;
+            height: auto;
             display: block;
         }
 
-        .menu-btn {
-            cursor: pointer;
-            color: var(--saffron);
-            text-align: center;
-        }
-        .menu-btn i { font-size: 2rem; }
-        #sidebar {
-            position: fixed;
-            top: 0; right: -300px;
-            width: 300px; height: 100%;
-            background: rgba(128, 0, 0, 0.98);
-            backdrop-filter: blur(10px);
-            z-index: 2000;
-            transition: 0.5s ease;
-            padding: 50px 30px;
-        }
-        #sidebar.active { right: 0; }
-        .sidebar-links { list-style: none; margin-top: 40px; }
-        .sidebar-links li { margin-bottom: 25px; }
-        .sidebar-links a {
-            color: var(--gold);
+        a {
             text-decoration: none;
-            font-size: 1.2rem;
-            font-weight: 600;
-            display: flex; align-items: center; gap: 15px;
-            transition: 0.3s;
+            color: inherit;
+            transition: color 0.3s ease;
         }
+
+        ul {
+            list-style: none;
+        }
+
+        /* =========================================
+           TYPOGRAPHY
+           ========================================= */
+        .hindi-heading {
+            font-family: var(--font-hindi);
+            font-weight: normal;
+            line-height: 1.3;
+        }
+
+        .display-heading {
+            font-family: var(--font-display);
+            font-weight: 600;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        .eyebrow {
+            font-family: var(--font-sans);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 600;
+            color: var(--accent-saffron);
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .eyebrow-light {
+            color: var(--accent-gold);
+        }
+
+        /* =========================================
+           NAVIGATION
+           ========================================= */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: background-color 0.4s ease, border-bottom 0.4s ease, padding 0.3s ease;
+            border-bottom: 1px solid transparent;
+            background: linear-gradient(to bottom, rgba(18,18,18,0.85), rgba(18,18,18,0));
+        }
+
+        .navbar.scrolled {
+            background-color: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: var(--border-thin-light);
+            padding: 0.7rem 5%;
+        }
+
+        .nav-brand {
+            position: relative;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-light);
+        }
+
+        .nav-logo {
+            height: 60px;
+            width: 60px;
+            flex-shrink: 0;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 1px solid rgba(199, 161, 90, 0.6);
+            background: var(--bg-charcoal);
+            transition: height 0.3s, width 0.3s;
+        }
+
+        .navbar.scrolled .nav-logo { height: 48px; width: 48px; }
+
+        .nav-title {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .nav-title strong {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+        }
+
+        .nav-title small {
+            font-family: var(--font-hindi);
+            font-size: 0.8rem;
+            color: var(--accent-gold);
+            letter-spacing: 0.02em;
+            margin-top: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--accent-gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .btn-nav {
+            background-color: var(--accent-saffron);
+            color: white !important;
+            padding: 0.6rem 1.5rem;
+            border: 1px solid var(--accent-saffron);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btn-nav::after { display: none; }
+
+        .btn-nav:hover {
+            background-color: transparent;
+            color: var(--accent-saffron) !important;
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 6px;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background-color: var(--text-light);
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        /* =========================================
+           HERO SECTION
+           ========================================= */
+        .hero {
+            height: 100vh;
+            min-height: 600px;
+            background-color: var(--bg-charcoal);
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 7rem 5% 3rem;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 70% 50%, rgba(226, 88, 34, 0.15) 0%, transparent 60%),
+                        linear-gradient(rgba(18,18,18,0.7), rgba(18,18,18,0.9));
+            z-index: 1;
+        }
+
+        /* Placeholder for cinematic background image */
+        .hero-image-placeholder {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat;
+            opacity: 0.3;
+            z-index: 0;
+            mask-image: linear-gradient(to left, black, transparent);
+            -webkit-mask-image: linear-gradient(to left, black, transparent);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 7vw, 6rem);
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 1.5vw, 1.25rem);
+            color: rgba(245, 242, 235, 0.7);
+            max-width: 600px;
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-saffron);
+            color: var(--text-light);
+            padding: 1rem 2.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 500;
+            border: 1px solid var(--accent-saffron);
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--accent-saffron);
+        }
+
+        .btn-secondary {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary:hover {
+            color: var(--accent-gold);
+        }
+
+        /* =========================================
+           INTRODUCTION SECTION
+           ========================================= */
+        .intro {
+            padding: 8rem 5%;
+            background-color: var(--bg-ivory);
+            position: relative;
+        }
+
+        .intro-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .intro-text h2 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            margin-bottom: 2rem;
+            color: var(--text-dark);
+        }
+
+        .intro-text p {
+            font-size: 1.1rem;
+            color: #444;
+            margin-bottom: 1.5rem;
+        }
+
+        .intro-image-container {
+            position: relative;
+            padding-top: 120%; /* Asymmetric aspect ratio */
+            background: var(--bg-charcoal);
+            overflow: hidden;
+        }
+
+        /* Placeholder for organization image */
+        .intro-image-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(20%) sepia(10%);
+        }
+
+        .intro-image-container::before {
+            content: '०१';
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            font-family: var(--font-hindi);
+            font-size: 1.5rem;
+            color: var(--accent-gold);
+            z-index: 2;
+        }
+
+        /* =========================================
+           MISSION SECTION (DARK)
+           ========================================= */
+        .mission {
+            background-color: var(--bg-charcoal);
+            color: var(--text-light);
+            padding: 8rem 5%;
+        }
+
+        .mission-header {
+            max-width: 1400px;
+            margin: 0 auto 5rem auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-bottom: var(--border-thin-light);
+            padding-bottom: 2rem;
+        }
+
+        .mission-header h2 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+        }
+
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .mission-card {
+            border-top: 1px solid rgba(199, 161, 90, 0.3);
+            padding-top: 2rem;
+        }
+
+        .mission-num {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            color: var(--accent-gold);
+            opacity: 0.5;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .mission-card h3 {
+            font-family: var(--font-hindi);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--bg-ivory);
+        }
+
+        .mission-card p {
+            color: #A0A0A0;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        /* =========================================
+           GALLERY SECTION
+           ========================================= */
+        .gallery {
+            padding: 8rem 5%;
+            background-color: var(--bg-ivory);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .gallery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 4rem;
+        }
+
+        .gallery-header h2 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+        }
+
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: 250px;
+            gap: 1rem;
         }
-        .gallery-grid img { 
-            width: 100%; height: 200px; object-fit: cover; 
-            border-radius: 10px; transition: 0.5s; cursor: pointer;
+
+        .gallery-item {
+            background-color: #E0E0E0;
+            overflow: hidden;
+            position: relative;
         }
-        .sidebar-links a:hover { color: white; transform: translateX(10px); }
-        .hero {
-            height: 90vh;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                        url('https://images.unsplash.com/photo-1545063007-44869687e939?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
-            background-size: cover;
-            background-position: center;
-            display: flex; align-items: center; justify-content: center;
-            text-align: center; color: white;
-            margin-top: 0;
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-        .hero-content h2 { font-family: 'Martel', serif; font-size: 3rem; margin-bottom: 10px; color: var(--gold); }
-        .hero-content p { font-size: 1.4rem; margin-bottom: 30px; letter-spacing: 1px; }
-        .btn-main {
-            padding: 15px 40px;
-            background: var(--saffron);
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            box-shadow: 0 5px 15px rgba(255, 153, 51, 0.4);
-            transition: 0.3s;
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Asymmetric Grid */
+        .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+        .gallery-item:nth-child(2) { grid-column: span 2; grid-row: span 1; }
+        .gallery-item:nth-child(3) { grid-column: span 1; grid-row: span 1; }
+        .gallery-item:nth-child(4) { grid-column: span 1; grid-row: span 1; }
+        .gallery-item:nth-child(5) { grid-column: span 2; grid-row: span 1; }
+
+        /* =========================================
+           CTA SECTION
+           ========================================= */
+        .cta {
+            background-color: var(--accent-saffron);
+            padding: 8rem 5%;
+            text-align: center;
+            color: var(--text-light);
+        }
+
+        .cta h2 {
+            font-family: var(--font-hindi);
+            font-size: clamp(2rem, 5vw, 4rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta p {
             font-size: 1.1rem;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.9;
         }
-        .btn-main:hover { background: var(--maroon); transform: scale(1.05); }
-        .section { padding: 80px 10%; text-align: center; }
-        .section-title { font-family: 'Martel', serif; font-size: 2.5rem; color: var(--maroon); margin-bottom: 50px; }
-        .section-title span { color: var(--saffron); }
-        .grid {
+
+        .btn-white {
+            background-color: var(--text-light);
+            color: var(--accent-saffron);
+            padding: 1rem 3rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+            border: 1px solid var(--text-light);
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-white:hover {
+            background-color: transparent;
+            color: var(--text-light);
+        }
+
+        /* =========================================
+           CONTACT & FOOTER
+           ========================================= */
+        .footer {
+            background-color: var(--bg-charcoal);
+            color: var(--text-light);
+            padding: 5rem 5% 2rem 5%;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-grid {
+            max-width: 1400px;
+            margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr;
+            gap: 4rem;
+            margin-bottom: 5rem;
         }
-        .card {
-            background: white; padding: 40px 20px;
-            border-radius: 15px; border-bottom: 5px solid var(--saffron);
-            box-shadow: var(--shadow); transition: 0.3s;
+
+        .footer-brand img {
+            height: 64px;
+            width: 64px;
+            object-fit: cover;
+            border: 1px solid rgba(199, 161, 90, 0.6);
+            margin-bottom: 1.5rem;
+            border-radius: 50%;
         }
-        .card:hover { transform: translateY(-10px); }
-        .card i { font-size: 3rem; color: var(--saffron); margin-bottom: 20px; }
-        .stats-bg {
-            background: var(--maroon);
-            padding: 60px 5%;
-            color: white;
-            display: 
-            flex; flex-wrap: wrap; justify-content: space-around;
+
+        .footer-brand h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
         }
-        /* ===== Contact Form Styling ===== */
 
-.contact-form input,
-.contact-form textarea {
-    width: 100%;
-    padding: 15px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-family: 'Poppins', sans-serif;
-}
+        .footer-brand p {
+            color: #888;
+            font-size: 0.9rem;
+            max-width: 300px;
+        }
 
-.contact-form input:focus,
-.contact-form textarea:focus {
-    outline: none;
-    border-color: var(--saffron);
-}
+        .footer-links h4 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-gold);
+            margin-bottom: 1.5rem;
+        }
 
-.contact-form button {
-    width: 100%;
-    padding: 15px;
-    background: var(--maroon);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-}
+        .footer-links ul li {
+            margin-bottom: 0.8rem;
+        }
 
-.contact-form button:hover {
-    background: var(--deep-saffron);
-}
+        .footer-links a {
+            color: #A0A0A0;
+            font-size: 0.9rem;
+        }
 
-.success-message {
-    display: none;
-    margin-top: 15px;
-    color: green;
-    font-weight: 600;
-}
-        .stat-item { text-align: center; margin: 20px; }
-        .stat-num { font-size: 3rem; font-weight: bold; color: var(--gold); display: block; }
-        footer { background: #1a0000; color: #ccc; padding: 50px 5% 20px; text-align: center; }
-        .footer-logo { font-family: 'Martel', serif; color: white; font-size: 1.5rem; margin-bottom: 20px; }
-        .socials { margin-bottom: 30px; }
-        .socials a { color: var(--saffron); font-size: 1.5rem; margin: 0 15px; }
+        .footer-links a:hover {
+            color: var(--text-light);
+        }
+
+        .footer-contact p {
+            color: #A0A0A0;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Contact Form Minimal */
+        .contact-form {
+            margin-top: 1.5rem;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding: 0.8rem 0;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            font-family: var(--font-sans);
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-bottom-color: var(--accent-gold);
+        }
+
+        .contact-form button {
+            background: transparent;
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            padding: 0.6rem 2rem;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .contact-form button:hover {
+            background: var(--accent-gold);
+            color: var(--bg-charcoal);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        /* =========================================
+           RESPONSIVE DESIGN
+           ========================================= */
+        @media (max-width: 1024px) {
+            .intro-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            .intro-image-container {
+                padding-top: 60%;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .menu-toggle { display: flex; }
+            .nav-logo { height: 46px; width: 46px; }
+            .navbar.scrolled .nav-logo { height: 42px; width: 42px; }
+            .nav-title strong { font-size: 1.25rem; }
+            .nav-title small { font-size: 0.7rem; }
+            
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 100%;
+                height: 100vh;
+                background-color: var(--bg-charcoal);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: right 0.4s ease;
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links a {
+                font-size: 1.2rem;
+            }
+        }
+
         @media (max-width: 768px) {
-            .hero-content h2 { font-size: 2.2rem; }
-            .company-name-box h1 { font-size: 1rem; }
-            .logo-box { height: 90px; }
-            .hero { margin-top: 110px; }
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                grid-auto-rows: 250px;
+            }
+
+            .gallery-item:nth-child(n) {
+                grid-column: span 1;
+                grid-row: span 1;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+
+            .mission-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .gallery-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        /* =========================================
+           JOIN MODAL & FORM STATUS (Google Sheet)
+           ========================================= */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(18, 18, 18, 0.85);
+            backdrop-filter: blur(6px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            z-index: 2000;
+        }
+
+        .modal.open { display: flex; }
+
+        .modal-box {
+            background: var(--bg-ivory);
+            width: 100%;
+            max-width: 480px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2.5rem 2rem 2rem;
+            position: relative;
+            border-top: 3px solid var(--accent-saffron);
+        }
+
+        .modal-box h3 {
+            font-family: var(--font-hindi);
+            font-weight: normal;
+            font-size: 1.9rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .modal-box > p { color: #555; font-size: 0.95rem; margin-bottom: 1.5rem; }
+
+        .modal-close {
+            position: absolute;
+            top: 0.8rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            line-height: 1;
+            cursor: pointer;
+            color: var(--text-dark);
+        }
+
+        .join-form input,
+        .join-form textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(26, 26, 26, 0.3);
+            padding: 0.8rem 0;
+            margin-bottom: 0.8rem;
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            color: var(--text-dark);
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .join-form input:focus,
+        .join-form textarea:focus { border-bottom-color: var(--accent-saffron); }
+
+        .join-form button {
+            width: 100%;
+            margin-top: 1rem;
+            cursor: pointer;
+            font-family: var(--font-sans);
+        }
+
+        .hp-field { position: absolute; left: -9999px; opacity: 0; height: 0; }
+
+        .form-status { font-size: 0.9rem; margin-top: 1rem; min-height: 1.3em; }
+        .form-status.ok { color: #2e7d32; }
+        .form-status.err { color: #c62828; }
+        .contact-form .form-status.ok { color: #7bc67e; }
+        .contact-form .form-status.err { color: #ff8a80; }
+
+        a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+            outline: 2px solid var(--accent-gold);
+            outline-offset: 3px;
         }
     </style>
 </head>
 <body>
-<div id="sidebar">
-<div style="text-align: right; color: white; cursor: pointer;" onclick="toggleMenu()"><i class="fas fa-times fa-2x"></i></div>
-<ul class="sidebar-links">
-<li><a href="#home" onclick="toggleMenu()"><i class="fas fa-home"></i> मुख्य पृष्ठ</a></li>
-<li><a href="#about" onclick="toggleMenu()"><i class="fas fa-history"></i> हमारा इतिहास</a></li>
-<li><a href="#mission" onclick="toggleMenu()"><i class="fas fa-bullseye"></i> हमारा लक्ष्य</a></li>
-<li><a href="http://devarsh.unaux.com/gallery.html" onclick="toggleMenu()"><i class="fas fa-images"></i> गैलरी</a></li>
-<li><a href="#contact" onclick="toggleMenu()"><i class="fas fa-envelope"></i> जानकारी हेतु</a></li>
-<li><a href="query.html" target="_blank" class="form-link" onclick="toggleMenu()" rel="noopener"><i class="fa fa-question-circle"></i> पदाधिकारियों का विवरण</a></li>
-<li><a href="https://hrssupdate.blogspot.com/" target="_blank" class="form-link" onclick="toggleMenu()" rel="noopener"><i class="fas fa-user"></i> H.R.S.S पंजिकृत सद्स्य सूची </a></li>
-<li><a href="right.html" target="_blank" class="form-link" onclick="toggleMenu()" rel="noopener"><i class="fas fa-user"></i> मान्यता एवं वैधानिक प्रमाण </a></li>
-<li><a href="https://forms.gle/GmZ5qZxb6NucHi7u7" target="_blank" class="form-link" onclick="toggleMenu()" rel="noopener"><i class="fas fa-user"></i> जुड़ने हेतु</a></li>
 
-</ul>
-<div style="margin-top: 50px; text-align: center; color: var(--gold); opacity: 0.6;">
-<p>धर्मो रक्षति रक्षितः</p>
-</div>
-</div>
-<header>
-<div class="logo-box"><img src="https://iili.io/q3JiQqP.png" alt="HRSS लोगो" /></div>
-<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 520 160" width="520" height="160" style="flex: 0.7; max-width: 100%;"> <defs> <lineargradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%"> <stop offset="0%" stop-color="#800000"></stop> <stop offset="50%" stop-color="#FF6600"></stop> <stop offset="100%" stop-color="#800000"></stop> </lineargradient> </defs> <!-- Outer decorative border --> <rect x="4" y="4" width="512" height="152" rx="8" ry="8" fill="#fff9f2" stroke="#FF9933" stroke-width="2.5"></rect> <!-- Inner double border --> <rect x="10" y="10" width="500" height="140" rx="5" ry="5" fill="none" stroke="#FFD700" stroke-width="1" stroke-dasharray="6,4"></rect> <!-- Top decorative line with Om symbol --> <line x1="30" y1="38" x2="235" y2="38" stroke="#FF9933" stroke-width="1.5"></line> <text x="260" y="44" font-size="18" fill="#FF6600" text-anchor="middle" font-family="serif">ॐ</text> <line x1="285" y1="38" x2="490" y2="38" stroke="#FF9933" stroke-width="1.5"></line> <!-- Main Hindi text with gradient --> <text x="260" y="95" font-family="'Martel', serif" font-size="52" font-weight="900" fill="url(#textGrad)" text-anchor="middle" letter-spacing="3">हिंदू रक्षा शक्ति संघ</text> <!-- Bottom decorative line with dots --> <line x1="30" y1="118" x2="490" y2="118" stroke="#FF9933" stroke-width="1.5"></line> <circle cx="60" cy="135" r="3" fill="#FF9933"></circle> <circle cx="260" cy="135" r="3" fill="#800000"></circle> <circle cx="460" cy="135" r="3" fill="#FF9933"></circle> <text x="260" y="148" font-size="9" fill="#FF6600" text-anchor="middle" font-family="'Poppins', sans-serif" letter-spacing="3">Hindu Raksha Shakti Sangh</text> </svg>
-<div class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars-staggered"></i> <span style="display: block; font-size: 10px; font-weight: bold;">मेन्यू</span></div>
-</header>
-<section class="hero" id="home">
-<div class="hero-content" data-aos="zoom-in">
-<h2>हिंदू पहचान का सशक्तिकरण</h2>
-<p>एकता • शक्ति • संस्कृति</p>
-<a href="https://forms.gle/GmZ5qZxb6NucHi7u7" class="btn-main">अभियान से जुड़ें</a></div>
-</section>
-<section class="section" id="about">
-<div style="display: flex; flex-wrap: wrap; gap: 50px; text-align: left;">
-<div style="flex: 1; min-width: 300px;" data-aos="fade-right">
-<h2 class="section-title" style="text-align: left;">मुख्य <span>उद्देश्य</span></h2>
-<p>1. सुरक्षा का संकल्प, एकता का बल हमारा प्राथमिक लक्ष्य हर हिन्दू परिवार के मन से भय को समाप्त करना है। हम एक ऐसा अभेद्य नेटवर्क बना रहे हैं जहाँ संकट के समय कोई भी व्यक्ति खुद को अकेला न पाए। एकता ही हमारी सबसे बड़ी शक्ति है। <br /><br />2. संस्कारों और विरासत का संरक्षण आधुनिकता की अंधी दौड़ में अपनी जड़ों को न भूलें। नई पीढ़ी को अपनी गौरवशाली विरासत, इतिहास और 'शस्त्र एवं शास्त्र' के संतुलित ज्ञान से जोड़ना हमारा अटूट मिशन है। <br /><br />3. शस्त्र पूजन एवं प्रतीक धारण ⚔️ "शस्त्रेण रक्षिते राष्ट्रे शास्त्रचिन्ता प्रवर्तते"। संघ के प्रत्येक सदस्य का यह पावन कर्तव्य है कि वे पूजन हेतु 'धार-मुक्त तलवार' धारण करें। <br /><br />4. अंतिम पंक्ति तक सहायता चाहे कानूनी उलझन हो, चिकित्सा सहायता हो या सामाजिक अन्याय के खिलाफ खड़ा होना—संघ हर उस हिन्दू भाई-बहन की ढाल बनेगा।</p>
-</div>
-<div style="flex: 1; min-width: 300px;" data-aos="fade-left"><img src="https://iili.io/q2QEQhx.md.jpg" alt="संस्कृति" style="width: 90%; height: auto; border-radius: 15px; box-shadow: var(--shadow);" /></div>
-</div>
-</section>
-<div class="stats-bg">
-<div class="stat-item"><span class="stat-num" data-target="50000">0</span>
-<p>सक्रिय सदस्य</p>
-</div>
-<div class="stat-item"><span class="stat-num" data-target="120">0</span>
-<p>सामाजिक कार्य</p>
-</div>
-<div class="stat-item"><span class="stat-num" data-target="25">0</span>
-<p>शहरों में उपस्थिति</p>
-</div>
-</div>
-<section class="section" id="mission">
-<h2 class="section-title">हमारे <span>आधार स्तंभ</span></h2>
-<div class="grid">
-<div class="card" data-aos="fade-up"><i class="fas fa-shield"></i>
-<h3>रक्षा</h3>
-<p>हमारी पावन संस्कृति और पारंपरिक मूल्यों का संरक्षण करना हमारा परम धर्म है।</p>
-</div>
-<div class="card" data-aos="fade-up" data-aos-delay="100"><i class="fas fa-om"></i>
-<h3>अध्यात्म</h3>
-<p>युवाओं को शस्त्र और शास्त्र, दोनों के महत्व से परिचित कराना।</p>
-</div>
-<div class="card" data-aos="fade-up" data-aos-delay="200"><i class="fas fa-hand-holding-heart"></i>
-<h3>सेवा</h3>
-<p>नर सेवा को नारायण सेवा मानकर समाज के वंचित वर्गों के लिए निरंतर कार्य करना।</p>
-</div>
-</div>
-</section>
-<section class="gallery">
-    <h2>Gallery</h2>
-    <div class="gallery-grid">
-        <img src="https://iili.io/q2mkGUX.jpg" alt="">
-        <img src="https://iili.io/q2mkElt.jpg" alt="">
-        <img src="https://iili.io/q2mkXOG.jpg" alt="">
-        <img src="https://iili.io/q2mkVJn.jpg" alt="">
-       
+    <!-- NAVIGATION -->
+    <nav class="navbar" id="navbar">
+        <a href="#" class="nav-brand">
+            <img src="https://iili.io/q3JiQqP.png" alt="HRSS Logo" class="nav-logo" width="60" height="60" onerror="logoFallback(this)">
+            <span class="nav-title"><strong>HRSS</strong><small>हिन्दू रक्षा शक्ति संघ</small></span>
+        </a>
+
+        <div class="menu-toggle" id="menuToggle" aria-label="Toggle navigation" role="button" tabindex="0">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="nav-links" id="navLinks">
+            <a href="#about">हमारे बारे में</a>
+            <a href="#mission">लक्ष्य</a>
+            <a href="#gallery">गैलरी</a>
+            <a href="query.html">सदस्य</a>
+            <a href="#contact">संपर्क</a>
+            <!-- REPLACE # WITH ACTUAL JOINING FORM LINK -->
+            <a href="#join" class="btn-nav" data-join>सदस्य बनें</a>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="hero">
+        <div class="hero-bg"></div>
+        <!-- Placeholder for cinematic hero image -->
+        <div class="hero-image-placeholder"></div>
         
-    </div>
-</section>
-<section class="section" id="contact">
-<h2 class="section-title">जानकारी <span>हेतु</span></h2>
-<div style="display: flex; flex-wrap: wrap; gap: 50px; text-align: left;">
-<div style="flex: 1; min-width: 300px;">
-<h3>संपर्क विवरण</h3>
-<br />
-<p><i class="fas fa-map-marker-alt" style="color: var(--saffron);"></i> संस्था का मुख्य कार्यालय निबिया रूपईडीहा 188,<br />सहजनवा जिला बहराइच उत्तर प्रदेश भारत</p>
-<p><i class="fas fa-phone" style="color: var(--saffron);"></i> 8765594075 , 9305114281</p>
-<p><i class="fas fa-envelope" style="color: var(--saffron);"></i> <a href="mailto:saktisangh@gmail.com" style="color: #333; text-decoration: none; font-weight: 600;">saktisangh@gmail.com</a></p>
-</div>
-<div style="flex: 1; min-width: 300px;"><form action="https://formspree.io/f/xjgeeboj" 
-      method="POST" 
-      class="contact-form" 
-      id="contactForm">
-
-    <input type="hidden" name="_subject" value="HRSS Website Contact">
-
-    <input type="text" name="name" placeholder="आपका नाम" required>
-
-    <input type="tel" name="mobile" 
-           placeholder="आपका मोबाइल नंबर"
-           pattern="[0-9]{10}" 
-           maxlength="10"
-           required>
-
-    <textarea name="message" rows="4" 
-              placeholder="आप कैसे योगदान देना चाहते हैं?" 
-              required></textarea>
-
-    <button type="submit">अनुरोध भेजें</button>
-
-    <div class="success-message" id="successMessage">
-        ✅ आपका संदेश सफलतापूर्वक भेज दिया गया!
-    </div>
-
-</form>
+        <div class="hero-content">
+            <span class="eyebrow eyebrow-light">यतो धर्मः ततो जयः</span>
+            <h1 class="hindi-heading">धर्म, संस्कृति और राष्ट्र रक्षा का संकल्प।</h1>
+            <p>हिन्दू रक्षा शक्ति संघ (HRSS) सनातन परंपराओं के संरक्षण, सामाजिक एकता और राष्ट्र सेवा के लिए समर्पित एक संगठन है। हमारा उद्देश्य समाज के प्रत्येक वर्ग को सशक्त बनाना है।</p>
+            <div class="hero-actions">
+                <!-- REPLACE # WITH ACTUAL JOINING FORM LINK -->
+                <a href="#join" class="btn-primary" data-join>अभी जुड़ें</a>
+                <a href="#about" class="btn-secondary">और जानें &rarr;</a>
             </div>
         </div>
-</div>
-</section>
-<footer>
-<div class="footer-logo">हिंदू रक्षा शक्ति संघ</div>
-<div class="socials"><a href="https://www.facebook.com/share/1bdwLqiszk/"><i class="fab fa-facebook"></i></a> <a href="https://www.youtube.com/@pankjkumar4593"><i class="fab fa-youtube"></i></a></div>
-<p>© 2024 हिंदू रक्षा शक्ति संघ। सर्वाधिकार सुरक्षित।<br /><a href="https://www.instagram.com/adrxsh.who/#">ADARSH</a> द्वारा बनाया गया</p>
-</footer>
-<p>
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>
-        AOS.init({ duration: 1000, once: true });
+    </header>
+
+    <!-- INTRODUCTION SECTION -->
+    <section class="intro" id="about">
+        <div class="intro-grid">
+            <div class="intro-text">
+                <span class="eyebrow">हमारा परिचय</span>
+                <h2 class="hindi-heading">राष्ट्र और धर्म की रक्षा हेतु एकजुट प्रयास।</h2>
+                <p>हिन्दू रक्षा शक्ति संघ की स्थापना समाज में सुरक्षा, आत्मीयता और सांस्कृतिक मूल्यों को बढ़ावा देने के लिए की गई है। हम मानते हैं कि एक मजबूत और जागरूक समाज ही राष्ट्र के विकास की नींव रख सकता है।</p>
+                <p>हमारा संगठन न केवल रक्षा तक सीमित है, बल्कि सेवा, शिक्षा और सांस्कृतिक जागरण के माध्यम से समाज के हर वर्ग तक सहायता पहुँचाने का कार्य करता है।</p>
+            </div>
+            <div class="intro-image-container">
+                <!-- Placeholder for organization image, replace src with real image -->
+                <img src="https://images.unsplash.com/photo-1583089892943-9aefe7db64e0?q=80&w=1000&auto=format&fit=crop" alt="HRSS Cultural Gathering">
+            </div>
+        </div>
+    </section>
+
+    <!-- MISSION SECTION -->
+    <section class="mission" id="mission">
+        <div class="mission-header">
+            <div>
+                <span class="eyebrow eyebrow-light">हमारे उद्देश्य</span>
+                <h2 class="hindi-heading">चार स्तंभ जो हमें दिशा देते हैं।</h2>
+            </div>
+        </div>
+
+        <div class="mission-grid">
+            <div class="mission-card">
+                <span class="mission-num">01</span>
+                <h3>रक्षा (Protection)</h3>
+                <p>समाज की सुरक्षा, आत्म-रक्षा का प्रशिक्षण, और आपातकालीन स्थितियों में तत्काल सहायता प्रदान करना।</p>
+            </div>
+            <div class="mission-card">
+                <span class="mission-num">02</span>
+                <h3>संस्कृति (Culture)</h3>
+                <p>सनातन परंपराओं, वेदों, और भारतीय कलाओं के संरक्षण तथा प्रचार-प्रसार हेतु कार्य करना।</p>
+            </div>
+            <div class="mission-card">
+                <span class="mission-num">03</span>
+                <h3>सेवा (Service)</h3>
+                <p>जरूरतमंदों की सहायता, चिकित्सा शिविरों का आयोजन, और सामाजिक कल्याण के कार्यों में अग्रणी रहना।</p>
+            </div>
+            <div class="mission-card">
+                <span class="mission-num">04</span>
+                <h3>एकता (Unity)</h3>
+                <p>समाज के विभिन्न वर्गों को जोड़कर एक सशक्त, जागरूक और संगठित हिन्दू समाज का निर्माण करना।</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALLERY SECTION -->
+    <section class="gallery" id="gallery">
+        <div class="gallery-header">
+            <div>
+                <span class="eyebrow">दृश्य झलकियाँ</span>
+                <h2 class="hindi-heading">हमारी गतिविधियाँ</h2>
+            </div>
+            <!-- REPLACE # WITH ACTUAL GALLERY PAGE LINK -->
+            <a href="#" class="btn-secondary" style="color: var(--text-dark); border-bottom: 1px solid var(--text-dark); padding-bottom: 2px;">सभी तस्वीरें देखें &rarr;</a>
+        </div>
+
+        <div class="gallery-grid">
+            <!-- PLACEHOLDER IMAGES - Replace src with actual gallery image URLs -->
+            <div class="gallery-item">
+                <img src="img1.jpeg" alt="Event 1" loading="lazy">
+            </div>
+            <div class="gallery-item">
+                <img src="img2.jpeg" alt="Event 2" loading="lazy">
+            </div>
+            <div class="gallery-item">
+                <img src="img3.jpeg" alt="Event 3" loading="lazy">
+            </div>
+            <div class="gallery-item">
+                <img src="img4.jpeg" alt="Event 4" loading="lazy">
+            </div>
+            <div class="gallery-item">
+                <img src="img5.jpeg" alt="Event 5" loading="lazy">
+            </div>
+        </div>
+    </section>
+
+    <!-- CALL TO ACTION -->
+    <section class="cta">
+        <h2 class="hindi-heading">समाज सेवा के इस पावन यज्ञ में हमारे साथ जुड़ें।</h2>
+        <p>एक सशक्त राष्ट्र के निर्माण में अपना योगदान दें। HRSS परिवार का हिस्सा बनें।</p>
+        <!-- REPLACE # WITH ACTUAL JOINING FORM LINK -->
+        <a href="#join" class="btn-white" data-join>सदस्यता ग्रहण करें</a>
+    </section>
+
+    <!-- FOOTER & CONTACT -->
+    <footer class="footer" id="contact">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <img src="https://iili.io/q3JiQqP.png" alt="HRSS Logo" width="64" height="64" onerror="logoFallback(this)">
+                <h3>Hindu Raksha Shakti Sangh</h3>
+                <p>धर्म, संस्कृति और राष्ट्र रक्षा के संकल्प के साथ समर्पित संगठन।</p>
+                <p style="margin-top: 1rem; font-size: 0.8rem; color: var(--accent-gold);">यतो धर्मः ततो जयः</p>
+            </div>
+
+            <div class="footer-links">
+                <h4>नेविगेशन</h4>
+                <ul>
+                    <li><a href="#about">हमारे बारे में</a></li>
+                    <li><a href="#mission">हमारे लक्ष्य</a></li>
+                    <li><a href="#gallery">गैलरी</a></li>
+                    <!-- REPLACE # WITH ACTUAL JOINING FORM LINK -->
+                    <li><a href="#join" data-join>सदस्य बनें</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h4>संपर्क</h4>
+                <ul>
+                    <!-- REPLACE WITH ACTUAL CONTACT DETAILS -->
+                    <li><a href="tel:+910000000000">+91 00000 00000</a></li>
+                    <li><a href="mailto:info@hrss.org">info@hrss.org</a></li>
+                    <!-- REPLACE WITH ACTUAL ADDRESS -->
+                    <li style="color: #A0A0A0; font-size: 0.9rem; margin-top: 1rem;">Address Line 1<br>City, State, PIN</li>
+                </ul>
+            </div>
+
+            <div class="footer-contact">
+                <h4>संदेश भेजें</h4>
+                <!-- 
+                  IMPORTANT: Replace action="" with your actual form endpoint. 
+                  If using a service like Formspree, it should look like: 
+                  action="https://formspree.io/f/yourid" method="POST" 
+                -->
+                <form class="contact-form" id="contactForm" data-type="Message" novalidate>
+                    <input type="text" name="name" placeholder="आपका नाम" required aria-label="Your Name">
+                    <input type="email" name="email" placeholder="ईमेल पता" required aria-label="Email Address">
+                    <textarea name="message" rows="2" placeholder="आपका संदेश" required aria-label="Message"></textarea>
+                    <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+                    <button type="submit">भेजें</button>
+                    <p class="form-status" role="status"></p>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 Hindu Raksha Shakti Sangh. All rights reserved.</p>
+            <p>Designed with reverence.</p>
+        </div>
+    </footer>
+
+    <!-- JOIN MODAL (saves to Google Sheet) -->
+    <div class="modal" id="joinModal" role="dialog" aria-modal="true" aria-labelledby="joinTitle">
+        <div class="modal-box">
+            <button class="modal-close" type="button" aria-label="बंद करें" data-close>&times;</button>
+            <h3 id="joinTitle">सदस्य बनें</h3>
+            <p>अपनी जानकारी भरें, हमारी टीम आपसे संपर्क करेगी।</p>
+            <form class="join-form" id="joinForm" data-type="Member" novalidate>
+                <input type="text" name="name" placeholder="पूरा नाम *" required aria-label="Full name">
+                <input type="tel" name="phone" placeholder="मोबाइल नंबर *" required pattern="[0-9+ ]{10,15}" aria-label="Mobile number">
+                <input type="email" name="email" placeholder="ईमेल (वैकल्पिक)" aria-label="Email">
+                <input type="text" name="city" placeholder="शहर / जिला *" required aria-label="City or district">
+                <textarea name="message" rows="2" placeholder="संदेश (वैकल्पिक)" aria-label="Message"></textarea>
+                <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+                <button type="submit" class="btn-primary">आवेदन भेजें</button>
+                <p class="form-status" role="status"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+        let isMenuOpen = false;
+
         function toggleMenu() {
-            document.getElementById('sidebar').classList.toggle('active');
+            isMenuOpen = !isMenuOpen;
+            if (isMenuOpen) {
+                navLinks.classList.add('active');
+                menuToggle.setAttribute('aria-expanded', 'true');
+            } else {
+                navLinks.classList.remove('active');
+                menuToggle.setAttribute('aria-expanded', 'false');
+            }
         }
-        const counters = document.querySelectorAll('.stat-num');
-        const startCounters = () => {
-            counters.forEach(counter => {
-                const updateCount = () => {
-                    const target = +counter.getAttribute('data-target');
-                    const count = +counter.innerText;
-                    const inc = target / 200;
-                    if (count < target) {
-                        counter.innerText = Math.ceil(count + inc);
-                        setTimeout(updateCount, 15);
-                    } else {
-                        counter.innerText = target.toLocaleString() + "+";
-                    }
-                };
-                updateCount();
+
+        menuToggle.addEventListener('click', toggleMenu);
+        
+        // Keyboard accessibility for menu toggle
+        menuToggle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleMenu();
+            }
+        });
+        // Close mobile menu when a link is clicked
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (isMenuOpen) toggleMenu();
             });
-        };
-        let observer = new IntersectionObserver((entries) => {
-            if(entries[0].isIntersecting) { startCounters(); observer.disconnect(); }
-        }, { threshold: 0.5 });
-        observer.observe(document.querySelector('.stats-bg'));
-        // ===== AJAX Contact Form =====
+        });
 
-const form = document.getElementById("contactForm");
-const successMessage = document.getElementById("successMessage");
+        // =========================================
+        // GOOGLE SHEET CONNECTION
+        // Paste your Apps Script Web App URL below (see SETUP-GOOGLE-SHEET.md)
+        // =========================================
+        const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyUwJiMyVFwQk1mxJnAEbB5CNwlb1Em0N6YrloT3Y-thhHKfOKGiR1I-HtJJMB8xLbe/exec';
 
-if(form){
-form.addEventListener("submit", async function(e) {
-    e.preventDefault();
+        // Join modal
+        const modal = document.getElementById('joinModal');
+        function openModal(e) {
+            if (e) e.preventDefault();
+            modal.classList.add('open');
+            const first = modal.querySelector('input');
+            if (first) setTimeout(() => first.focus(), 50);
+        }
+        function closeModal() { modal.classList.remove('open'); }
+        document.querySelectorAll('[data-join]').forEach(a => a.addEventListener('click', openModal));
+        modal.querySelector('[data-close]').addEventListener('click', closeModal);
+        modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-    const data = new FormData(form);
+        // Send any form to the Google Sheet
+        function bindSheetForm(form) {
+            const status = form.querySelector('.form-status');
+            const btn = form.querySelector('button[type="submit"]');
+            const label = btn.textContent;
 
-    const response = await fetch(form.action, {
-        method: form.method,
-        body: data,
-        headers: { 'Accept': 'application/json' }
-    });
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                status.className = 'form-status';
+                status.textContent = '';
 
-    if (response.ok) {
-        form.reset();
-        successMessage.style.display = "block";
-    } else {
-        alert("कुछ गलती हो गई। कृपया दोबारा प्रयास करें।");
-    }
-});
-}
+                if (!form.checkValidity()) {
+                    status.classList.add('err');
+                    status.textContent = 'कृपया सभी आवश्यक जानकारी सही भरें।';
+                    return;
+                }
+                if (form.website && form.website.value) return; // spam trap
+                if (SHEET_URL.startsWith('PASTE_')) {
+                    status.classList.add('err');
+                    status.textContent = 'Google Sheet लिंक अभी जोड़ा नहीं गया है।';
+                    return;
+                }
+
+                const data = Object.fromEntries(new FormData(form).entries());
+                delete data.website;
+                data.type = form.dataset.type;
+                data.page = location.href;
+
+                btn.disabled = true;
+                btn.textContent = 'भेजा जा रहा है…';
+                try {
+                    await fetch(SHEET_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify(data)
+                    });
+                    form.reset();
+                    status.classList.add('ok');
+                    status.textContent = 'धन्यवाद! आपकी जानकारी प्राप्त हो गई है।';
+                    if (form.id === 'joinForm') setTimeout(closeModal, 2500);
+                } catch (err) {
+                    status.classList.add('err');
+                    status.textContent = 'भेजने में समस्या हुई। कृपया पुनः प्रयास करें।';
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = label;
+                }
+            });
+        }
+        bindSheetForm(document.getElementById('joinForm'));
+        bindSheetForm(document.getElementById('contactForm'));
     </script>
-</p>
+</body>
+</html>
