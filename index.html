@@ -1042,7 +1042,7 @@
             <p>अपनी जानकारी भरें, हमारी टीम आपसे संपर्क करेगी।</p>
             <form class="join-form" id="joinForm" data-type="Member" novalidate>
                 <input type="text" name="name" placeholder="पूरा नाम *" required aria-label="Full name">
-                <input type="tel" name="phone" placeholder="मोबाइल नंबर *" required pattern="[0-9+ ]{10,15}" aria-label="Mobile number">
+                <input type="tel" name="phone" placeholder="मोबाइल नंबर *" required inputmode="tel" autocomplete="tel" aria-label="Mobile number">
                 <input type="email" name="email" placeholder="ईमेल (वैकल्पिक)" aria-label="Email">
                 <input type="text" name="city" placeholder="शहर / जिला *" required aria-label="City or district">
                 <textarea name="message" rows="2" placeholder="संदेश (वैकल्पिक)" aria-label="Message"></textarea>
@@ -1133,6 +1133,11 @@
                     status.textContent = 'कृपया सभी आवश्यक जानकारी सही भरें।';
                     return;
                 }
+                if (form.phone && !/^[0-9+\s-]{10,15}$/.test(form.phone.value.trim())) {
+                    status.classList.add('err');
+                    status.textContent = 'कृपया सही मोबाइल नंबर लिखें (10 अंक)।';
+                    return;
+                }
                 if (form.website && form.website.value) return; // spam trap
                 if (SHEET_URL.startsWith('PASTE_')) {
                     status.classList.add('err');
@@ -1148,19 +1153,23 @@
                 btn.disabled = true;
                 btn.textContent = 'भेजा जा रहा है…';
                 try {
-                    await fetch(SHEET_URL, {
+                    // text/plain keeps this a "simple" request, so Google's reply can be read
+                    const res = await fetch(SHEET_URL, {
                         method: 'POST',
-                        mode: 'no-cors',
                         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                         body: JSON.stringify(data)
                     });
+                    const out = await res.json();
+                    if (!out.ok) throw new Error(out.error || 'Sheet returned an error');
+
                     form.reset();
                     status.classList.add('ok');
                     status.textContent = 'धन्यवाद! आपकी जानकारी प्राप्त हो गई है।';
                     if (form.id === 'joinForm') setTimeout(closeModal, 2500);
                 } catch (err) {
+                    console.error('HRSS form error:', err);
                     status.classList.add('err');
-                    status.textContent = 'भेजने में समस्या हुई। कृपया पुनः प्रयास करें।';
+                    status.textContent = 'भेजने में समस्या हुई। कृपया पुनः प्रयास करें। (' + (err.message || 'network') + ')';
                 } finally {
                     btn.disabled = false;
                     btn.textContent = label;
