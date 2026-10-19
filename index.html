@@ -140,17 +140,18 @@
         }
 
         .nav-logo {
-            height: 60px;
-            width: 60px;
+            height: 64px;
+            width: auto;
+            max-width: 160px;
             flex-shrink: 0;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 1px solid rgba(199, 161, 90, 0.6);
-            background: var(--bg-charcoal);
-            transition: height 0.3s, width 0.3s;
+            object-fit: contain;
+            border: none;
+            border-radius: 0;
+            background: none;
+            transition: height 0.3s;
         }
 
-        .navbar.scrolled .nav-logo { height: 48px; width: 48px; }
+        .navbar.scrolled .nav-logo { height: 50px; width: auto; }
 
         .nav-title {
             display: flex;
@@ -567,11 +568,10 @@
 
         .footer-brand img {
             height: 64px;
-            width: 64px;
-            object-fit: cover;
-            border: 1px solid rgba(199, 161, 90, 0.6);
-            margin-bottom: 1.5rem;
-            border-radius: 50%;
+            width: auto;
+            object-fit: contain;
+            border: none;
+            border-radius: 0;
         }
 
         .footer-brand h3 {
@@ -685,8 +685,8 @@
 
         @media (max-width: 900px) {
             .menu-toggle { display: flex; }
-            .nav-logo { height: 46px; width: 46px; }
-            .navbar.scrolled .nav-logo { height: 42px; width: 42px; }
+            .nav-logo { height: 48px; width: auto; }
+            .navbar.scrolled .nav-logo { height: 50px; width: auto; }
             .nav-title strong { font-size: 1.25rem; }
             .nav-title small { font-size: 0.7rem; }
             
@@ -851,7 +851,7 @@
     <!-- NAVIGATION -->
     <nav class="navbar" id="navbar">
         <a href="#" class="nav-brand">
-            <img src="https://iili.io/q3JiQqP.png" alt="HRSS Logo" class="nav-logo" width="60" height="60" onerror="logoFallback(this)">
+            <img src="https://iili.io/q3JiQqP.png" alt="HRSS Logo" class="nav-logo" onerror="logoFallback(this)">
             <span class="nav-title"><strong>HRSS</strong><small>हिन्दू रक्षा शक्ति संघ</small></span>
         </a>
 
@@ -982,7 +982,7 @@
     <footer class="footer" id="contact">
         <div class="footer-grid">
             <div class="footer-brand">
-                <img src="https://iili.io/q3JiQqP.png" alt="HRSS Logo" width="64" height="64" onerror="logoFallback(this)">
+                <img src="https://iili.io/q3JiQqP.png" alt="HRSS Logo" onerror="logoFallback(this)">
                 <h3>Hindu Raksha Shakti Sangh</h3>
                 <p>धर्म, संस्कृति और राष्ट्र रक्षा के संकल्प के साथ समर्पित संगठन।</p>
                 <p style="margin-top: 1rem; font-size: 0.8rem; color: var(--accent-gold);">यतो धर्मः ततो जयः</p>
