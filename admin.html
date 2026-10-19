@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>गैलरी एडमिन | HRSS</title>
+    <link rel="icon" type="image/png" href="https://iili.io/q3JiQqP.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Tiro+Devanagari+Hindi:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        const FALLBACK_LOGO = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23121212'/%3E%3Ccircle cx='50' cy='50' r='44' fill='none' stroke='%23C7A15A' stroke-width='2'/%3E%3Cpath d='M50 18c8 12 14 18 14 30a14 14 0 0 1-28 0c0-12 6-18 14-30z' fill='%23E25822'/%3E%3Ctext x='50' y='80' font-family='Georgia,serif' font-size='16' font-weight='700' fill='%23C7A15A' text-anchor='middle'%3EHRSS%3C/text%3E%3C/svg%3E";
+        function logoFallback(img) {
+            if (!img.dataset.tried) { img.dataset.tried = '1'; img.src = 'logo.png'; }
+            else { img.onerror = null; img.src = FALLBACK_LOGO; }
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg-ivory: #F5F2EB;
+            --bg-charcoal: #121212;
+            --bg-charcoal-light: #1E1E1E;
+            --accent-saffron: #E25822;
+            --accent-gold: #C7A15A;
+            --text-dark: #1A1A1A;
+            --text-light: #F5F2EB;
+            --text-muted: #888888;
+            --font-display: 'Playfair Display', serif;
+            --font-hindi: 'Tiro Devanagari Hindi', serif;
+            --font-sans: 'Inter', 'Tiro Devanagari Hindi', sans-serif;
+            --border-thin: 1px solid rgba(26, 26, 26, 0.15);
+            --border-thin-light: 1px solid rgba(245, 242, 235, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-ivory);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        img { max-width: 100%; height: auto; display: block; }
+        a { text-decoration: none; color: inherit; transition: color 0.3s ease; }
+        [hidden] { display: none !important; }
+
+        .eyebrow {
+            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em;
+            font-weight: 600; color: var(--accent-gold); display: block; margin-bottom: 1rem;
+        }
+
+        /* ---------- NAV ---------- */
+        .navbar {
+            position: fixed; top: 0; left: 0; width: 100%;
+            padding: 1.5rem 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(18,18,18,0.85), rgba(18,18,18,0));
+            border-bottom: 1px solid transparent;
+            transition: background-color 0.4s ease, border-bottom 0.4s ease, padding 0.3s ease;
+        }
+        .navbar.scrolled {
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: var(--border-thin-light);
+            padding: 0.7rem 5%;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 14px; color: var(--text-light); }
+        .nav-logo {
+            height: 96px; width: auto; max-width: 220px; flex-shrink: 0;
+            object-fit: contain; border: none; border-radius: 0; background: none;
+            transition: height 0.3s;
+        }
+        .navbar.scrolled .nav-logo { height: 68px; width: auto; }
+        .nav-title { display: flex; flex-direction: column; line-height: 1.1; }
+        .nav-title strong { font-family: var(--font-display); font-size: 2.1rem; font-weight: 700; letter-spacing: 0.08em; }
+        .nav-title small { font-family: var(--font-hindi); font-size: 1rem; color: var(--accent-gold); margin-top: 2px; }
+        .nav-actions { display: flex; gap: 0.6rem; align-items: center; }
+        .btn-nav {
+            background-color: var(--accent-saffron); color: white;
+            padding: 0.6rem 1.5rem; border: 1px solid var(--accent-saffron);
+            font-family: var(--font-sans);
+            font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500;
+            transition: background-color 0.3s, color 0.3s; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-nav:hover { background-color: transparent; color: var(--accent-saffron); }
+        .btn-nav.ghost { background: transparent; border-color: rgba(245,242,235,0.4); color: var(--text-light); }
+        .btn-nav.ghost:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+
+        /* ---------- HERO ---------- */
+        .hero {
+            background-color: var(--bg-charcoal);
+            position: relative;
+            padding: 11rem 5% 4rem;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at 70% 50%, rgba(226, 88, 34, 0.15) 0%, transparent 60%);
+        }
+        .hero-content { position: relative; max-width: 900px; }
+        .hero h1 {
+            font-family: var(--font-hindi); font-weight: normal; line-height: 1.25;
+            font-size: clamp(2.2rem, 5vw, 4rem); color: var(--text-light); margin-bottom: 1rem;
+        }
+        .hero p { color: rgba(245, 242, 235, 0.7); font-weight: 300; max-width: 560px; }
+
+        /* ---------- LAYOUT ---------- */
+        .wrap { max-width: 1400px; margin: 0 auto; padding: 4rem 5% 7rem; }
+
+        .card {
+            background: #FBF9F4;
+            border: var(--border-thin);
+            border-top: 2px solid var(--accent-gold);
+            padding: 2.2rem 2rem;
+        }
+        .card h2 {
+            font-family: var(--font-hindi); font-weight: normal;
+            font-size: 1.7rem; line-height: 1.3; margin-bottom: 0.4rem;
+        }
+        .card > p.sub { color: #555; font-size: 0.95rem; margin-bottom: 1.6rem; }
+
+        /* login */
+        #loginView .card { max-width: 460px; margin: 0 auto; }
+
+        /* fields */
+        label.f { display: block; font-size: 0.8rem; color: var(--text-muted); letter-spacing: 0.04em; margin-top: 1.2rem; }
+        input[type="password"], textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(26, 26, 26, 0.3);
+            padding: 0.7rem 0;
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            color: var(--text-dark);
+            outline: none;
+            transition: border-color 0.3s;
+            resize: vertical;
+        }
+        input[type="password"]:focus, textarea:focus { border-bottom-color: var(--accent-saffron); }
+
+        .btn {
+            background: var(--accent-saffron);
+            color: #fff;
+            border: 1px solid var(--accent-saffron);
+            padding: 0.9rem 2rem;
+            font-family: var(--font-sans);
+            font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500;
+            cursor: pointer; margin-top: 1.6rem;
+            transition: background-color 0.3s, color 0.3s;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn:hover:not(:disabled) { background: transparent; color: var(--accent-saffron); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .status { font-size: 0.9rem; margin-top: 1rem; min-height: 1.4em; }
+        .status.ok { color: #2e7d32; }
+        .status.err { color: #c62828; }
+
+        /* upload */
+        .upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start; }
+
+        .drop {
+            border: 1px dashed rgba(199, 161, 90, 0.9);
+            background: rgba(199, 161, 90, 0.06);
+            min-height: 280px;
+            display: flex; align-items: center; justify-content: center;
+            text-align: center; cursor: pointer; position: relative; overflow: hidden;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+        .drop:hover, .drop.over { border-color: var(--accent-saffron); background: rgba(226, 88, 34, 0.06); }
+        .drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+        .drop-text i { font-size: 2rem; color: var(--accent-gold); display: block; margin-bottom: 0.8rem; }
+        .drop-text p { font-family: var(--font-hindi); font-size: 1.05rem; }
+        .drop-text small { color: var(--text-muted); }
+        .drop img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: var(--bg-charcoal); }
+
+        .count-lg { font-family: var(--font-display); color: var(--accent-saffron); font-size: 1.4rem; margin-right: 4px; }
+
+        /* list */
+        .list-head {
+            font-family: var(--font-hindi); font-size: 1.1rem; color: #444;
+            border-top: 1px solid rgba(199, 161, 90, 0.5);
+            padding-top: 1rem; margin: 4rem 0 2rem;
+        }
+
+        .admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.2rem; }
+        .a-item { background: #FBF9F4; border: var(--border-thin); }
+        .a-item .ph { aspect-ratio: 4 / 5; background: var(--bg-charcoal-light); overflow: hidden; }
+        .a-item img { width: 100%; height: 100%; object-fit: cover; }
+        .a-body { padding: 0.9rem 1rem 1rem; border-top: 1px solid rgba(199, 161, 90, 0.5); }
+        .a-desc { font-size: 0.88rem; color: #333; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; min-height: 4.2em; }
+        .a-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 0.7rem; gap: 0.5rem; }
+        .a-date { font-size: 0.72rem; color: var(--text-muted); }
+        .btn-del {
+            background: transparent; border: 1px solid rgba(198, 40, 40, 0.5); color: #c62828;
+            padding: 0.35rem 0.8rem; font-size: 0.78rem; cursor: pointer; font-family: var(--font-sans);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .btn-del:hover:not(:disabled) { background: #c62828; color: #fff; }
+        .btn-del:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .empty { text-align: center; color: var(--text-muted); padding: 3rem 1rem; font-family: var(--font-hindi); }
+
+        a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+            outline: 2px solid var(--accent-gold); outline-offset: 3px;
+        }
+
+        @media (max-width: 900px) {
+            .nav-logo { height: 64px; width: auto; }
+            .navbar.scrolled .nav-logo { height: 54px; width: auto; }
+            .nav-title strong { font-size: 1.5rem; }
+            .nav-title small { font-size: 0.82rem; }
+            .upload-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+        }
+        @media (max-width: 600px) {
+            .hero { padding: 9rem 5% 3rem; }
+            .wrap { padding: 3rem 5% 5rem; }
+            .card { padding: 1.6rem 1.2rem; }
+            .btn-nav { padding: 0.5rem 0.9rem; font-size: 0.7rem; }
+            .nav-actions .ghost span { display: none; }
+            .admin-grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="nav-brand">
+            <img src="https://iili.io/q3JiQqP.png" alt="HRSS Logo" class="nav-logo" onerror="logoFallback(this)">
+            <span class="nav-title"><strong>HRSS</strong><small>हिन्दू रक्षा शक्ति संघ</small></span>
+        </a>
+        <div class="nav-actions">
+            <a href="gallery.html" class="btn-nav ghost"><i class="fas fa-images"></i> <span>गैलरी देखें</span></a>
+            <button class="btn-nav" id="logoutBtn" type="button" hidden><i class="fas fa-right-from-bracket"></i> <span>लॉगआउट</span></button>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <span class="eyebrow">एडमिन पैनल</span>
+            <h1>गैलरी प्रबंधन।</h1>
+            <p>नई फोटो और उसका विवरण जोड़ें। फोटो तुरंत गैलरी पेज पर दिखने लगती है।</p>
+        </div>
+    </header>
+
+    <main class="wrap">
+
+        <!-- LOGIN -->
+        <section id="loginView">
+            <div class="card">
+                <h2>एडमिन लॉगिन</h2>
+                <p class="sub">आगे बढ़ने के लिए पासवर्ड डालें।</p>
+                <form id="loginForm">
+                    <label class="f" for="pw">पासवर्ड</label>
+                    <input type="password" id="pw" autocomplete="current-password" required>
+                    <button class="btn" type="submit" id="loginBtn">लॉगिन</button>
+                    <p class="status" id="loginStatus" role="status"></p>
+                </form>
+            </div>
+        </section>
+
+        <!-- PANEL -->
+        <section id="panelView" hidden>
+            <div class="card">
+                <h2>नई फोटो जोड़ें</h2>
+                <p class="sub">फोटो चुनें, विवरण लिखें और अपलोड करें।</p>
+                <form id="uploadForm">
+                    <div class="upload-grid">
+                        <div>
+                            <div class="drop" id="drop">
+                                <input type="file" id="file" accept="image/jpeg,image/png,image/webp" aria-label="फोटो चुनें">
+                                <div class="drop-text" id="dropText">
+                                    <i class="fas fa-cloud-arrow-up"></i>
+                                    <p>फोटो चुनने के लिए यहाँ टैप करें</p>
+                                    <small>JPG, PNG या WEBP</small>
+                                </div>
+                                <img id="preview" alt="चुनी गई फोटो" hidden>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="f" for="desc">फोटो का विवरण (Description)</label>
+                            <textarea id="desc" rows="6" maxlength="600" placeholder="इस फोटो के बारे में लिखें..."></textarea>
+                            <button class="btn" type="submit" id="uploadBtn"><i class="fas fa-upload"></i> अपलोड करें</button>
+                            <p class="status" id="uploadStatus" role="status"></p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="list-head"><span class="count-lg" id="adminCount">0</span> फोटो अपलोड हैं</div>
+            <div class="admin-grid" id="adminGrid"></div>
+            <div class="empty" id="adminEmpty" hidden>अभी कोई फोटो नहीं है</div>
+        </section>
+    </main>
+
+    <script>
+        // Same Apps Script link as the website forms
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyUwJiMyVFwQk1mxJnAEbB5CNwlb1Em0N6YrloT3Y-thhHKfOKGiR1I-HtJJMB8xLbe/exec';
+
+        const $ = id => document.getElementById(id);
+        const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        const thumb = (id, w) => `https://drive.google.com/thumbnail?id=${encodeURIComponent(id)}&sz=w${w}`;
+        const direct = id => `https://drive.google.com/uc?export=view&id=${encodeURIComponent(id)}`;
+
+        const navbar = $('navbar');
+        const onScroll = () => navbar.classList.toggle('scrolled', window.scrollY > 50);
+        window.addEventListener('scroll', onScroll);
+        onScroll();
+
+        let password = '';
+        try { password = sessionStorage.getItem('hrss_admin') || ''; } catch (e) {}
+
+        // text/plain keeps this a simple request so Google's reply can be read
+        async function post(payload) {
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payload)
+            });
+            const out = await res.json();
+            if (!out.ok) throw new Error(out.error || 'Server error');
+            return out;
+        }
+
+        function say(el, msg, type) { el.className = 'status' + (type ? ' ' + type : ''); el.textContent = msg; }
+
+        /* ---------- login ---------- */
+        function showPanel() {
+            $('loginView').hidden = true;
+            $('panelView').hidden = false;
+            $('logoutBtn').hidden = false;
+            loadList();
+        }
+
+        async function tryLogin(pw, statusEl) {
+            await post({ action: 'login', password: pw });
+            password = pw;
+            try { sessionStorage.setItem('hrss_admin', pw); } catch (e) {}
+            showPanel();
+        }
+
+        $('loginForm').addEventListener('submit', async e => {
+            e.preventDefault();
+            const btn = $('loginBtn');
+            btn.disabled = true;
+            say($('loginStatus'), 'जाँच हो रही है…');
+            try {
+                await tryLogin($('pw').value, $('loginStatus'));
+                $('pw').value = '';
+            } catch (err) {
+                say($('loginStatus'), err.message === 'Wrong password' ? 'पासवर्ड गलत है।' : 'लॉगिन नहीं हो सका: ' + err.message, 'err');
+            } finally { btn.disabled = false; }
+        });
+
+        $('logoutBtn').addEventListener('click', () => {
+            password = '';
+            try { sessionStorage.removeItem('hrss_admin'); } catch (e) {}
+            $('panelView').hidden = true;
+            $('logoutBtn').hidden = true;
+            $('loginView').hidden = false;
+            say($('loginStatus'), '');
+        });
+
+        if (password) tryLogin(password).catch(() => { password = ''; try { sessionStorage.removeItem('hrss_admin'); } catch (e) {} });
+
+        /* ---------- choose + resize image ---------- */
+        let chosenDataUrl = '';
+
+        function loadImage(file) {
+            return new Promise((resolve, reject) => {
+                const url = URL.createObjectURL(file);
+                const img = new Image();
+                img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+                img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('यह फोटो पढ़ी नहीं जा सकी')); };
+                img.src = url;
+            });
+        }
+
+        async function prepare(file) {
+            const img = await loadImage(file);
+            const MAX = 1600;
+            const scale = Math.min(1, MAX / Math.max(img.naturalWidth, img.naturalHeight));
+            const w = Math.round(img.naturalWidth * scale), h = Math.round(img.naturalHeight * scale);
+            const c = document.createElement('canvas');
+            c.width = w; c.height = h;
+            const ctx = c.getContext('2d');
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(0, 0, w, h);
+            ctx.drawImage(img, 0, 0, w, h);
+            return c.toDataURL('image/jpeg', 0.85);
+        }
+
+        async function onFile(file) {
+            if (!file) return;
+            if (!/^image\//.test(file.type)) { say($('uploadStatus'), 'कृपया सिर्फ फोटो चुनें।', 'err'); return; }
+            say($('uploadStatus'), '');
+            try {
+                chosenDataUrl = await prepare(file);
+                $('preview').src = chosenDataUrl;
+                $('preview').hidden = false;
+                $('dropText').hidden = true;
+            } catch (err) {
+                chosenDataUrl = '';
+                say($('uploadStatus'), err.message, 'err');
+            }
+        }
+
+        $('file').addEventListener('change', e => onFile(e.target.files[0]));
+        ['dragenter', 'dragover'].forEach(ev => $('drop').addEventListener(ev, e => { e.preventDefault(); $('drop').classList.add('over'); }));
+        ['dragleave', 'drop'].forEach(ev => $('drop').addEventListener(ev, e => { e.preventDefault(); $('drop').classList.remove('over'); }));
+        $('drop').addEventListener('drop', e => onFile(e.dataTransfer.files[0]));
+
+        /* ---------- upload ---------- */
+        $('uploadForm').addEventListener('submit', async e => {
+            e.preventDefault();
+            if (!chosenDataUrl) { say($('uploadStatus'), 'पहले एक फोटो चुनें।', 'err'); return; }
+            const btn = $('uploadBtn');
+            btn.disabled = true;
+            say($('uploadStatus'), 'अपलोड हो रही है… कृपया रुकें।');
+            try {
+                await post({
+                    action: 'upload',
+                    password: password,
+                    description: $('desc').value.trim(),
+                    image: chosenDataUrl
+                });
+                say($('uploadStatus'), 'फोटो सफलतापूर्वक जुड़ गई।', 'ok');
+                $('uploadForm').reset();
+                chosenDataUrl = '';
+                $('preview').hidden = true;
+                $('preview').removeAttribute('src');
+                $('dropText').hidden = false;
+                loadList();
+            } catch (err) {
+                console.error('Upload error:', err);
+                say($('uploadStatus'), 'अपलोड नहीं हो सका: ' + err.message, 'err');
+            } finally { btn.disabled = false; }
+        });
+
+        /* ---------- list + delete ---------- */
+        async function loadList() {
+            try {
+                const res = await fetch(API_URL + '?action=gallery');
+                const out = await res.json();
+                if (!out.ok) throw new Error(out.error || 'Server error');
+                renderList(out.photos || []);
+            } catch (err) {
+                console.error('List error:', err);
+                $('adminGrid').innerHTML = '';
+                $('adminEmpty').hidden = false;
+                $('adminEmpty').textContent = 'फोटो की सूची लोड नहीं हो सकी।';
+            }
+        }
+
+        function renderList(photos) {
+            $('adminCount').textContent = photos.length;
+            const grid = $('adminGrid');
+            grid.innerHTML = '';
+            $('adminEmpty').hidden = photos.length > 0;
+            $('adminEmpty').textContent = 'अभी कोई फोटो नहीं है';
+            photos.forEach(p => {
+                const el = document.createElement('div');
+                el.className = 'a-item';
+                el.innerHTML = `
+                    <div class="ph"><img src="${esc(thumb(p.fileId, 500))}" alt="${esc(p.description || 'फोटो')}" loading="lazy"></div>
+                    <div class="a-body">
+                        <p class="a-desc">${esc(p.description) || '<em>विवरण नहीं</em>'}</p>
+                        <div class="a-foot">
+                            <span class="a-date">${esc(String(p.time).split(' ')[0])}</span>
+                            <button class="btn-del" type="button"><i class="fas fa-trash"></i> हटाएँ</button>
+                        </div>
+                    </div>`;
+                el.querySelector('img').addEventListener('error', function () {
+                    if (!this.dataset.t) { this.dataset.t = '1'; this.src = direct(p.fileId); }
+                });
+                el.querySelector('.btn-del').addEventListener('click', async function () {
+                    if (!confirm('क्या आप यह फोटो हटाना चाहते हैं?')) return;
+                    this.disabled = true;
+                    try {
+                        await post({ action: 'delete', password: password, id: p.id });
+                        loadList();
+                    } catch (err) {
+                        this.disabled = false;
+                        alert('फोटो नहीं हट सकी: ' + err.message);
+                    }
+                });
+                grid.appendChild(el);
+            });
+        }
+    </script>
+</body>
+</html>
