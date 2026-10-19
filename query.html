@@ -647,7 +647,6 @@
             members.forEach(m => {
                 const deptLabel = m.dept_label || deptLabelMap[m.vibhag] || m.vibhag;
                 const photoSrc  = driveUrl(m.photo);
-                const mobileTel = m.mobile.replace(/[^0-9+]/g, '');
 
                 const card = document.createElement('article');
                 card.className = 'mcard';
@@ -663,10 +662,7 @@
                         </div>
                         <div class="card-info">
                             <div class="card-name">${esc(m.naam)}</div>
-                            <div class="card-row"><i class="fas fa-user-tie"></i><div><span>पद :</span> ${esc(m.pad)}</div></div>
                             <div class="card-row"><i class="fas fa-user"></i><div><span>पिता :</span> ${esc(m.pita)}</div></div>
-                            <div class="card-row"><i class="fas fa-cake-candles"></i><div><span>आयु :</span> ${esc(m.aayu)}</div></div>
-                            <div class="card-row"><i class="fas fa-phone"></i><a href="tel:${esc(mobileTel)}">${esc(m.mobile)}</a></div>
                             <div class="card-row"><i class="fas fa-location-dot"></i><div>${esc(m.pata)}</div></div>
                         </div>
                     </div>`;
