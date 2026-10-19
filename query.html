@@ -93,33 +93,34 @@
             padding: 0.7rem 5%;
         }
 
-        .nav-brand { display: flex; align-items: center; gap: 12px; color: var(--text-light); }
+        .nav-brand { display: flex; align-items: center; gap: 14px; color: var(--text-light); }
 
         .nav-logo {
-            height: 60px;
-            width: 60px;
+            height: 96px;
+            width: auto;
+            max-width: 220px;
             flex-shrink: 0;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 1px solid rgba(199, 161, 90, 0.6);
-            background: var(--bg-charcoal);
-            transition: height 0.3s, width 0.3s;
+            object-fit: contain;
+            border: none;
+            border-radius: 0;
+            background: none;
+            transition: height 0.3s;
         }
 
-        .navbar.scrolled .nav-logo { height: 48px; width: 48px; }
+        .navbar.scrolled .nav-logo { height: 68px; width: auto; }
 
         .nav-title { display: flex; flex-direction: column; line-height: 1.1; }
 
         .nav-title strong {
             font-family: var(--font-display);
-            font-size: 1.6rem;
+            font-size: 2.1rem;
             font-weight: 700;
             letter-spacing: 0.08em;
         }
 
         .nav-title small {
             font-family: var(--font-hindi);
-            font-size: 0.8rem;
+            font-size: 1rem;
             color: var(--accent-gold);
             margin-top: 2px;
         }
@@ -147,7 +148,7 @@
         .hero {
             background-color: var(--bg-charcoal);
             position: relative;
-            padding: 11rem 5% 5rem;
+            padding: 12rem 5% 5rem;
             overflow: hidden;
         }
 
@@ -328,7 +329,7 @@
             padding: 1.2rem 0.6rem 0.5rem;
             background: linear-gradient(0deg, rgba(18,18,18,0.9), transparent);
             font-family: var(--font-hindi);
-            font-size: 0.8rem;
+            font-size: 1rem;
             color: var(--accent-gold);
         }
 
@@ -409,11 +410,11 @@
         .footer-brand { display: flex; align-items: center; gap: 1.2rem; }
 
         .footer-brand img {
-            height: 64px;
-            width: 64px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 1px solid rgba(199, 161, 90, 0.6);
+            height: 96px;
+            width: auto;
+            object-fit: contain;
+            border: none;
+            border-radius: 0;
         }
 
         .footer-brand h3 { font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 0.2rem; }
@@ -449,14 +450,14 @@
 
         @media (max-width: 900px) {
             .stats { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-            .nav-logo { height: 46px; width: 46px; }
-            .navbar.scrolled .nav-logo { height: 42px; width: 42px; }
-            .nav-title strong { font-size: 1.25rem; }
-            .nav-title small { font-size: 0.7rem; }
+            .nav-logo { height: 64px; width: auto; }
+            .navbar.scrolled .nav-logo { height: 54px; width: auto; }
+            .nav-title strong { font-size: 1.5rem; }
+            .nav-title small { font-size: 0.82rem; }
         }
 
         @media (max-width: 600px) {
-            .hero { padding: 8rem 5% 3.5rem; }
+            .hero { padding: 9rem 5% 3.5rem; }
             .stat-n { font-size: 2.2rem; }
             .controls { flex-direction: column; align-items: stretch; gap: 1.5rem; }
             .search-wrap { width: 100%; }
@@ -476,7 +477,7 @@
     <!-- NAVIGATION -->
     <nav class="navbar" id="navbar">
         <a href="index.html" class="nav-brand">
-            <img src="https://iili.io/q3JiQqP.png" alt="HRSS Logo" class="nav-logo" width="60" height="60" onerror="logoFallback(this)">
+            <img src="https://iili.io/q3JiQqP.png" alt="HRSS Logo" class="nav-logo" onerror="logoFallback(this)">
             <span class="nav-title"><strong>HRSS</strong><small>हिन्दू रक्षा शक्ति संघ</small></span>
         </a>
         <a href="index.html" class="btn-nav"><i class="fas fa-arrow-left"></i> वापस</a>
@@ -535,7 +536,7 @@
     <footer class="footer">
         <div class="footer-inner">
             <div class="footer-brand">
-                <img src="https://iili.io/q3JiQqP.png" alt="HRSS Logo" width="64" height="64" onerror="logoFallback(this)">
+                <img src="https://iili.io/q3JiQqP.png" alt="HRSS Logo" onerror="logoFallback(this)">
                 <div>
                     <h3>Hindu Raksha Shakti Sangh</h3>
                     <p>धर्मो रक्षति रक्षितः</p>
