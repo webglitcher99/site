@@ -342,6 +342,21 @@
             min-width: 0;
         }
 
+        .card-sr {
+            font-family: var(--font-hindi);
+            font-size: 0.8rem;
+            color: var(--accent-gold);
+            margin-bottom: 0.3rem;
+        }
+
+        .card-sr b {
+            font-family: var(--font-display);
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--accent-saffron);
+            margin-left: 4px;
+        }
+
         .card-name {
             font-family: var(--font-hindi);
             font-size: 1.3rem;
@@ -609,6 +624,7 @@
                         rajya:      String(r.c[7]?.v || '').toLowerCase().trim(),
                         photo:      r.c[8]?.v || '',
                         dept_label: r.c[9]?.v || '',
+                        sr:         i + 1,
                         delay:      Math.min(i, 20) * 0.04
                     }));
 
@@ -661,6 +677,7 @@
                             <div class="photo-dept">${esc(deptLabel)}</div>
                         </div>
                         <div class="card-info">
+                            <div class="card-sr">क्रमांक <b>${String(m.sr).padStart(2, '0')}</b></div>
                             <div class="card-name">${esc(m.naam)}</div>
                             <div class="card-row"><i class="fas fa-user"></i><div><span>पिता :</span> ${esc(m.pita)}</div></div>
                             <div class="card-row"><i class="fas fa-location-dot"></i><div>${esc(m.pata)}</div></div>
