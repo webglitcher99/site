@@ -331,6 +331,9 @@
             return out;
         }
 
+        const OLD_BACKEND = 'OLD_BACKEND';
+        const OLD_MSG = 'सर्वर पर पुराना Code.gs चल रहा है। नया Code.gs paste करके Deploy > Manage deployments > New version करें।';
+
         function say(el, msg, type) { el.className = 'status' + (type ? ' ' + type : ''); el.textContent = msg; }
 
         /* ---------- login ---------- */
@@ -342,7 +345,8 @@
         }
 
         async function tryLogin(pw, statusEl) {
-            await post({ action: 'login', password: pw });
+            const out = await post({ action: 'login', password: pw });
+            if (out.admin !== true) throw new Error(OLD_BACKEND);   // old script just says ok to anything
             password = pw;
             try { sessionStorage.setItem('hrss_admin', pw); } catch (e) {}
             showPanel();
@@ -357,7 +361,10 @@
                 await tryLogin($('pw').value, $('loginStatus'));
                 $('pw').value = '';
             } catch (err) {
-                say($('loginStatus'), err.message === 'Wrong password' ? 'पासवर्ड गलत है।' : 'लॉगिन नहीं हो सका: ' + err.message, 'err');
+                say($('loginStatus'),
+                    err.message === 'Wrong password' ? 'पासवर्ड गलत है।' :
+                    err.message === OLD_BACKEND ? OLD_MSG :
+                    'लॉगिन नहीं हो सका: ' + err.message, 'err');
             } finally { btn.disabled = false; }
         });
 
@@ -427,12 +434,13 @@
             btn.disabled = true;
             say($('uploadStatus'), 'अपलोड हो रही है… कृपया रुकें।');
             try {
-                await post({
+                const out = await post({
                     action: 'upload',
                     password: password,
                     description: $('desc').value.trim(),
                     image: chosenDataUrl
                 });
+                if (!out.id) throw new Error(OLD_BACKEND);
                 say($('uploadStatus'), 'फोटो सफलतापूर्वक जुड़ गई।', 'ok');
                 $('uploadForm').reset();
                 chosenDataUrl = '';
@@ -442,7 +450,7 @@
                 loadList();
             } catch (err) {
                 console.error('Upload error:', err);
-                say($('uploadStatus'), 'अपलोड नहीं हो सका: ' + err.message, 'err');
+                say($('uploadStatus'), err.message === OLD_BACKEND ? OLD_MSG : 'अपलोड नहीं हो सका: ' + err.message, 'err');
             } finally { btn.disabled = false; }
         });
 
@@ -486,11 +494,12 @@
                     if (!confirm('क्या आप यह फोटो हटाना चाहते हैं?')) return;
                     this.disabled = true;
                     try {
-                        await post({ action: 'delete', password: password, id: p.id });
+                        const out = await post({ action: 'delete', password: password, id: p.id });
+                        if (out.deleted !== true) throw new Error(OLD_BACKEND);
                         loadList();
                     } catch (err) {
                         this.disabled = false;
-                        alert('फोटो नहीं हट सकी: ' + err.message);
+                        alert(err.message === OLD_BACKEND ? OLD_MSG : 'फोटो नहीं हट सकी: ' + err.message);
                     }
                 });
                 grid.appendChild(el);
