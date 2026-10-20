@@ -868,7 +868,7 @@
             <a href="query.html">सदस्य</a>
             <a href="#contact">संपर्क</a>
             <!-- REPLACE # WITH ACTUAL JOINING FORM LINK -->
-            <a href="#join" class="btn-nav" data-join>सदस्य बनें</a>
+            <a href="https://forms.gle/ELde7BQYDYTJnhB2A" class="btn-nav" target="_blank" rel="noopener">सदस्य बनें</a>
         </div>
     </nav>
 
@@ -884,7 +884,7 @@
             <p>हिन्दू रक्षा शक्ति संघ (HRSS) सनातन परंपराओं के संरक्षण, सामाजिक एकता और राष्ट्र सेवा के लिए समर्पित एक संगठन है। हमारा उद्देश्य समाज के प्रत्येक वर्ग को सशक्त बनाना है।</p>
             <div class="hero-actions">
                 <!-- REPLACE # WITH ACTUAL JOINING FORM LINK -->
-                <a href="#join" class="btn-primary" data-join>अभी जुड़ें</a>
+                <a href="https://forms.gle/ELde7BQYDYTJnhB2A" class="btn-primary" target="_blank" rel="noopener">अभी जुड़ें</a>
                 <a href="#about" class="btn-secondary">और जानें &rarr;</a>
             </div>
         </div>
@@ -947,7 +947,7 @@
                 <h2 class="hindi-heading">हमारी गतिविधियाँ</h2>
             </div>
             <!-- REPLACE # WITH ACTUAL GALLERY PAGE LINK -->
-            <a href="gallery.html" class="btn-secondary" style="color: var(--text-dark); border-bottom: 1px solid var(--text-dark); padding-bottom: 2px;">सभी तस्वीरें देखें &rarr;</a>
+            <a href="#" class="btn-secondary" style="color: var(--text-dark); border-bottom: 1px solid var(--text-dark); padding-bottom: 2px;">सभी तस्वीरें देखें &rarr;</a>
         </div>
 
         <div class="gallery-grid">
@@ -975,7 +975,7 @@
         <h2 class="hindi-heading">समाज सेवा के इस पावन यज्ञ में हमारे साथ जुड़ें।</h2>
         <p>एक सशक्त राष्ट्र के निर्माण में अपना योगदान दें। HRSS परिवार का हिस्सा बनें।</p>
         <!-- REPLACE # WITH ACTUAL JOINING FORM LINK -->
-        <a href="#join" class="btn-white" data-join>सदस्यता ग्रहण करें</a>
+        <a href="https://forms.gle/ELde7BQYDYTJnhB2A" class="btn-white" target="_blank" rel="noopener">सदस्यता ग्रहण करें</a>
     </section>
 
     <!-- FOOTER & CONTACT -->
@@ -995,7 +995,7 @@
                     <li><a href="#mission">हमारे लक्ष्य</a></li>
                     <li><a href="#gallery">गैलरी</a></li>
                     <!-- REPLACE # WITH ACTUAL JOINING FORM LINK -->
-                    <li><a href="#join" data-join>सदस्य बनें</a></li>
+                    <li><a href="https://forms.gle/ELde7BQYDYTJnhB2A" target="_blank" rel="noopener">सदस्य बनें</a></li>
                 </ul>
             </div>
 
@@ -1005,10 +1005,6 @@
                     <!-- REPLACE WITH ACTUAL CONTACT DETAILS -->
                     <li><a href="tel:+910000000000">+91 8765594075, +91 9305114281</a></li>
                     <li><a href="mailto:info@hrss.org">saktisangh@gmail.com</a></li>
-                    <!-- REPLACE WITH ACTUAL
-   
-
-  ADDRESS -->
                     <li style="color: #A0A0A0; font-size: 0.9rem; margin-top: 1rem;"> The main office of the organization is Nibiya Rupaidiha 188,<br>Sahajanwa District Bahraich Uttar Pradesh India</li>
                 </ul>
             </div>
@@ -1021,7 +1017,7 @@
                   action="https://formspree.io/f/yourid" method="POST" 
                 -->
                 <form class="contact-form" id="contactForm" data-type="Message" novalidate
-                    action="https://formspree.io/f/mbdaakzj"method="POST">
+                    action="https://formspree.io/f/mbdaakzj" method="POST">
                     <input type="text" name="name" placeholder="आपका नाम" required aria-label="Your Name">
                     <input type="email" name="email" placeholder="ईमेल पता" required aria-label="Email Address">
                     <textarea name="message" rows="2" placeholder="आपका संदेश" required aria-label="Message"></textarea>
@@ -1038,26 +1034,7 @@
         </div>
     </footer>
 
-    <!-- JOIN MODAL (saves to Google Sheet) -->
-    <div class="modal" id="joinModal" role="dialog" aria-modal="true" aria-labelledby="joinTitle">
-        <div class="modal-box">
-            <button class="modal-close" type="button" aria-label="बंद करें" data-close>&times;</button>
-            <h3 id="joinTitle">सदस्य बनें</h3>
-            <p>अपनी जानकारी भरें, हमारी टीम आपसे संपर्क करेगी।</p>
-            <form class="join-form" id="joinForm" data-type="Member" novalidate>
-                <input type="text" name="name" placeholder="पूरा नाम *" required aria-label="Full name">
-                <input type="tel" name="phone" placeholder="मोबाइल नंबर *" required inputmode="tel" autocomplete="tel" aria-label="Mobile number">
-                <input type="email" name="email" placeholder="ईमेल (वैकल्पिक)" aria-label="Email">
-                <input type="text" name="city" placeholder="शहर / जिला *" required aria-label="City or district">
-                <textarea name="message" rows="2" placeholder="संदेश (वैकल्पिक)" aria-label="Message"></textarea>
-                <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
-                <button type="submit" class="btn-primary">आवेदन भेजें</button>
-                <p class="form-status" role="status"></p>
-            </form>
-        </div>
-    </div>
-
-    <!-- JAVASCRIPT-->
+    <!-- JAVASCRIPT -->
     <script>
         // Navbar Scroll Effect
         const navbar = document.getElementById('navbar');
@@ -1105,21 +1082,7 @@
         // GOOGLE SHEET CONNECTION
         // Paste your Apps Script Web App URL below (see SETUP-GOOGLE-SHEET.md)
         // =========================================
-        const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyUwJiMyVFwQk1mxJnAEbB5CNwlb1Em0N6YrloT3Y-thhHKfOKGiR1I-HtJJMB8xLbe/exec';
-
-        // Join modal
-        const modal = document.getElementById('joinModal');
-        function openModal(e) {
-            if (e) e.preventDefault();
-            modal.classList.add('open');
-            const first = modal.querySelector('input');
-            if (first) setTimeout(() => first.focus(), 50);
-        }
-        function closeModal() { modal.classList.remove('open'); }
-        document.querySelectorAll('[data-join]').forEach(a => a.addEventListener('click', openModal));
-        modal.querySelector('[data-close]').addEventListener('click', closeModal);
-        modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+        const SHEET_URL = 'https://script.google.com/macros/s/AKfycbw3AP-b78NupSl7_jFhksQkHY8QrY8-oM0U9dEqAWs8lJ_eSTIsFgO13356WeBbd5da/exec';
 
         // Send any form to the Google Sheet
         function bindSheetForm(form) {
@@ -1169,7 +1132,6 @@
                     form.reset();
                     status.classList.add('ok');
                     status.textContent = 'धन्यवाद! आपकी जानकारी प्राप्त हो गई है।';
-                    if (form.id === 'joinForm') setTimeout(closeModal, 2500);
                 } catch (err) {
                     console.error('HRSS form error:', err);
                     status.classList.add('err');
@@ -1180,7 +1142,6 @@
                 }
             });
         }
-        bindSheetForm(document.getElementById('joinForm'));
         bindSheetForm(document.getElementById('contactForm'));
     </script>
 </body>
