@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>सदस्यता आवेदन एवं पहचान पत्र | HRSS</title>
+    <link rel="icon" type="image/png" href="https://iili.io/q3JiQqP.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Tiro+Devanagari+Hindi:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        // Logo fallback chain for the page header
+        const FALLBACK_LOGO = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23121212'/%3E%3Ccircle cx='50' cy='50' r='44' fill='none' stroke='%23C7A15A' stroke-width='2'/%3E%3Cpath d='M50 18c8 12 14 18 14 30a14 14 0 0 1-28 0c0-12 6-18 14-30z' fill='%23E25822'/%3E%3Ctext x='50' y='80' font-family='Georgia%2Cserif' font-size='16' font-weight='700' fill='%23C7A15A' text-anchor='middle'%3EHRSS%3C/text%3E%3C/svg%3E";
+        function logoFallback(img) {
+            if (!img.dataset.tried) { img.dataset.tried = '1'; img.src = 'logo.png'; }
+            else { img.onerror = null; img.src = FALLBACK_LOGO; }
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg-ivory: #F5F2EB;
+            --bg-charcoal: #121212;
+            --bg-charcoal-light: #1E1E1E;
+            --accent-saffron: #E25822;
+            --accent-gold: #C7A15A;
+            --text-dark: #1A1A1A;
+            --text-light: #F5F2EB;
+            --text-muted: #888888;
+            --font-display: 'Playfair Display', serif;
+            --font-hindi: 'Tiro Devanagari Hindi', serif;
+            --font-sans: 'Inter', 'Tiro Devanagari Hindi', sans-serif;
+            --border-thin: 1px solid rgba(26, 26, 26, 0.15);
+            --border-thin-light: 1px solid rgba(245, 242, 235, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-ivory);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        img { max-width: 100%; height: auto; display: block; }
+        a { text-decoration: none; color: inherit; transition: color 0.3s ease; }
+        [hidden] { display: none !important; }
+
+        .eyebrow {
+            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em;
+            font-weight: 600; color: var(--accent-gold); display: block; margin-bottom: 1rem;
+        }
+
+        /* ---------- NAV ---------- */
+        .navbar {
+            position: fixed; top: 0; left: 0; width: 100%;
+            padding: 1.5rem 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(18,18,18,0.85), rgba(18,18,18,0));
+            border-bottom: 1px solid transparent;
+            transition: background-color 0.4s ease, border-bottom 0.4s ease, padding 0.3s ease;
+        }
+        .navbar.scrolled {
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: var(--border-thin-light);
+            padding: 0.7rem 5%;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 14px; color: var(--text-light); }
+        .nav-logo {
+            height: 96px; width: auto; max-width: 220px; flex-shrink: 0;
+            object-fit: contain; border: none; border-radius: 0; background: none;
+            transition: height 0.3s;
+        }
+        .navbar.scrolled .nav-logo { height: 68px; width: auto; }
+        .nav-title { display: flex; flex-direction: column; line-height: 1.1; }
+        .nav-title strong { font-family: var(--font-display); font-size: 2.1rem; font-weight: 700; letter-spacing: 0.08em; }
+        .nav-title small { font-family: var(--font-hindi); font-size: 1rem; color: var(--accent-gold); margin-top: 2px; }
+        .btn-nav {
+            background-color: var(--accent-saffron); color: white;
+            padding: 0.6rem 1.5rem; border: 1px solid var(--accent-saffron);
+            font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500;
+            transition: background-color 0.3s, color 0.3s;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-nav:hover { background-color: transparent; color: var(--accent-saffron); }
+
+        /* ---------- HERO ---------- */
+        .hero {
+            background-color: var(--bg-charcoal);
+            position: relative;
+            padding: 11rem 5% 4rem;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at 70% 50%, rgba(226, 88, 34, 0.15) 0%, transparent 60%);
+        }
+        .hero-content { position: relative; max-width: 900px; }
+        .hero h1 {
+            font-family: var(--font-hindi); font-weight: normal; line-height: 1.25;
+            font-size: clamp(2.2rem, 5.5vw, 4.2rem); color: var(--text-light); margin-bottom: 1rem;
+        }
+        .hero p { color: rgba(245, 242, 235, 0.7); font-weight: 300; max-width: 600px; }
+
+        /* ---------- LAYOUT ---------- */
+        .wrap { max-width: 1100px; margin: 0 auto; padding: 4rem 5% 7rem; }
+
+        .tabs { display: flex; gap: 0.6rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .tab {
+            background: transparent; border: var(--border-thin); color: var(--text-dark);
+            padding: 0.7rem 1.5rem; font-family: var(--font-sans); font-size: 0.95rem; cursor: pointer;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+        .tab:hover { border-color: var(--accent-saffron); color: var(--accent-saffron); }
+        .tab[aria-selected="true"] { background: var(--accent-saffron); border-color: var(--accent-saffron); color: #fff; }
+
+        .card {
+            background: #FBF9F4;
+            border: var(--border-thin);
+            border-top: 2px solid var(--accent-gold);
+            padding: 2.4rem 2.2rem;
+        }
+        .card h2 { font-family: var(--font-hindi); font-weight: normal; font-size: 1.8rem; line-height: 1.3; margin-bottom: 0.4rem; }
+        .card > p.sub { color: #555; font-size: 0.95rem; margin-bottom: 1.6rem; }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2.5rem; }
+        .full { grid-column: 1 / -1; }
+
+        label.f { display: block; font-size: 0.8rem; color: var(--text-muted); letter-spacing: 0.04em; margin-top: 1.3rem; }
+        label.f b { color: var(--accent-saffron); font-weight: 500; }
+
+        input[type="text"], input[type="tel"], input[type="date"], select, textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(26, 26, 26, 0.3);
+            padding: 0.7rem 0;
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            color: var(--text-dark);
+            outline: none;
+            border-radius: 0;
+            transition: border-color 0.3s;
+            resize: vertical;
+        }
+        select { cursor: pointer; }
+        input:focus, select:focus, textarea:focus { border-bottom-color: var(--accent-saffron); }
+        .hp-field { position: absolute; left: -9999px; opacity: 0; height: 0; }
+
+        /* photo picker */
+        .photo-box { display: flex; gap: 1.5rem; align-items: center; margin-top: 0.8rem; flex-wrap: wrap; }
+        .photo-prev {
+            width: 120px; height: 160px; flex-shrink: 0;
+            border: 1px dashed rgba(199, 161, 90, 0.9);
+            background: rgba(199, 161, 90, 0.06);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--accent-gold); font-size: 2rem; overflow: hidden;
+        }
+        .photo-prev img { width: 100%; height: 100%; object-fit: cover; }
+        .photo-help { font-size: 0.85rem; color: #555; max-width: 320px; }
+        .btn-ghost {
+            background: transparent; border: 1px solid var(--accent-gold); color: var(--text-dark);
+            padding: 0.6rem 1.2rem; font-family: var(--font-sans); font-size: 0.85rem; cursor: pointer;
+            transition: background-color 0.3s, color 0.3s; margin-bottom: 0.6rem;
+        }
+        .btn-ghost:hover { background: var(--accent-gold); color: var(--bg-charcoal); }
+
+        .check { display: flex; gap: 0.7rem; align-items: flex-start; margin-top: 1.6rem; font-size: 0.9rem; color: #333; }
+        .check input { margin-top: 0.3rem; accent-color: var(--accent-saffron); width: 18px; height: 18px; flex-shrink: 0; }
+
+        .btn {
+            background: var(--accent-saffron); color: #fff; border: 1px solid var(--accent-saffron);
+            padding: 0.95rem 2.2rem; font-family: var(--font-sans);
+            font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500;
+            cursor: pointer; margin-top: 1.8rem;
+            transition: background-color 0.3s, color 0.3s;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn:hover:not(:disabled) { background: transparent; color: var(--accent-saffron); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn.dark { background: var(--bg-charcoal); border-color: var(--bg-charcoal); }
+        .btn.dark:hover:not(:disabled) { background: transparent; color: var(--text-dark); }
+
+        .status { font-size: 0.92rem; margin-top: 1rem; min-height: 1.4em; }
+        .status.ok { color: #2e7d32; }
+        .status.err { color: #c62828; }
+
+        /* ---------- RESULT ---------- */
+        .result-head { margin-bottom: 2rem; }
+        .result-head h2 { font-family: var(--font-hindi); font-weight: normal; font-size: clamp(1.8rem, 4vw, 2.6rem); }
+        .result-head p { color: #444; margin-top: 0.4rem; }
+        .id-chip {
+            display: inline-block; margin-top: 1rem;
+            border: 1px solid rgba(199, 161, 90, 0.8); padding: 0.5rem 1rem;
+            font-family: var(--font-display); font-size: 1.3rem; font-weight: 600; color: var(--accent-saffron);
+        }
+        .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .cards-grid figure { margin: 0; }
+        .cards-grid canvas { width: 100%; height: auto; display: block; border: var(--border-thin); background: #fff; }
+        .cards-grid figcaption { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem; letter-spacing: 0.08em; text-transform: uppercase; }
+        .dl-row { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 1.5rem; }
+        .dl-row .btn { margin-top: 0; }
+        .note { margin-top: 1.8rem; padding: 1rem 1.2rem; border-left: 2px solid var(--accent-gold); background: rgba(199,161,90,0.08); font-size: 0.9rem; color: #333; }
+
+        a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+            outline: 2px solid var(--accent-gold); outline-offset: 3px;
+        }
+
+        /* ---------- FOOTER ---------- */
+        .footer { background-color: var(--bg-charcoal); color: var(--text-light); padding: 3rem 5% 2rem; border-top: 1px solid rgba(255,255,255,0.05); }
+        .footer-bottom {
+            max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;
+            gap: 1rem; flex-wrap: wrap; font-size: 0.8rem; color: #666;
+        }
+        .footer-bottom a { color: var(--accent-gold); font-weight: 500; }
+
+        @media (max-width: 900px) {
+            .nav-logo { height: 64px; width: auto; }
+            .navbar.scrolled .nav-logo { height: 54px; width: auto; }
+            .nav-title strong { font-size: 1.5rem; }
+            .nav-title small { font-size: 0.82rem; }
+            .cards-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 600px) {
+            .hero { padding: 9rem 5% 3rem; }
+            .wrap { padding: 3rem 5% 5rem; }
+            .card { padding: 1.7rem 1.2rem; }
+            .form-grid { grid-template-columns: 1fr; }
+            .btn-nav { padding: 0.5rem 1rem; font-size: 0.7rem; }
+            .footer-bottom { flex-direction: column; text-align: center; }
+            .dl-row .btn { width: 100%; justify-content: center; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="nav-brand">
+            <img src="https://iili.io/q3JiQqP.png" alt="HRSS Logo" class="nav-logo" onerror="logoFallback(this)">
+            <span class="nav-title"><strong>HRSS</strong><small>हिन्दू रक्षा शक्ति संघ</small></span>
+        </a>
+        <a href="index.html" class="btn-nav"><i class="fas fa-arrow-left"></i> वापस</a>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <span class="eyebrow">सदस्यता आवेदन</span>
+            <h1>सदस्य बनें, अपना पहचान पत्र पाएँ।</h1>
+            <p>फॉर्म भरते ही आपका सदस्य पहचान पत्र तैयार हो जाएगा, जिसे आप तुरंत डाउनलोड कर सकते हैं।</p>
+        </div>
+    </header>
+
+    <main class="wrap">
+
+        <!-- FORM AREA -->
+        <div id="formArea">
+            <div class="tabs" role="tablist">
+                <button class="tab" id="tabNew" role="tab" aria-selected="true" aria-controls="panelNew" type="button">नया आवेदन</button>
+                <button class="tab" id="tabOld" role="tab" aria-selected="false" aria-controls="panelOld" type="button">कार्ड दोबारा पाएँ</button>
+            </div>
+
+            <!-- New registration -->
+            <section class="card" id="panelNew" role="tabpanel" aria-labelledby="tabNew">
+                <h2>सदस्यता फॉर्म</h2>
+                <p class="sub">* वाले सभी खाने भरना ज़रूरी है। जानकारी वही लिखें जो आप अपने कार्ड पर चाहते हैं।</p>
+
+                <form id="regForm" novalidate>
+                    <div class="form-grid">
+                        <div>
+                            <label class="f" for="name">पूरा नाम <b>*</b></label>
+                            <input type="text" id="name" maxlength="60" autocomplete="name" required>
+                        </div>
+                        <div>
+                            <label class="f" for="father">पिता का नाम <b>*</b></label>
+                            <input type="text" id="father" maxlength="60" required>
+                        </div>
+                        <div>
+                            <label class="f" for="dob">जन्म तिथि <b>*</b></label>
+                            <input type="date" id="dob" required>
+                        </div>
+                        <div>
+                            <label class="f" for="mobile">मोबाइल नंबर <b>*</b></label>
+                            <input type="tel" id="mobile" inputmode="numeric" maxlength="14" autocomplete="tel" placeholder="10 अंक" required>
+                        </div>
+                        <div>
+                            <label class="f" for="blood">रक्त समूह (वैकल्पिक)</label>
+                            <select id="blood">
+                                <option value="">चुनें</option>
+                                <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+                                <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="f" for="district">ज़िला <b>*</b></label>
+                            <input type="text" id="district" maxlength="60" required>
+                        </div>
+                        <div class="full">
+                            <label class="f" for="address">पूरा पता <b>*</b></label>
+                            <textarea id="address" rows="2" maxlength="200" placeholder="गाँव / मोहल्ला, पोस्ट, तहसील, राज्य" required></textarea>
+                        </div>
+                        <div class="full">
+                            <label class="f">पासपोर्ट साइज़ फोटो <b>*</b></label>
+                            <div class="photo-box">
+                                <div class="photo-prev" id="photoPrev"><i class="fas fa-user"></i></div>
+                                <div>
+                                    <button type="button" class="btn-ghost" id="photoBtn"><i class="fas fa-camera"></i> फोटो चुनें</button>
+                                    <p class="photo-help">साफ़ फोटो चुनें जिसमें चेहरा बीच में हो। फोटो अपने आप 3:4 साइज़ में काटी जाएगी।</p>
+                                    <input type="file" id="photo" accept="image/jpeg,image/png,image/webp" hidden>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="text" id="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+                    <label class="check">
+                        <input type="checkbox" id="agree">
+                        <span>मैं घोषणा करता/करती हूँ कि ऊपर दी गई सारी जानकारी सही है।</span>
+                    </label>
+
+                    <button class="btn" type="submit" id="regBtn"><i class="fas fa-id-card"></i> आवेदन भेजें और कार्ड बनाएँ</button>
+                    <p class="status" id="regStatus" role="status"></p>
+                </form>
+            </section>
+
+            <!-- Get card again -->
+            <section class="card" id="panelOld" role="tabpanel" aria-labelledby="tabOld" hidden>
+                <h2>अपना कार्ड दोबारा पाएँ</h2>
+                <p class="sub">आवेदन करते समय जो मोबाइल नंबर और जन्म तिथि लिखी थी, वही डालें।</p>
+                <form id="lookForm" novalidate>
+                    <div class="form-grid">
+                        <div>
+                            <label class="f" for="lmobile">मोबाइल नंबर <b>*</b></label>
+                            <input type="tel" id="lmobile" inputmode="numeric" maxlength="14" required>
+                        </div>
+                        <div>
+                            <label class="f" for="ldob">जन्म तिथि <b>*</b></label>
+                            <input type="date" id="ldob" required>
+                        </div>
+                    </div>
+                    <button class="btn" type="submit" id="lookBtn"><i class="fas fa-magnifying-glass"></i> कार्ड खोजें</button>
+                    <p class="status" id="lookStatus" role="status"></p>
+                </form>
+            </section>
+        </div>
+
+        <!-- RESULT -->
+        <section id="resultArea" hidden>
+            <div class="result-head">
+                <span class="eyebrow">आपका पहचान पत्र तैयार है</span>
+                <h2 id="resName"></h2>
+                <span class="id-chip" id="resId"></span>
+            </div>
+
+            <div class="cards-grid">
+                <figure><canvas id="cvFront" width="1012" height="638" aria-label="पहचान पत्र का आगे का भाग"></canvas><figcaption>आगे</figcaption></figure>
+                <figure><canvas id="cvBack" width="1012" height="638" aria-label="पहचान पत्र का पीछे का भाग"></canvas><figcaption>पीछे</figcaption></figure>
+            </div>
+
+            <div class="dl-row">
+                <button class="btn" type="button" id="dlPdf"><i class="fas fa-file-pdf"></i> PDF डाउनलोड</button>
+                <button class="btn dark" type="button" id="dlFront"><i class="fas fa-download"></i> आगे (PNG)</button>
+                <button class="btn dark" type="button" id="dlBack"><i class="fas fa-download"></i> पीछे (PNG)</button>
+                <button class="btn dark" type="button" id="again"><i class="fas fa-rotate-left"></i> वापस</button>
+            </div>
+
+            <p class="note">अपना सदस्यता क्रमांक सुरक्षित रखें। कार्ड खो जाए तो ऊपर "कार्ड दोबारा पाएँ" में मोबाइल नंबर और जन्म तिथि डालकर इसे फिर से डाउनलोड कर सकते हैं।</p>
+            <p class="status" id="dlStatus" role="status"></p>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>&copy; <span id="yr"></span> Hindu Raksha Shakti Sangh. सर्वाधिकार सुरक्षित।</p>
+            <p>Designed &amp; Developed by <a href="https://www.instagram.com/adrxsh.who/" target="_blank" rel="noopener">Adarsh</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Same Apps Script link as the rest of the website
+        const API_URL = 'https://script.google.com/macros/s/AKfycbw3AP-b78NupSl7_jFhksQkHY8QrY8-oM0U9dEqAWs8lJ_eSTIsFgO13356WeBbd5da/exec';
+
+        const $ = id => document.getElementById(id);
+        const OLD_MSG = 'सर्वर पर पुराना Code.gs चल रहा है। नया Code.gs paste करके New version deploy करें।';
+
+        const navbar = $('navbar');
+        const onScroll = () => navbar.classList.toggle('scrolled', window.scrollY > 50);
+        window.addEventListener('scroll', onScroll);
+        onScroll();
+        $('yr').textContent = new Date().getFullYear();
+
+        const say = (el, msg, type) => { el.className = 'status' + (type ? ' ' + type : ''); el.textContent = msg; };
+
+        async function post(payload) {
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },   // simple request, reply readable
+                body: JSON.stringify(payload)
+            });
+            const out = await res.json();
+            if (!out.ok) throw new Error(out.error || 'Server error');
+            return out;
+        }
+
+        /* ---------- tabs ---------- */
+        function showTab(which) {
+            const isNew = which === 'new';
+            $('panelNew').hidden = !isNew;
+            $('panelOld').hidden = isNew;
+            $('tabNew').setAttribute('aria-selected', isNew);
+            $('tabOld').setAttribute('aria-selected', !isNew);
+        }
+        $('tabNew').addEventListener('click', () => showTab('new'));
+        $('tabOld').addEventListener('click', () => showTab('old'));
+
+        // today as max date
+        const today = new Date().toISOString().split('T')[0];
+        $('dob').max = today; $('ldob').max = today;
+
+        /* ---------- photo: pick + centre-crop to 3:4 ---------- */
+        let photoData = '';
+        $('photoBtn').addEventListener('click', () => $('photo').click());
+        $('photoPrev').addEventListener('click', () => $('photo').click());
+
+        function readImage(file) {
+            return new Promise((resolve, reject) => {
+                const url = URL.createObjectURL(file);
+                const img = new Image();
+                img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+                img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('यह फोटो पढ़ी नहीं जा सकी')); };
+                img.src = url;
+            });
+        }
+
+        $('photo').addEventListener('change', async e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            say($('regStatus'), '');
+            try {
+                if (!/^image\//.test(file.type)) throw new Error('कृपया सिर्फ फोटो चुनें');
+                const img = await readImage(file);
+                const TW = 450, TH = 600;
+                const target = TW / TH;
+                let sw = img.naturalWidth, sh = img.naturalHeight, sx = 0, sy = 0;
+                if (sw / sh > target) { const nw = sh * target; sx = (sw - nw) / 2; sw = nw; }
+                else { const nh = sw / target; sy = (sh - nh) * 0.25; sh = nh; }   // keep a bit more of the top (face)
+                const c = document.createElement('canvas');
+                c.width = TW; c.height = TH;
+                const g = c.getContext('2d');
+                g.fillStyle = '#fff'; g.fillRect(0, 0, TW, TH);
+                g.drawImage(img, sx, sy, sw, sh, 0, 0, TW, TH);
+                photoData = c.toDataURL('image/jpeg', 0.85);
+                $('photoPrev').innerHTML = '<img alt="चुनी गई फोटो" src="' + photoData + '">';
+            } catch (err) {
+                photoData = '';
+                $('photoPrev').innerHTML = '<i class="fas fa-user"></i>';
+                say($('regStatus'), err.message, 'err');
+            }
+        });
+
+        /* ---------- ID card drawing ---------- */
+        const W = 1012, H = 638;
+        const HI = '"Tiro Devanagari Hindi"';
+        const hasDev = s => /[\u0900-\u097F]/.test(s);
+        const font = (text, size, weight) => hasDev(text)
+            ? `${size}px ${HI}, Inter, serif`
+            : `${weight || 600} ${size}px Inter, ${HI}, sans-serif`;
+
+        function loadImg(src, cors) {
+            return new Promise(resolve => {
+                const im = new Image();
+                if (cors) im.crossOrigin = 'anonymous';
+                im.onload = () => resolve(im);
+                im.onerror = () => resolve(null);
+                im.src = src;
+            });
+        }
+
+        let logoCache = null;
+        async function getLogo() {
+            if (logoCache) return logoCache;
+            // CORS-enabled loads only, so the card can always be exported
+            for (const src of ['https://iili.io/q3JiQqP.png', 'logo.png']) {
+                const im = await loadImg(src, true);
+                if (im && im.naturalWidth) { logoCache = im; return im; }
+            }
+            logoCache = await loadImg(FALLBACK_LOGO, false);
+            return logoCache;
+        }
+
+        async function loadFonts(extra) {
+            try {
+                await Promise.all([
+                    document.fonts.load(`24px ${HI}`, 'हिन्दू रक्षा शक्ति संघ ॐ सदस्य पहचान पत्र ' + extra),
+                    document.fonts.load('600 28px Inter', 'Abc 123 ' + extra),
+                    document.fonts.load('700 34px "Playfair Display"', 'HRSS-2026-0001')
+                ]);
+                await document.fonts.ready;
+            } catch (e) { /* fall back to system fonts */ }
+        }
+
+        function fit(ctx, text, maxW, size, weight, min) {
+            let s = size;
+            ctx.font = font(text, s, weight);
+            while (ctx.measureText(text).width > maxW && s > (min || 16)) { s -= 1; ctx.font = font(text, s, weight); }
+            return s;
+        }
+
+        function wrap(ctx, text, maxW, size, maxLines) {
+            const words = text.replace(/\s+/g, ' ').trim().split(' ');
+            const lines = []; let line = '';
+            ctx.font = font(text, size, 500);
+            for (const w of words) {
+                const t = line ? line + ' ' + w : w;
+                if (ctx.measureText(t).width <= maxW) line = t;
+                else { if (line) lines.push(line); line = w; }
+            }
+            if (line) lines.push(line);
+            if (lines.length > maxLines) {
+                lines.length = maxLines;
+                let last = lines[maxLines - 1];
+                while (last.length > 1 && ctx.measureText(last + '…').width > maxW) last = last.slice(0, -1);
+                lines[maxLines - 1] = last + '…';
+            }
+            return lines;
+        }
+
+        const fmtDob = d => { const p = String(d).split('-'); return p.length === 3 ? `${p[2]}-${p[1]}-${p[0]}` : d; };
+        const issueDate = t => String(t || '').split(' ')[0];
+
+        function drawLogo(g, logo, x, y, maxH, maxW) {
+            if (!logo) return 0;
+            let h = maxH, w = logo.naturalWidth / logo.naturalHeight * h;
+            if (w > maxW) { w = maxW; h = w * logo.naturalHeight / logo.naturalWidth; }
+            g.drawImage(logo, x, y + (maxH - h) / 2, w, h);
+            return w;
+        }
+
+        function drawFront(cv, m, photo, logo) {
+            const g = cv.getContext('2d');
+            g.textBaseline = 'alphabetic';
+
+            g.fillStyle = '#F5F2EB'; g.fillRect(0, 0, W, H);
+
+            // faint ॐ watermark
+            g.save(); g.globalAlpha = 0.07; g.fillStyle = '#C7A15A';
+            g.font = `430px ${HI}`; g.textAlign = 'right'; g.fillText('ॐ', W - 10, 545); g.restore();
+
+            // header
+            g.fillStyle = '#121212'; g.fillRect(0, 0, W, 138);
+            g.fillStyle = '#C7A15A'; g.fillRect(0, 138, W, 3);
+            const lw = drawLogo(g, logo, 28, 19, 100, 170);
+            const tx = 28 + lw + 24;
+            g.textAlign = 'left';
+            g.fillStyle = '#F5F2EB'; g.font = `46px ${HI}`; g.fillText('हिन्दू रक्षा शक्ति संघ', tx, 72);
+            g.fillStyle = '#C7A15A'; g.font = '600 22px Inter, sans-serif'; g.fillText('HINDU RAKSHA SHAKTI SANGH', tx, 108);
+
+            // ribbon
+            g.fillStyle = '#E25822'; g.fillRect(0, 141, W, 42);
+            g.fillStyle = '#fff'; g.font = `24px ${HI}, Inter, serif`; g.textAlign = 'center';
+            g.fillText('सदस्य पहचान पत्र  •  MEMBER IDENTITY CARD', W / 2, 171);
+
+            // photo
+            const px = 44, py = 212, pw = 210, ph = 280;
+            g.fillStyle = '#1E1E1E'; g.fillRect(px, py, pw, ph);
+            if (photo) g.drawImage(photo, px, py, pw, ph);
+            g.strokeStyle = '#C7A15A'; g.lineWidth = 4; g.strokeRect(px - 3, py - 3, pw + 6, ph + 6);
+
+            // details
+            g.textAlign = 'left';
+            const LX = 292, VX = 478, VW = W - VX - 36;
+            let y = 238;
+            const rows = [['नाम', m.name, true], ['पिता का नाम', m.father], ['जन्म तिथि', fmtDob(m.dob)], ['मोबाइल', m.mobile]];
+            if (m.blood) rows.push(['रक्त समूह', m.blood]);
+            rows.push(['ज़िला', m.district]);
+
+            for (const [label, val, big] of rows) {
+                g.fillStyle = '#888'; g.font = `22px ${HI}`; g.fillText(label, LX, y);
+                g.fillStyle = '#1A1A1A';
+                const size = fit(g, val, VW, big ? 38 : 28, 600, 18);
+                g.font = font(val, size, 600);
+                g.fillText(val, VX, y);
+                y += big ? 54 : 44;
+            }
+            // address
+            g.fillStyle = '#888'; g.font = `22px ${HI}`; g.fillText('पता', LX, y);
+            g.fillStyle = '#1A1A1A';
+            const lines = wrap(g, m.address, VW, 24, 2);
+            lines.forEach((ln, i) => { g.font = font(ln, 24, 500); g.fillText(ln, VX, y + i * 32); });
+
+            // bottom bar
+            g.fillStyle = '#121212'; g.fillRect(0, 566, W, 72);
+            g.fillStyle = '#C7A15A'; g.fillRect(0, 566, W, 3);
+            g.textAlign = 'left';
+            g.font = `19px ${HI}`; g.fillText('सदस्यता क्रमांक', 40, 595);
+            g.fillStyle = '#F5F2EB'; g.font = '700 32px "Playfair Display", Georgia, serif'; g.fillText(m.id, 40, 627);
+            g.textAlign = 'right';
+            g.fillStyle = '#C7A15A'; g.font = `19px ${HI}`; g.fillText('जारी तिथि', W - 40, 595);
+            g.fillStyle = '#F5F2EB'; g.font = '600 26px Inter, sans-serif'; g.fillText(issueDate(m.time), W - 40, 627);
+        }
+
+        function drawBack(cv, m, logo) {
+            const g = cv.getContext('2d');
+            g.textBaseline = 'alphabetic';
+
+            g.fillStyle = '#121212'; g.fillRect(0, 0, W, H);
+            g.fillStyle = '#1E1E1E'; g.fillRect(0, 0, W, 8);
+            g.strokeStyle = 'rgba(199,161,90,0.7)'; g.lineWidth = 2; g.strokeRect(18, 18, W - 36, H - 36);
+
+            g.save(); g.globalAlpha = 0.05; g.fillStyle = '#C7A15A';
+            g.font = `430px ${HI}`; g.textAlign = 'right'; g.fillText('ॐ', W - 30, 560); g.restore();
+
+            const lw = drawLogo(g, logo, 48, 40, 84, 150);
+            const tx = 48 + lw + 22;
+            g.textAlign = 'left';
+            g.fillStyle = '#F5F2EB'; g.font = `38px ${HI}`; g.fillText('हिन्दू रक्षा शक्ति संघ', tx, 84);
+            g.fillStyle = '#C7A15A'; g.font = '600 19px Inter, sans-serif'; g.fillText('HINDU RAKSHA SHAKTI SANGH', tx, 114);
+            g.fillStyle = '#C7A15A'; g.fillRect(48, 148, W - 96, 2);
+
+            g.fillStyle = 'rgba(245,242,235,0.9)'; g.font = `25px ${HI}`;
+            g.fillText('यह पहचान पत्र हिन्दू रक्षा शक्ति संघ की सदस्यता का प्रमाण है।', 48, 200);
+            g.fillText('खोने या मिलने पर कृपया नीचे दिए संपर्क पर सूचित करें।', 48, 240);
+            g.fillStyle = '#888'; g.font = `19px ${HI}`;
+            g.fillText('यह संगठन का सदस्यता पहचान पत्र है, सरकारी पहचान पत्र नहीं।', 48, 280);
+
+            g.fillStyle = '#C7A15A'; g.font = `22px ${HI}`; g.fillText('मुख्य कार्यालय', 48, 338);
+            g.fillStyle = '#F5F2EB'; g.font = '400 23px Inter, sans-serif';
+            g.fillText('Nibiya Rupaidiha 188, Sahajanwa', 48, 374);
+            g.fillText('District Bahraich, Uttar Pradesh, India', 48, 406);
+            g.fillText('+91 8765594075, +91 9305114281', 48, 450);
+            g.fillText('saktisangh@gmail.com', 48, 482);
+
+            // signature
+            g.strokeStyle = 'rgba(245,242,235,0.6)'; g.lineWidth = 1.5;
+            g.beginPath(); g.moveTo(650, 500); g.lineTo(960, 500); g.stroke();
+            g.textAlign = 'center'; g.fillStyle = '#A0A0A0'; g.font = `21px ${HI}`;
+            g.fillText('अधिकृत हस्ताक्षर', 805, 534);
+
+            g.fillStyle = '#C7A15A'; g.font = `22px ${HI}, Inter, serif`;
+            g.fillText('धर्मो रक्षति रक्षितः   |   पंजीकृत ट्रस्ट   |   Reg. No. 06', W / 2, 596);
+            g.fillStyle = '#888'; g.font = '500 17px Inter, sans-serif';
+            g.fillText(m.id, W / 2, 618);
+        }
+
+        /* ---------- show result ---------- */
+        let current = null;
+
+        async function showCard(m, photoSrc) {
+            const photo = photoSrc ? await loadImg(photoSrc, false) : null;
+            await loadFonts([m.name, m.father, m.district, m.address, m.blood].join(' '));
+            const logo = await getLogo();
+            drawFront($('cvFront'), m, photo, logo);
+            drawBack($('cvBack'), m, logo);
+            current = m;
+            $('resName').textContent = m.name;
+            $('resId').textContent = m.id;
+            say($('dlStatus'), '');
+            $('formArea').hidden = true;
+            $('resultArea').hidden = false;
+            $('resultArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        $('again').addEventListener('click', () => {
+            $('resultArea').hidden = true;
+            $('formArea').hidden = false;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        /* ---------- downloads ---------- */
+        function canvasBlob(cv) {
+            return new Promise((resolve, reject) => cv.toBlob(b => b ? resolve(b) : reject(new Error('export failed')), 'image/png'));
+        }
+        function saveBlob(blob, name) {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = name;
+            document.body.appendChild(a); a.click(); a.remove();
+            setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+        }
+        async function dlPng(cv, side) {
+            try { saveBlob(await canvasBlob(cv), `${current.id}-${side}.png`); say($('dlStatus'), ''); }
+            catch (e) { say($('dlStatus'), 'डाउनलोड नहीं हो सका। कृपया कार्ड पर देर तक दबाकर फोटो सेव करें।', 'err'); }
+        }
+        $('dlFront').addEventListener('click', () => dlPng($('cvFront'), 'front'));
+        $('dlBack').addEventListener('click', () => dlPng($('cvBack'), 'back'));
+
+        function loadScript(src) {
+            return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
+        }
+        $('dlPdf').addEventListener('click', async () => {
+            const btn = $('dlPdf'); btn.disabled = true;
+            try {
+                if (!window.jspdf) await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+                const pdf = new window.jspdf.jsPDF({ orientation: 'landscape', unit: 'mm', format: [85.6, 54] });
+                pdf.addImage($('cvFront').toDataURL('image/png'), 'PNG', 0, 0, 85.6, 54);
+                pdf.addPage([85.6, 54], 'landscape');
+                pdf.addImage($('cvBack').toDataURL('image/png'), 'PNG', 0, 0, 85.6, 54);
+                pdf.save(`${current.id}.pdf`);
+                say($('dlStatus'), '');
+            } catch (e) {
+                console.error(e);
+                say($('dlStatus'), 'PDF नहीं बन सकी। कृपया PNG डाउनलोड करें।', 'err');
+            } finally { btn.disabled = false; }
+        });
+
+        /* ---------- submit: new registration ---------- */
+        const cleanMobile = v => String(v || '').replace(/\D/g, '').slice(-10);
+
+        $('regForm').addEventListener('submit', async e => {
+            e.preventDefault();
+            const st = $('regStatus');
+            if ($('website').value) return;   // spam trap
+
+            const d = {
+                name: $('name').value.trim(), father: $('father').value.trim(), dob: $('dob').value,
+                mobile: cleanMobile($('mobile').value), blood: $('blood').value,
+                district: $('district').value.trim(), address: $('address').value.trim()
+            };
+            if (d.name.length < 2 || d.father.length < 2 || !d.dob || !d.district || d.address.length < 5)
+                return say(st, 'कृपया सभी आवश्यक जानकारी भरें।', 'err');
+            if (!/^[6-9]\d{9}$/.test(d.mobile))
+                return say(st, 'कृपया सही 10 अंक का मोबाइल नंबर लिखें।', 'err');
+            const age = (Date.now() - new Date(d.dob).getTime()) / 31557600000;
+            if (!(age >= 5 && age <= 100)) return say(st, 'कृपया सही जन्म तिथि चुनें।', 'err');
+            if (!photoData) return say(st, 'कृपया अपनी फोटो चुनें।', 'err');
+            if (!$('agree').checked) return say(st, 'आगे बढ़ने के लिए घोषणा पर सही का निशान लगाएँ।', 'err');
+
+            const btn = $('regBtn'); btn.disabled = true;
+            say(st, 'आवेदन भेजा जा रहा है… कृपया रुकें।');
+            try {
+                const out = await post({ action: 'register', ...d, photo: photoData });
+                if (!out.member) throw new Error('OLD_BACKEND');
+                await showCard(out.member, photoData);
+                $('regForm').reset();
+                photoData = '';
+                $('photoPrev').innerHTML = '<i class="fas fa-user"></i>';
+                say(st, '');
+            } catch (err) {
+                console.error('Register error:', err);
+                if (err.message === 'OLD_BACKEND') say(st, OLD_MSG, 'err');
+                else if (err.message === 'ALREADY_REGISTERED') {
+                    say(st, 'यह मोबाइल नंबर पहले से पंजीकृत है। ऊपर "कार्ड दोबारा पाएँ" में मोबाइल नंबर और जन्म तिथि डालकर अपना कार्ड पाएँ।', 'err');
+                } else say(st, 'आवेदन नहीं भेजा जा सका। कृपया पुनः प्रयास करें। (' + (err.message || 'network') + ')', 'err');
+            } finally { btn.disabled = false; }
+        });
+
+        /* ---------- submit: get card again ---------- */
+        $('lookForm').addEventListener('submit', async e => {
+            e.preventDefault();
+            const st = $('lookStatus');
+            const mobile = cleanMobile($('lmobile').value), dob = $('ldob').value;
+            if (!/^[6-9]\d{9}$/.test(mobile) || !dob) return say(st, 'कृपया मोबाइल नंबर और जन्म तिथि सही भरें।', 'err');
+
+            const btn = $('lookBtn'); btn.disabled = true;
+            say(st, 'खोज रहे हैं…');
+            try {
+                const out = await post({ action: 'lookup', mobile, dob });
+                if (!out.member) throw new Error('OLD_BACKEND');
+                await showCard(out.member, out.photo);
+                say(st, '');
+            } catch (err) {
+                console.error('Lookup error:', err);
+                if (err.message === 'OLD_BACKEND') say(st, OLD_MSG, 'err');
+                else if (err.message === 'NOT_FOUND') say(st, 'इस मोबाइल नंबर और जन्म तिथि से कोई सदस्य नहीं मिला।', 'err');
+                else say(st, 'कार्ड नहीं मिल सका। कृपया पुनः प्रयास करें। (' + (err.message || 'network') + ')', 'err');
+            } finally { btn.disabled = false; }
+        });
+    </script>
+</body>
+</html>
