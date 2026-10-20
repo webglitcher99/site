@@ -59,24 +59,43 @@ $('photo').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileR
  const k=document.createElement('canvas');k.width=260;k.height=318;const s=Math.max(260/im.width,318/im.height);
  k.getContext('2d').drawImage(im,(260-im.width*s)/2,(318-im.height*s)/2,im.width*s,im.height*s);
  photoData=k.toDataURL('image/jpeg',.8);photoImg=new Image();photoImg.onload=draw;photoImg.src=photoData;lock()};im.src=ev.target.result};r.readAsDataURL(f)};
+const jsonp=qs=>new Promise((res,rej)=>{const cb='cb'+Date.now()+Math.floor(Math.random()*1e6),s=document.createElement('script');
+ const t=setTimeout(()=>{cl();rej(new Error('timeout'))},25000);
+ function cl(){clearTimeout(t);delete window[cb];s.remove()}
+ window[cb]=d=>{cl();res(d)};s.onerror=()=>{cl();rej(new Error('script load fail'))};
+ s.src=APPS_SCRIPT_URL+'?'+qs+'&callback='+cb;document.body.appendChild(s)});
+async function viaFetch(d){const r=await fetch(APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(d)});return r.json()}
+async function viaBeacon(d){
+ let k=d.kramank;
+ if(k){const f=await jsonp('action=find&q='+encodeURIComponent(k));if(f.ok)return{ok:false,error:'duplicate'}}
+ else{k=(await jsonp('action=next')).kramank}
+ d.kramank=k;
+ await fetch(APPS_SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(d)});
+ for(let i=0;i<8;i++){await new Promise(r=>setTimeout(r,1500));const f=await jsonp('action=find&q='+encodeURIComponent(k));if(f.ok)return{ok:true,kramank:k}}
+ return{ok:false,error:'save verify nahi hua (Apps Script me New version deploy kiya?)'}}
 async function save(){
  for(const f of F)if(!$(f).value.trim())return msg('Sab fields bharein: '+f,false);
  if(!/^\d{10}$/.test($('mobile').value))return msg('Mobile 10 digit ka hona chahiye',false);
  if(!photoData)return msg('Photo upload karein',false);
- const d={photo:photoData,kramank:$('kramankIn').value.trim()};F.forEach(f=>d[f]=$(f).value.trim());$('save').disabled=true;msg('Save ho raha hai...');
+ const d={photo:photoData,kramank:$('kramankIn').value.trim()};F.forEach(f=>d[f]=$(f).value.trim());
+ $('save').disabled=true;msg('Save ho raha hai...');
  try{
-  if(APPS_SCRIPT_URL){const j=await(await fetch(APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(d)})).json();if(!j.ok){if(j.error==='duplicate'){$('save').disabled=false;return msg('Ye क्रमांक pehle se use ho chuka hai, doosra daalein',false)}throw new Error(j.error||'server ne ok nahi diya')}kramank=j.kramank;msg('Google Sheet me save ho gaya ✔',true)}
-  else{let n=1;try{n=(+localStorage.getItem('hrss_n')||0)+1;localStorage.setItem('hrss_n',n)}catch(e){}
+  if(!APPS_SCRIPT_URL){let n=1;try{n=(+localStorage.getItem('hrss_n')||0)+1;localStorage.setItem('hrss_n',n)}catch(e){}
    kramank=d.kramank||('HRSS/'+new Date().getFullYear()+'/'+String(n).padStart(4,'0'));msg('APPS_SCRIPT_URL set nahi hai, sheet me save nahi hua.',false)}
+  else{
+   let j;
+   try{j=await viaFetch(d)}catch(e1){if(!(e1 instanceof TypeError))throw e1;msg('Doosre tareeke se save ho raha hai...');j=await viaBeacon(d)}
+   if(!j.ok){$('save').disabled=false;return msg(j.error==='duplicate'?'Ye क्रमांक pehle se use ho chuka hai, doosra daalein':'Save fail: '+(j.error||'server error'),false)}
+   kramank=j.kramank;msg('Google Sheet me save ho gaya ✔',true)}
   draw();$('dpng').disabled=$('dpdf').disabled=false;
- }catch(e){msg('Save fail hua: '+((e&&e.message)||e)+' (Failed to fetch = deployment access Anyone nahi hai ya URL galat)',false)}
+ }catch(e){msg('Save fail hua: '+((e&&e.message)||e),false)}
  $('save').disabled=false}
 async function find(){
  const q=$('q').value.trim();if(!q)return;if(!APPS_SCRIPT_URL)return msg('Search ke liye APPS_SCRIPT_URL zaroori hai',false);msg('Dhundh rahe hain...');
- try{const j=await(await fetch(APPS_SCRIPT_URL+'?action=find&q='+encodeURIComponent(q))).json();if(!j.ok)return msg('Record nahi mila',false);
+ try{const j=await jsonp('action=find&q='+encodeURIComponent(q));if(!j.ok)return msg('Record nahi mila',false);
   F.forEach(f=>$(f).value=j[f]);kramank=j.kramank;photoData=j.photo;
   if(j.photo){photoImg=new Image();photoImg.onload=draw;photoImg.src=j.photo}else{photoImg=null}
-  draw();$('dpng').disabled=$('dpdf').disabled=false;msg('Record mil gaya ✔',true)}catch(e){msg('Search fail hua',false)}}
+  draw();$('dpng').disabled=$('dpdf').disabled=false;msg('Record mil gaya ✔',true)}catch(e){msg('Search fail hua: '+((e&&e.message)||e),false)}}
 function dl(t){
  const cv=$('cv'),name=($('naam').value||'card')+'_'+kramank.replace(/\//g,'-');
  if(t==='png'){const a=document.createElement('a');a.href=cv.toDataURL('image/png');a.download=name+'.png';a.click()}
