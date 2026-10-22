@@ -1,46 +1,92 @@
 <!DOCTYPE html>
-<html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HRSS Niyukti Patra Form</title>
+<html lang="hi" translate="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="google" content="notranslate">
+<title>HRSS Niyukti Patra</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:'Noto Sans Devanagari',Arial,sans-serif;background:#eef0f4;color:#222}
+.top{background:#c8102e;color:#fff;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;font-weight:700}
+.top button{margin:0;background:#fff;color:#c8102e;padding:6px 12px}
 .wrap{display:flex;flex-wrap:wrap;gap:20px;padding:20px;justify-content:center;align-items:flex-start}
 .panel{background:#fff;border-radius:12px;padding:20px;width:360px;box-shadow:0 2px 10px #0002}
 .panel h2{margin:0 0 12px;font-size:18px;color:#c8102e}
 label{display:block;font-size:13px;margin:10px 0 3px;font-weight:600}
 input,textarea{width:100%;padding:9px;border:1px solid #bbb;border-radius:6px;font:inherit;font-size:14px}textarea{height:64px}
 button{padding:10px 14px;border:0;border-radius:6px;background:#c8102e;color:#fff;font:inherit;font-weight:600;cursor:pointer;margin:12px 6px 0 0}
-button.alt{background:#1e2a78}button:disabled{opacity:.4;cursor:not-allowed}
-#msg{margin-top:10px;font-size:13px}.srch{display:flex;gap:6px;margin-bottom:10px}.srch button{margin:0}
+button.alt{background:#1e2a78}button.gr{background:#666}button:disabled{opacity:.4;cursor:not-allowed}
+#msg,#lmsg{margin-top:10px;font-size:13px}
 #cv{width:100%;max-width:801px;height:auto;background:#fff;box-shadow:0 2px 10px #0003}
 .pv{flex:1;min-width:300px;max-width:801px}
+.login{max-width:340px;margin:60px auto}
+.list{width:100%;max-width:1220px;background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 10px #0002}
+.list .s{display:flex;gap:8px}.list .s button{margin:0}
+table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
+th,td{padding:8px;border-bottom:1px solid #ddd;text-align:left}tr.r{cursor:pointer}tr.r:hover{background:#fdeaec}
+.hide{display:none!important}
 </style></head><body>
-<div class="wrap">
-<div class="panel">
-<h2>पदाधिकारी की जानकारी भरें</h2>
-<div class="srch"><input id="q" placeholder="Kramank ya Mobile se purana card dhundhein"><button class="alt" onclick="find()">Search</button></div>
-<label>अनुशंसा करने वाले का नाम</label><input id="anushansa">
-<label>नाम</label><input id="naam">
-<label>पिता का नाम</label><input id="pita">
-<label>पद</label><input id="pad">
-<label>वैधता (Validity)</label><input id="vaidhta" placeholder="जैसे 31/12/2027">
-<label>पता</label><textarea id="pata"></textarea>
-<label>मोबाइल</label><input id="mobile" inputmode="numeric" maxlength="10">
-<label>फोटो</label><input type="file" id="photo" accept="image/*">
-<label>क्रमांक (खाली छोड़ें = अपने आप बनेगा)</label><input id="kramankIn" placeholder="जैसे HRSS/2026/0101">
-<button id="save" onclick="save()">Savve & क्रमांक बनाएं</button>
-<div><button id="dpng" class="alt" onclick="dl('png')" disabled>Download PNG</button><button id="dpdf" class="alt" onclick="dl('pdf')" disabled>Download PDF</button></div>
-<div id="msg"></div></div>
-<div class="pv"><canvas id="cv" width="801" height="1280"></canvas></div>
+
+<div id="loginV" class="panel login">
+ <h2>Admin Login</h2>
+ <label>Email</label><input id="em" type="email" autocomplete="username">
+ <label>Password</label><input id="pw" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
+ <button onclick="login()">Login</button><div id="lmsg"></div>
 </div>
+
+<div id="appV" class="hide">
+<div class="top"><span>हिन्दू रक्षा शक्ति संघ — नियुक्ति पत्र</span><span><span id="who" style="font-weight:400;margin-right:10px"></span><button onclick="logout()">Logout</button></span></div>
+<div class="wrap">
+ <div class="panel">
+  <h2 id="ft">नया पदाधिकारी</h2>
+  <label>अनुशंसा करने वाले का नाम</label><input id="anushansa">
+  <label>नाम</label><input id="naam">
+  <label>पिता का नाम</label><input id="pita">
+  <label>पद</label><input id="pad">
+  <label>वैधता (Validity)</label><input id="vaidhta" placeholder="जैसे 31/12/2027">
+  <label>पता</label><textarea id="pata"></textarea>
+  <label>मोबाइल</label><input id="mobile" inputmode="numeric" maxlength="10">
+  <label>फोटो</label><input type="file" id="photo" accept="image/*">
+  <label>क्रमांक (खाली छोड़ें = अपने आप बनेगा)</label><input id="kramankIn" placeholder="जैसे HRSS/2026/0101">
+  <button id="save" onclick="save()">Save</button><button class="gr" onclick="newForm()">नया फॉर्म</button>
+  <div><button id="dpng" class="alt" onclick="dl('png')" disabled>Download PNG</button><button id="dpdf" class="alt" onclick="dl('pdf')" disabled>Download PDF</button><button id="del" class="gr hide" onclick="del()">Delete</button></div>
+  <div id="msg"></div>
+ </div>
+ <div class="pv"><canvas id="cv" width="801" height="1280"></canvas></div>
+ <div class="list">
+  <h2 style="margin:0 0 10px;color:#c8102e;font-size:18px">सभी पदाधिकारी (<span id="cnt">0</span>)</h2>
+  <div class="s"><input id="q" placeholder="नाम / मोबाइल / क्रमांक से खोजें" onkeydown="if(event.key==='Enter')loadList()"><button class="alt" onclick="loadList()">Search</button></div>
+  <div style="overflow-x:auto"><table><thead><tr><th>क्रमांक</th><th>नाम</th><th>पद</th><th>मोबाइल</th></tr></thead><tbody id="tb"></tbody></table></div>
+ </div>
+</div>
+</div>
+
 <script>
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdj0RnK6eBEN86wjNqs8SlMR54PEMxOOrfudnG2IyJuVXXupsNyadhBHN62hLBsEBPiw/exec"; // <-- Apps Script Web App URL yahan paste karein
-const TPL = "template.jpg";
+// ====== SETTINGS: Supabase > Project Settings > API se copy karein ======
+const SUPABASE_URL = "https://YOUR-PROJECT.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_WEPBvlLv3FJ_5sbiXhu3VQ_kWnbGBd2";
+// =======================================================================
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const $=id=>document.getElementById(id), F=['anushansa','naam','pita','pad','vaidhta','pata','mobile'];
-let photoImg=null, photoData='', kramank='', tpl=new Image(); tpl.onload=draw; tpl.src=TPL;
+let photoImg=null, photoBlob=null, photoPath='', kramank='', curId='', tpl=new Image(); tpl.onload=draw; tpl.src='template.jpg';
 const msg=(t,ok)=>{$('msg').textContent=t;$('msg').style.color=ok===false?'#c00':'#080'};
 const FONT='"Noto Sans Devanagari","Mangal","Nirmala UI",Arial,sans-serif';
+
+/* ---------- Login ---------- */
+async function login(){
+ $('lmsg').textContent='...';
+ const {error}=await sb.auth.signInWithPassword({email:$('em').value.trim(),password:$('pw').value});
+ if(error){$('lmsg').style.color='#c00';$('lmsg').textContent='Login fail: '+error.message}
+}
+async function logout(){await sb.auth.signOut()}
+function gate(session){
+ $('loginV').classList.toggle('hide',!!session);$('appV').classList.toggle('hide',!session);
+ if(session){$('who').textContent=session.user.email;draw();loadList()}
+}
+sb.auth.getSession().then(({data})=>gate(data.session));
+sb.auth.onAuthStateChange((_e,s)=>gate(s));
+
+/* ---------- Card drawing ---------- */
 function fit(c,t,x,y,max,px,w){let s=px;c.font=w+' '+s+'px '+FONT;while(c.measureText(t).width>max&&s>9){s--;c.font=w+' '+s+'px '+FONT}c.fillText(t,x,y)}
 function wrap(c,t,max){const out=[];t.split('\n').forEach(p=>{let l='';p.split(' ').forEach(w=>{const n=l?l+' '+w:w;if(c.measureText(n).width>max&&l){out.push(l);l=w}else l=n});out.push(l)});return out}
 function draw(){
@@ -49,53 +95,68 @@ function draw(){
  [['naam',404],['pita',454],['pad',504],['vaidhta',554],['mobile',692]].forEach(([k,y])=>fit(c,$(k).value,220,y,392,18,'600'));
  c.font='600 17px '+FONT;const ls=wrap(c,$('pata').value,392).slice(0,3);
  ls.forEach((l,i)=>c.fillText(l,220,642-(ls.length-1-i)*26));
- if(photoImg){c.drawImage(photoImg,638,368,126,154)}
+ if(photoImg)c.drawImage(photoImg,638,368,126,154);
  if(kramank)fit(c,kramank,711,584,86,12,'700');
 }
-F.forEach(f=>$(f).addEventListener('input',()=>{lock();draw()}));
-function lock(){$('dpng').disabled=$('dpdf').disabled=true;kramank=''}
 if(document.fonts)document.fonts.load('600 18px "Noto Sans Devanagari"').then(draw);
+F.forEach(f=>$(f).addEventListener('input',()=>{$('dpng').disabled=$('dpdf').disabled=true;draw()}));
+
+/* ---------- Photo ---------- */
 $('photo').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{const im=new Image();im.onload=()=>{
  const k=document.createElement('canvas');k.width=260;k.height=318;const s=Math.max(260/im.width,318/im.height);
  k.getContext('2d').drawImage(im,(260-im.width*s)/2,(318-im.height*s)/2,im.width*s,im.height*s);
- photoData=k.toDataURL('image/jpeg',.8);photoImg=new Image();photoImg.onload=draw;photoImg.src=photoData;lock()};im.src=ev.target.result};r.readAsDataURL(f)};
-const jsonp=qs=>new Promise((res,rej)=>{const cb='cb'+Date.now()+Math.floor(Math.random()*1e6),s=document.createElement('script');
- const t=setTimeout(()=>{cl();rej(new Error('timeout'))},25000);
- function cl(){clearTimeout(t);delete window[cb];s.remove()}
- window[cb]=d=>{cl();res(d)};s.onerror=()=>{cl();rej(new Error('script load fail'))};
- s.src=APPS_SCRIPT_URL+'?'+qs+'&callback='+cb;document.body.appendChild(s)});
-async function viaFetch(d){const r=await fetch(APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(d)});return r.json()}
-async function viaBeacon(d){
- let k=d.kramank;
- if(k){const f=await jsonp('action=find&q='+encodeURIComponent(k));if(f.ok)return{ok:false,error:'duplicate'}}
- else{k=(await jsonp('action=next')).kramank}
- d.kramank=k;
- await fetch(APPS_SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(d)});
- for(let i=0;i<8;i++){await new Promise(r=>setTimeout(r,1500));const f=await jsonp('action=find&q='+encodeURIComponent(k));if(f.ok)return{ok:true,kramank:k}}
- return{ok:false,error:'save verify nahi hua (Apps Script me New version deploy kiya?)'}}
+ k.toBlob(b=>{photoBlob=b;photoImg=new Image();photoImg.onload=draw;photoImg.src=URL.createObjectURL(b);$('dpng').disabled=$('dpdf').disabled=true},'image/jpeg',.8)};im.src=ev.target.result};r.readAsDataURL(f)};
+
+/* ---------- Save / Update ---------- */
 async function save(){
  for(const f of F)if(!$(f).value.trim())return msg('Sab fields bharein: '+f,false);
  if(!/^\d{10}$/.test($('mobile').value))return msg('Mobile 10 digit ka hona chahiye',false);
- if(!photoData)return msg('Photo upload karein',false);
- const d={photo:photoData,kramank:$('kramankIn').value.trim()};F.forEach(f=>d[f]=$(f).value.trim());
+ if(!photoBlob&&!photoPath)return msg('Photo upload karein',false);
  $('save').disabled=true;msg('Save ho raha hai...');
  try{
-  if(!APPS_SCRIPT_URL){let n=1;try{n=(+localStorage.getItem('hrss_n')||0)+1;localStorage.setItem('hrss_n',n)}catch(e){}
-   kramank=d.kramank||('HRSS/'+new Date().getFullYear()+'/'+String(n).padStart(4,'0'));msg('APPS_SCRIPT_URL set nahi hai, sheet me save nahi hua.',false)}
-  else{
-   let j;
-   try{j=await viaFetch(d)}catch(e1){if(!(e1 instanceof TypeError))throw e1;msg('Doosre tareeke se save ho raha hai...');j=await viaBeacon(d)}
-   if(!j.ok){$('save').disabled=false;return msg(j.error==='duplicate'?'Ye क्रमांक pehle se use ho chuka hai, doosra daalein':'Save fail: '+(j.error||'server error'),false)}
-   kramank=j.kramank;msg('Google Sheet me save ho gaya ✔',true)}
-  draw();$('dpng').disabled=$('dpdf').disabled=false;
- }catch(e){msg('Save fail hua: '+((e&&e.message)||e),false)}
+  let path=photoPath;
+  if(photoBlob){path=crypto.randomUUID()+'.jpg';
+   const u=await sb.storage.from('photos').upload(path,photoBlob,{contentType:'image/jpeg'});if(u.error)throw u.error}
+  const row={photo_path:path};F.forEach(f=>row[f]=$(f).value.trim());
+  const k=$('kramankIn').value.trim();if(k)row.kramank=k;
+  const q=curId?sb.from('members').update(row).eq('id',curId):sb.from('members').insert(row);
+  const {data,error}=await q.select().single();
+  if(error){if(error.code==='23505')throw new Error('Ye क्रमांक pehle se use ho chuka hai, doosra daalein');throw error}
+  curId=data.id;kramank=data.kramank;photoPath=data.photo_path;photoBlob=null;
+  $('ft').textContent='पदाधिकारी (edit)';$('save').textContent='Update';$('del').classList.remove('hide');
+  draw();$('dpng').disabled=$('dpdf').disabled=false;msg('Save ho gaya ✔  क्रमांक: '+kramank,true);loadList();
+ }catch(e){msg('Save fail: '+((e&&e.message)||e),false)}
  $('save').disabled=false}
-async function find(){
- const q=$('q').value.trim();if(!q)return;if(!APPS_SCRIPT_URL)return msg('Search ke liye APPS_SCRIPT_URL zaroori hai',false);msg('Dhundh rahe hain...');
- try{const j=await jsonp('action=find&q='+encodeURIComponent(q));if(!j.ok)return msg('Record nahi mila',false);
-  F.forEach(f=>$(f).value=j[f]);kramank=j.kramank;photoData=j.photo;
-  if(j.photo){photoImg=new Image();photoImg.onload=draw;photoImg.src=j.photo}else{photoImg=null}
-  draw();$('dpng').disabled=$('dpdf').disabled=false;msg('Record mil gaya ✔',true)}catch(e){msg('Search fail hua: '+((e&&e.message)||e),false)}}
+
+/* ---------- List / Search / Load ---------- */
+async function loadList(){
+ let q=sb.from('members').select('*',{count:'exact'}).order('created_at',{ascending:false}).limit(100);
+ const s=$('q').value.trim().replace(/[,()%]/g,'');
+ if(s)q=q.or('naam.ilike.%'+s+'%,mobile.ilike.%'+s+'%,kramank.ilike.%'+s+'%');
+ const {data,count,error}=await q;
+ if(error){$('tb').innerHTML='<tr><td colspan=4>Error: '+error.message+'</td></tr>';return}
+ $('cnt').textContent=count;const tb=$('tb');tb.innerHTML='';
+ data.forEach(m=>{const tr=document.createElement('tr');tr.className='r';
+  [m.kramank,m.naam,m.pad,m.mobile].forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.appendChild(td)});
+  tr.onclick=()=>loadMember(m);tb.appendChild(tr)});
+ if(!data.length)tb.innerHTML='<tr><td colspan=4>Kuch nahi mila</td></tr>'}
+async function loadMember(m){
+ F.forEach(f=>$(f).value=m[f]||'');$('kramankIn').value='';kramank=m.kramank;curId=m.id;photoPath=m.photo_path||'';photoBlob=null;photoImg=null;
+ $('ft').textContent='पदाधिकारी (edit)';$('save').textContent='Update';$('del').classList.remove('hide');
+ if(photoPath){const {data}=await sb.storage.from('photos').download(photoPath);
+  if(data){photoImg=new Image();photoImg.onload=draw;photoImg.src=URL.createObjectURL(data)}}
+ draw();$('dpng').disabled=$('dpdf').disabled=false;msg('Record khul gaya: '+kramank,true);window.scrollTo({top:0,behavior:'smooth'})}
+function newForm(){
+ F.forEach(f=>$(f).value='');$('kramankIn').value='';$('photo').value='';kramank='';curId='';photoPath='';photoBlob=null;photoImg=null;
+ $('ft').textContent='नया पदाधिकारी';$('save').textContent='Save';$('del').classList.add('hide');
+ $('dpng').disabled=$('dpdf').disabled=true;msg('');draw()}
+async function del(){
+ if(!curId||!confirm(kramank+' ko hamesha ke liye delete karein?'))return;
+ const {error}=await sb.from('members').delete().eq('id',curId);if(error)return msg('Delete fail: '+error.message,false);
+ if(photoPath)await sb.storage.from('photos').remove([photoPath]);
+ newForm();loadList();msg('Delete ho gaya',true)}
+
+/* ---------- Download ---------- */
 function dl(t){
  const cv=$('cv'),name=($('naam').value||'card')+'_'+kramank.replace(/\//g,'-');
  if(t==='png'){const a=document.createElement('a');a.href=cv.toDataURL('image/png');a.download=name+'.png';a.click()}
