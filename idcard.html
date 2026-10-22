@@ -27,7 +27,7 @@ th,td{padding:8px;border-bottom:1px solid #ddd;text-align:left}tr.r{cursor:point
 .hide{display:none!important}
 </style></head><body>
 
-<div id="loginV" class="panel login">
+<div id="loginV" class="panel login hide">
  <h2>Admin Login</h2>
  <label>Email</label><input id="em" type="email" autocomplete="username">
  <label>Password</label><input id="pw" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
@@ -35,8 +35,8 @@ th,td{padding:8px;border-bottom:1px solid #ddd;text-align:left}tr.r{cursor:point
  <div style="margin-top:14px;font-size:11px;color:#888" id="srv"></div>
 </div>
 
-<div id="appV" class="hide">
-<div class="top"><span>हिन्दू रक्षा शक्ति संघ — नियुक्ति पत्र</span><span><span id="who" style="font-weight:400;margin-right:10px"></span><button onclick="logout()">Logout</button></span></div>
+<div id="appV">
+<div class="top"><span>हिन्दू रक्षा शक्ति संघ — नियुक्ति पत्र</span><span><span id="who" style="font-weight:400;margin-right:10px"></span><button id="lbtn" onclick="lbtn()">Admin Login</button></span></div>
 <div class="wrap">
  <div class="panel">
   <h2 id="ft">नया पदाधिकारी</h2>
@@ -54,7 +54,7 @@ th,td{padding:8px;border-bottom:1px solid #ddd;text-align:left}tr.r{cursor:point
   <div id="msg"></div>
  </div>
  <div class="pv"><canvas id="cv" width="801" height="1280"></canvas></div>
- <div class="list">
+ <div class="list hide" id="lst">
   <h2 style="margin:0 0 10px;color:#c8102e;font-size:18px">सभी पदाधिकारी (<span id="cnt">0</span>)</h2>
   <div class="s"><input id="q" placeholder="नाम / मोबाइल / क्रमांक से खोजें" onkeydown="if(event.key==='Enter')loadList()"><button class="alt" onclick="loadList()">Search</button></div>
   <div style="overflow-x:auto"><table><thead><tr><th>क्रमांक</th><th>नाम</th><th>पद</th><th>मोबाइल</th></tr></thead><tbody id="tb"></tbody></table></div>
@@ -70,7 +70,7 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 document.getElementById('srv').textContent='Server: '+SUPABASE_URL.replace('https://','')+' | v3';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const $=id=>document.getElementById(id), F=['anushansa','naam','pita','pad','vaidhta','pata','mobile'];
-let photoImg=null, photoBlob=null, photoPath='', kramank='', curId='', tpl=new Image(); tpl.onload=draw; tpl.src='template.jpg';
+let admin=false, photoImg=null, photoBlob=null, photoPath='', kramank='', curId='', tpl=new Image(); tpl.onload=draw; tpl.src='template.jpg';
 const msg=(t,ok)=>{$('msg').textContent=t;$('msg').style.color=ok===false?'#c00':'#080'};
 const FONT='"Noto Sans Devanagari","Mangal","Nirmala UI",Arial,sans-serif';
 
@@ -82,10 +82,11 @@ async function login(){
   if(error)throw error;
  }catch(e){$('lmsg').style.color='#c00';$('lmsg').textContent='Login fail: '+((e&&e.message)||e)+(/fetch/i.test((e&&e.message)||'')?' | Server: '+SUPABASE_URL:'')}
 }
-async function logout(){await sb.auth.signOut()}
+function lbtn(){if(admin)sb.auth.signOut();else $('loginV').classList.toggle('hide')}
 function gate(session){
- $('loginV').classList.toggle('hide',!!session);$('appV').classList.toggle('hide',!session);
- if(session){$('who').textContent=session.user.email;draw();loadList()}
+ admin=!!session;$('loginV').classList.add('hide');$('lbtn').textContent=admin?'Logout':'Admin Login';
+ $('who').textContent=admin?session.user.email:'';$('lst').classList.toggle('hide',!admin);
+ if(admin)loadList();else if(curId)newForm();
 }
 sb.auth.getSession().then(({data})=>gate(data.session));
 sb.auth.onAuthStateChange((_e,s)=>gate(s));
@@ -103,34 +104,39 @@ function draw(){
  if(kramank)fit(c,kramank,711,584,86,12,'700');
 }
 if(document.fonts)document.fonts.load('600 18px "Noto Sans Devanagari"').then(draw);
-F.forEach(f=>$(f).addEventListener('input',()=>{$('dpng').disabled=$('dpdf').disabled=true;draw()}));
+F.forEach(f=>$(f).addEventListener('input',()=>{$('dpng').disabled=$('dpdf').disabled=true;$('save').disabled=false;draw()}));
 
 /* ---------- Photo ---------- */
 $('photo').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{const im=new Image();im.onload=()=>{
  const k=document.createElement('canvas');k.width=260;k.height=318;const s=Math.max(260/im.width,318/im.height);
  k.getContext('2d').drawImage(im,(260-im.width*s)/2,(318-im.height*s)/2,im.width*s,im.height*s);
- k.toBlob(b=>{photoBlob=b;photoImg=new Image();photoImg.onload=draw;photoImg.src=URL.createObjectURL(b);$('dpng').disabled=$('dpdf').disabled=true},'image/jpeg',.8)};im.src=ev.target.result};r.readAsDataURL(f)};
+ k.toBlob(b=>{photoBlob=b;photoImg=new Image();photoImg.onload=draw;photoImg.src=URL.createObjectURL(b);$('dpng').disabled=$('dpdf').disabled=true;$('save').disabled=false},'image/jpeg',.8)};im.src=ev.target.result};r.readAsDataURL(f)};
 
 /* ---------- Save / Update ---------- */
 async function save(){
  for(const f of F)if(!$(f).value.trim())return msg('Sab fields bharein: '+f,false);
  if(!/^\d{10}$/.test($('mobile').value))return msg('Mobile 10 digit ka hona chahiye',false);
  if(!photoBlob&&!photoPath)return msg('Photo upload karein',false);
- $('save').disabled=true;msg('Save ho raha hai...');
+ $('save').disabled=true;msg('Save ho raha hai...');let locked=false;
  try{
   let path=photoPath;
   if(photoBlob){path=crypto.randomUUID()+'.jpg';
    const u=await sb.storage.from('photos').upload(path,photoBlob,{contentType:'image/jpeg'});if(u.error)throw u.error}
   const row={photo_path:path};F.forEach(f=>row[f]=$(f).value.trim());
   const k=$('kramankIn').value.trim();if(k)row.kramank=k;
-  const q=curId?sb.from('members').update(row).eq('id',curId):sb.from('members').insert(row);
-  const {data,error}=await q.select().single();
-  if(error){if(error.code==='23505')throw new Error('Ye क्रमांक pehle se use ho chuka hai, doosra daalein');throw error}
-  curId=data.id;kramank=data.kramank;photoPath=data.photo_path;photoBlob=null;
-  $('ft').textContent='पदाधिकारी (edit)';$('save').textContent='Update';$('del').classList.remove('hide');
-  draw();$('dpng').disabled=$('dpdf').disabled=false;msg('Save ho gaya ✔  क्रमांक: '+kramank,true);loadList();
- }catch(e){msg('Save fail: '+((e&&e.message)||e),false)}
- $('save').disabled=false}
+  if(admin){
+   const q=curId?sb.from('members').update(row).eq('id',curId):sb.from('members').insert(row);
+   const {data,error}=await q.select().single();if(error)throw error;
+   curId=data.id;kramank=data.kramank;
+   $('ft').textContent='पदाधिकारी (edit)';$('save').textContent='Update';$('del').classList.remove('hide');loadList();
+  }else{
+   const {data,error}=await sb.rpc('add_member',{p:row});if(error)throw error;
+   kramank=data;locked=true;
+  }
+  photoPath=path;photoBlob=null;draw();$('dpng').disabled=$('dpdf').disabled=false;
+  msg('Save ho gaya ✔  क्रमांक: '+kramank,true);
+ }catch(e){msg(e&&e.code==='23505'?'Ye क्रमांक pehle se use ho chuka hai, doosra daalein':'Save fail: '+((e&&e.message)||e),false)}
+ $('save').disabled=locked}
 
 /* ---------- List / Search / Load ---------- */
 async function loadList(){
@@ -153,7 +159,7 @@ async function loadMember(m){
 function newForm(){
  F.forEach(f=>$(f).value='');$('kramankIn').value='';$('photo').value='';kramank='';curId='';photoPath='';photoBlob=null;photoImg=null;
  $('ft').textContent='नया पदाधिकारी';$('save').textContent='Save';$('del').classList.add('hide');
- $('dpng').disabled=$('dpdf').disabled=true;msg('');draw()}
+ $('dpng').disabled=$('dpdf').disabled=true;$('save').disabled=false;msg('');draw()}
 async function del(){
  if(!curId||!confirm(kramank+' ko hamesha ke liye delete karein?'))return;
  const {error}=await sb.from('members').delete().eq('id',curId);if(error)return msg('Delete fail: '+error.message,false);
