@@ -843,7 +843,14 @@
         a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
             outline: 2px solid var(--accent-gold);
             outline-offset: 3px;
+            
         }
+
+        /* QR image ke liye */
+.intro-image-container{padding-top:0;aspect-ratio:2/3;width:100%;max-width:460px;justify-self:center;background:#fff;box-shadow:0 10px 40px rgba(0,0,0,.15)}
+.intro-image-container::before{display:none}
+.intro-image-container img{object-fit:contain;filter:none}
+@media (max-width:1024px){.intro-image-container{padding-top:0;max-width:380px;margin:0 auto}}
     </style>
 </head>
 <body>
