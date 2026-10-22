@@ -103,7 +103,7 @@ function draw(){
  c.font='600 17px '+FONT;const ls=wrap(c,$('pata').value,392).slice(0,3);
  ls.forEach((l,i)=>c.fillText(l,220,642-(ls.length-1-i)*26));
  if(photoImg)c.drawImage(photoImg,638,368,126,154);
- if(stampImg&&stampImg.complete&&stampImg.naturalWidth){const w=stampImg.naturalWidth,h=stampImg.naturalHeight,s=Math.min(150/w,150/h);c.drawImage(stampImg,780-w*s,1222-h*s,w*s,h*s)}
+ if(stampImg&&stampImg.complete&&stampImg.naturalWidth){const w=stampImg.naturalWidth,h=stampImg.naturalHeight,s=Math.min(150/w,150/h);c.drawImage(stampImg,700-w*s,1222-h*s,w*s,h*s)}
  if(kramank)fit(c,kramank,711,584,86,12,'700');
 }
 if(document.fonts)document.fonts.load('600 18px "Noto Sans Devanagari"').then(draw);
