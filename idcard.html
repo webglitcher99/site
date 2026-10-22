@@ -32,6 +32,7 @@ th,td{padding:8px;border-bottom:1px solid #ddd;text-align:left}tr.r{cursor:point
  <label>Email</label><input id="em" type="email" autocomplete="username">
  <label>Password</label><input id="pw" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
  <button onclick="login()">Login</button><div id="lmsg"></div>
+ <div style="margin-top:14px;font-size:11px;color:#888" id="srv"></div>
 </div>
 
 <div id="appV" class="hide">
@@ -63,9 +64,10 @@ th,td{padding:8px;border-bottom:1px solid #ddd;text-align:left}tr.r{cursor:point
 
 <script>
 // ====== SETTINGS: Supabase > Project Settings > API se copy karein ======
-const SUPABASE_URL = "https://YOUR-PROJECT.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_WEPBvlLv3FJ_5sbiXhu3VQ_kWnbGBd2";
+const SUPABASE_URL = "https://gxidzpucieqafhtfgggy.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd4aWR6cHVjaWVxYWZodGZnZ2d5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI2MzMzODgsImV4cCI6MjEwODIwOTM4OH0.-dFo0DTpBvvkt9kzSfhCofdmXApzmzI8F7mGyWV5OH4";
 // =======================================================================
+document.getElementById('srv').textContent='Server: '+SUPABASE_URL.replace('https://','')+' | v3';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const $=id=>document.getElementById(id), F=['anushansa','naam','pita','pad','vaidhta','pata','mobile'];
 let photoImg=null, photoBlob=null, photoPath='', kramank='', curId='', tpl=new Image(); tpl.onload=draw; tpl.src='template.jpg';
@@ -74,9 +76,11 @@ const FONT='"Noto Sans Devanagari","Mangal","Nirmala UI",Arial,sans-serif';
 
 /* ---------- Login ---------- */
 async function login(){
- $('lmsg').textContent='...';
- const {error}=await sb.auth.signInWithPassword({email:$('em').value.trim(),password:$('pw').value});
- if(error){$('lmsg').style.color='#c00';$('lmsg').textContent='Login fail: '+error.message}
+ $('lmsg').style.color='#333';$('lmsg').textContent='...';
+ try{
+  const {error}=await sb.auth.signInWithPassword({email:$('em').value.trim(),password:$('pw').value});
+  if(error)throw error;
+ }catch(e){$('lmsg').style.color='#c00';$('lmsg').textContent='Login fail: '+((e&&e.message)||e)+(/fetch/i.test((e&&e.message)||'')?' | Server: '+SUPABASE_URL:'')}
 }
 async function logout(){await sb.auth.signOut()}
 function gate(session){
