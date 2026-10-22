@@ -49,6 +49,8 @@ th,td{padding:8px;border-bottom:1px solid #ddd;text-align:left}tr.r{cursor:point
   <label>मोबाइल</label><input id="mobile" inputmode="numeric" maxlength="10">
   <label>फोटो</label><input type="file" id="photo" accept="image/*">
   <label>क्रमांक (खाली छोड़ें = अपने आप बनेगा)</label><input id="kramankIn" placeholder="जैसे HRSS/2026/0101">
+  <div id="stampBox" class="hide"><label>मोहर (Stamp) — सिर्फ Admin</label><input type="file" id="stamp" accept="image/*">
+  <button class="gr" type="button" onclick="useSavedStamp()">सेव्ड मोहर लगाएं</button><button class="gr" type="button" onclick="clearStamp()">मोहर हटाएं</button></div>
   <button id="save" onclick="save()">Save</button><button class="gr" onclick="newForm()">नया फॉर्म</button>
   <div><button id="dpng" class="alt" onclick="dl('png')" disabled>Download PNG</button><button id="dpdf" class="alt" onclick="dl('pdf')" disabled>Download PDF</button><button id="del" class="gr hide" onclick="del()">Delete</button></div>
   <div id="msg"></div>
@@ -70,7 +72,7 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 document.getElementById('srv').textContent='Server: '+SUPABASE_URL.replace('https://','')+' | v3';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const $=id=>document.getElementById(id), F=['anushansa','naam','pita','pad','vaidhta','pata','mobile'];
-let admin=false, photoImg=null, photoBlob=null, photoPath='', kramank='', curId='', tpl=new Image(); tpl.onload=draw; tpl.src='template.jpg';
+let admin=false, stampImg=null, stampBlob=null, stampPath='', photoImg=null, photoBlob=null, photoPath='', kramank='', curId='', tpl=new Image(); tpl.onload=draw; tpl.src='template.jpg';
 const msg=(t,ok)=>{$('msg').textContent=t;$('msg').style.color=ok===false?'#c00':'#080'};
 const FONT='"Noto Sans Devanagari","Mangal","Nirmala UI",Arial,sans-serif';
 
@@ -85,7 +87,7 @@ async function login(){
 function lbtn(){if(admin)sb.auth.signOut();else $('loginV').classList.toggle('hide')}
 function gate(session){
  admin=!!session;$('loginV').classList.add('hide');$('lbtn').textContent=admin?'Logout':'Admin Login';
- $('who').textContent=admin?session.user.email:'';$('lst').classList.toggle('hide',!admin);
+ $('who').textContent=admin?session.user.email:'';$('lst').classList.toggle('hide',!admin);$('stampBox').classList.toggle('hide',!admin);if(!admin&&stampImg)clearStamp();
  if(admin)loadList();else if(curId)newForm();
 }
 sb.auth.getSession().then(({data})=>gate(data.session));
@@ -101,6 +103,7 @@ function draw(){
  c.font='600 17px '+FONT;const ls=wrap(c,$('pata').value,392).slice(0,3);
  ls.forEach((l,i)=>c.fillText(l,220,642-(ls.length-1-i)*26));
  if(photoImg)c.drawImage(photoImg,638,368,126,154);
+ if(stampImg&&stampImg.complete&&stampImg.naturalWidth){const w=stampImg.naturalWidth,h=stampImg.naturalHeight,s=Math.min(150/w,150/h);c.drawImage(stampImg,780-w*s,1222-h*s,w*s,h*s)}
  if(kramank)fit(c,kramank,711,584,86,12,'700');
 }
 if(document.fonts)document.fonts.load('600 18px "Noto Sans Devanagari"').then(draw);
@@ -112,6 +115,16 @@ $('photo').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileR
  k.getContext('2d').drawImage(im,(260-im.width*s)/2,(318-im.height*s)/2,im.width*s,im.height*s);
  k.toBlob(b=>{photoBlob=b;photoImg=new Image();photoImg.onload=draw;photoImg.src=URL.createObjectURL(b);$('dpng').disabled=$('dpdf').disabled=true;$('save').disabled=false},'image/jpeg',.8)};im.src=ev.target.result};r.readAsDataURL(f)};
 
+/* ---------- Stamp (admin) ---------- */
+$('stamp').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{const im=new Image();im.onload=()=>{
+ const m=Math.min(1,300/Math.max(im.width,im.height)),k=document.createElement('canvas');k.width=Math.round(im.width*m);k.height=Math.round(im.height*m);
+ k.getContext('2d').drawImage(im,0,0,k.width,k.height);
+ try{localStorage.setItem('hrss_stamp',k.toDataURL('image/png'))}catch(_){}
+ k.toBlob(b=>setStamp(b),'image/png')};im.src=ev.target.result};r.readAsDataURL(f)};
+function setStamp(b){stampBlob=b;stampImg=new Image();stampImg.onload=draw;stampImg.src=URL.createObjectURL(b);$('dpng').disabled=$('dpdf').disabled=true;$('save').disabled=false}
+function clearStamp(){stampBlob=null;stampImg=null;stampPath='';$('stamp').value='';$('dpng').disabled=$('dpdf').disabled=true;$('save').disabled=false;draw()}
+async function useSavedStamp(){let d='';try{d=localStorage.getItem('hrss_stamp')||''}catch(_){}if(!d)return msg('Pehle ek मोहर upload karein',false);setStamp(await (await fetch(d)).blob())}
+
 /* ---------- Save / Update ---------- */
 async function save(){
  for(const f of F)if(!$(f).value.trim())return msg('Sab fields bharein: '+f,false);
@@ -122,7 +135,10 @@ async function save(){
   let path=photoPath;
   if(photoBlob){path=crypto.randomUUID()+'.jpg';
    const u=await sb.storage.from('photos').upload(path,photoBlob,{contentType:'image/jpeg'});if(u.error)throw u.error}
-  const row={photo_path:path};F.forEach(f=>row[f]=$(f).value.trim());
+  let sp=stampPath;
+  if(admin&&stampBlob){sp='stamps/'+crypto.randomUUID()+'.png';
+   const u2=await sb.storage.from('photos').upload(sp,stampBlob,{contentType:'image/png'});if(u2.error)throw u2.error}
+  const row={photo_path:path};if(admin)row.stamp_path=sp||null;F.forEach(f=>row[f]=$(f).value.trim());
   const k=$('kramankIn').value.trim();if(k)row.kramank=k;
   if(admin){
    const q=curId?sb.from('members').update(row).eq('id',curId):sb.from('members').insert(row);
@@ -133,7 +149,7 @@ async function save(){
    const {data,error}=await sb.rpc('add_member',{p:row});if(error)throw error;
    kramank=data;locked=true;
   }
-  photoPath=path;photoBlob=null;draw();$('dpng').disabled=$('dpdf').disabled=false;
+  photoPath=path;photoBlob=null;if(admin){stampPath=sp||'';stampBlob=null}draw();$('dpng').disabled=$('dpdf').disabled=false;
   msg('Save ho gaya ✔  क्रमांक: '+kramank,true);
  }catch(e){msg(e&&e.code==='23505'?'Ye क्रमांक pehle se use ho chuka hai, doosra daalein':'Save fail: '+((e&&e.message)||e),false)}
  $('save').disabled=locked}
@@ -151,19 +167,21 @@ async function loadList(){
   tr.onclick=()=>loadMember(m);tb.appendChild(tr)});
  if(!data.length)tb.innerHTML='<tr><td colspan=4>Kuch nahi mila</td></tr>'}
 async function loadMember(m){
- F.forEach(f=>$(f).value=m[f]||'');$('kramankIn').value='';kramank=m.kramank;curId=m.id;photoPath=m.photo_path||'';photoBlob=null;photoImg=null;
+ F.forEach(f=>$(f).value=m[f]||'');$('kramankIn').value='';kramank=m.kramank;curId=m.id;photoPath=m.photo_path||'';photoBlob=null;photoImg=null;stampImg=null;stampBlob=null;stampPath=m.stamp_path||'';$('stamp').value='';
  $('ft').textContent='पदाधिकारी (edit)';$('save').textContent='Update';$('del').classList.remove('hide');
  if(photoPath){const {data}=await sb.storage.from('photos').download(photoPath);
   if(data){photoImg=new Image();photoImg.onload=draw;photoImg.src=URL.createObjectURL(data)}}
+ if(stampPath){const {data}=await sb.storage.from('photos').download(stampPath);
+  if(data){stampImg=new Image();stampImg.onload=draw;stampImg.src=URL.createObjectURL(data)}}
  draw();$('dpng').disabled=$('dpdf').disabled=false;msg('Record khul gaya: '+kramank,true);window.scrollTo({top:0,behavior:'smooth'})}
 function newForm(){
- F.forEach(f=>$(f).value='');$('kramankIn').value='';$('photo').value='';kramank='';curId='';photoPath='';photoBlob=null;photoImg=null;
+ F.forEach(f=>$(f).value='');$('kramankIn').value='';$('photo').value='';kramank='';curId='';photoPath='';photoBlob=null;photoImg=null;stampImg=null;stampBlob=null;stampPath='';$('stamp').value='';
  $('ft').textContent='नया पदाधिकारी';$('save').textContent='Save';$('del').classList.add('hide');
  $('dpng').disabled=$('dpdf').disabled=true;$('save').disabled=false;msg('');draw()}
 async function del(){
  if(!curId||!confirm(kramank+' ko hamesha ke liye delete karein?'))return;
  const {error}=await sb.from('members').delete().eq('id',curId);if(error)return msg('Delete fail: '+error.message,false);
- if(photoPath)await sb.storage.from('photos').remove([photoPath]);
+ {const fl=[photoPath,stampPath].filter(Boolean);if(fl.length)await sb.storage.from('photos').remove(fl)}
  newForm();loadList();msg('Delete ho gaya',true)}
 
 /* ---------- Download ---------- */
