@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /disha.html
+
+Sitemap: https://webglitcher99.github.io/site/sitemap.xml
