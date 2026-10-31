@@ -378,6 +378,27 @@
             word-break: break-word;
         }
 
+        .card-pad {
+            display: inline-block;
+            align-self: flex-start;
+            font-family: var(--font-hindi);
+            font-size: 0.85rem;
+            color: var(--accent-saffron);
+            border: 1px solid rgba(226, 88, 34, 0.5);
+            padding: 0.1rem 0.6rem;
+            margin-bottom: 0.6rem;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .id-pad {
+            font-family: var(--font-hindi);
+            font-size: 0.95rem;
+            color: var(--accent-saffron);
+            margin: -0.3rem 0 0.9rem;
+            word-break: break-word;
+        }
+
         .card-row i { color: var(--accent-saffron); font-size: 0.72rem; margin-top: 5px; width: 14px; flex-shrink: 0; }
         .card-row span { color: var(--text-muted); margin-right: 2px; }
         .card-row a { color: var(--accent-saffron); font-weight: 500; }
@@ -455,6 +476,129 @@
         /* =========================================
            MOTION & RESPONSIVE
            ========================================= */
+        /* =========================================
+           ID CARD POPUP
+           ========================================= */
+        .mcard { cursor: pointer; }
+
+        .id-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(18, 18, 18, 0.85);
+            backdrop-filter: blur(6px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .id-modal.open { display: flex; }
+
+        .id-card {
+            position: relative;
+            width: 100%;
+            max-width: 360px;
+            background: var(--bg-charcoal);
+            border: 1px solid var(--accent-gold);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+            color: var(--text-light);
+            text-align: center;
+            animation: fadeIn 0.3s ease both;
+        }
+
+        .id-card::before {
+            content: '';
+            position: absolute;
+            inset: 6px;
+            border: 1px solid rgba(199, 161, 90, 0.3);
+            pointer-events: none;
+        }
+
+        .id-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 2;
+            width: 34px;
+            height: 34px;
+            border: 1px solid rgba(245, 242, 235, 0.3);
+            background: rgba(18, 18, 18, 0.6);
+            color: var(--text-light);
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .id-close:hover { background: var(--accent-saffron); border-color: var(--accent-saffron); }
+
+        .id-head {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 1.4rem 3rem 1rem;
+            background: linear-gradient(135deg, rgba(226, 88, 34, 0.3), transparent);
+            border-bottom: 1px solid rgba(199, 161, 90, 0.4);
+        }
+
+        .id-head img { height: 52px; width: auto; object-fit: contain; }
+        .id-head div { text-align: left; line-height: 1.1; }
+        .id-head strong { display: block; font-family: var(--font-display); font-size: 1.4rem; letter-spacing: 0.08em; }
+        .id-head small { font-family: var(--font-hindi); font-size: 0.8rem; color: var(--accent-gold); }
+
+        .id-photo {
+            width: 170px;
+            aspect-ratio: 3/4;
+            margin: 1.6rem auto 1.2rem;
+            border: 2px solid var(--accent-gold);
+            background: var(--bg-charcoal-light);
+            overflow: hidden;
+        }
+
+        .id-photo img { width: 100%; height: 100%; object-fit: cover; }
+        .id-photo .no-img { font-size: 3.5rem; }
+
+        .id-body { padding: 0 1.8rem 1.4rem; }
+
+        .id-name {
+            font-family: var(--font-hindi);
+            font-size: 1.6rem;
+            line-height: 1.25;
+            color: var(--accent-gold);
+            padding-bottom: 0.8rem;
+            margin-bottom: 0.9rem;
+            border-bottom: 1px solid rgba(199, 161, 90, 0.4);
+            word-break: break-word;
+        }
+
+        .id-row { margin-bottom: 0.8rem; }
+
+        .id-row span {
+            display: block;
+            font-family: var(--font-hindi);
+            font-size: 0.8rem;
+            color: var(--accent-saffron);
+            letter-spacing: 0.1em;
+        }
+
+        .id-row p {
+            font-family: var(--font-hindi);
+            font-size: 1.05rem;
+            line-height: 1.5;
+            color: var(--text-light);
+            word-break: break-word;
+        }
+
+        .id-foot {
+            padding: 0.8rem;
+            font-family: var(--font-hindi);
+            font-size: 0.85rem;
+            color: var(--accent-gold);
+            background: rgba(199, 161, 90, 0.08);
+            border-top: 1px solid rgba(199, 161, 90, 0.4);
+        }
+
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -508,25 +652,16 @@
         </div>
     </header>
 
-    <!-- STATS -->
-    <section class="stats">
-        <div class="stat"><span class="stat-n" id="statTotal">—</span><div class="stat-l">कुल सदस्य</div></div>
-        <div class="stat"><span class="stat-n" id="statTech">—</span><div class="stat-l">तकनीकी सदस्य</div></div>
-        <div class="stat"><span class="stat-n" id="statSadasya">—</span><div class="stat-l">साधारण सदस्य</div></div>
-        <div class="stat"><span class="stat-n" id="statPad">—</span><div class="stat-l">पदाधिकारी</div></div>
-    </section>
-
     <!-- CONTROLS -->
     <div class="controls">
         <div class="search-wrap">
-            <input type="text" id="searchInput" placeholder="नाम खोजें..." aria-label="नाम खोजें">
+            <input type="text" id="searchInput" placeholder="नाम या क्रमांक खोजें..." aria-label="नाम या क्रमांक खोजें">
         </div>
         <div class="filters">
             <button class="flt on" data-filter="all">सभी</button>
-            <button class="flt" data-filter="padhadhikari">पदाधिकारी</button>
-            <button class="flt" data-filter="rakshak">हिंदू रक्षक</button>
-            <button class="flt" data-filter="sadasya">सदस्य</button>
-            <button class="flt" data-filter="technical">टेक्निकल</button>
+            <button class="flt" data-filter="member">सदस्य</button>
+            <button class="flt" data-filter="head">अध्यक्ष</button>
+            <button class="flt" data-filter="staff">स्टाफ</button>
         </div>
     </div>
 
@@ -546,6 +681,28 @@
             <p>कोई सदस्य नहीं मिला</p>
         </div>
     </main>
+
+    <!-- ID CARD POPUP -->
+    <div class="id-modal" id="idModal" onclick="if(event.target===this)closeCard()" role="dialog" aria-modal="true" aria-label="आईडी कार्ड">
+        <div class="id-card">
+            <button class="id-close" id="idClose" onclick="closeCard()" aria-label="बंद करें"><i class="fas fa-xmark"></i></button>
+            <div class="id-head">
+                <img src="https://iili.io/q3JiQqP.png" alt="HRSS" onerror="logoFallback(this)">
+                <div>
+                    <strong>HRSS</strong>
+                    <small>हिन्दू रक्षक शक्ति संघ</small>
+                </div>
+            </div>
+            <div class="id-photo" id="idPhoto"></div>
+            <div class="id-body">
+                <div class="id-name" id="idName"></div>
+                <div class="id-pad" id="idPad"></div>
+                <div class="id-row"><span>पिता</span><p id="idPita"></p></div>
+                <div class="id-row"><span>पता</span><p id="idPata"></p></div>
+            </div>
+            <div class="id-foot">धर्मो रक्षति रक्षितः</div>
+        </div>
+    </div>
 
     <!-- FOOTER -->
     <footer class="footer">
@@ -574,28 +731,76 @@
         // ════════════════════════════════════════════
         //  GOOGLE SHEET (members list)
         //  Sheet must be shared as "Anyone with the link – Viewer"
-        //  Columns: A=naam, B=pad, C=pita, D=aayu, E=mobile,
-        //           F=pata, G=vibhag, H=rajya, I=photo, J=dept_label
+        //  Columns are found by their HEADER NAME in row 1 (any order):
+        //  naam, pita, pata, photo_url (and photo_path as backup).
+        //  Page par sirf photo, naam, pita, pata dikhte hain. Baaki sab ignore.
         // ════════════════════════════════════════════
-        const SHEET_ID = '1e5-GjWpqgu2iSuBLumjQMdGBTvre9YilbZRYrQgqqGQ';
+        const SHEET_ID = '1w6O3snITgQLr37VYTeYz3dvXh2iiNZQ86uWobTtYvXU';
         const SHEET_NAME = 'Sheet1';
-        const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
+        const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&headers=1&sheet=${encodeURIComponent(SHEET_NAME)}`;
+        const SUPABASE_URL = 'https://gxidzpucieqafhtfgggy.supabase.co';
 
         let allMembers = [];
         let activeFilter = 'all';
 
-        const deptLabelMap = {
-            'padhadhikari': 'पदाधिकारी',
-            'rakshak':      'हिंदू रक्षक',
-            'sadasya':      'सदस्य',
-            'technical':    'टेक्निकल'
-        };
+        // How the "pad" (post) decides the filter group. Edit these words if needed.
+        //   head   -> pad contains one of HEAD_WORDS   (e.g. ग्राम अध्यक्ष, राष्ट्रीय अध्यक्ष)
+        //   member -> pad contains one of MEMBER_WORDS (e.g. हिंदू रक्षक) or pad is empty
+        //   staff  -> every other post
+        const HEAD_WORDS   = ['अध्यक्ष'];
+        const MEMBER_WORDS = ['रक्षक'];
+        function groupOf(pad) {
+            const p = String(pad || '').trim();
+            if (!p) return 'member';
+            if (HEAD_WORDS.some(w => p.includes(w))) return 'head';
+            if (MEMBER_WORDS.some(w => p.includes(w))) return 'member';
+            return 'staff';
+        }
 
+        // Photo missing/broken -> placeholder icon
         function noPhoto(img) {
+            const alt = img.dataset.alt;
+            if (alt && !img.dataset.tried) { img.dataset.tried = '1'; img.src = alt; return; }
             const p = img.parentElement;
             img.remove();
             p.insertAdjacentHTML('afterbegin', '<div class="no-img"><i class="fas fa-user"></i></div>');
         }
+
+        // Google Drive link -> direct image URL (other links are used as they are)
+        function driveUrl(url, size) {
+            url = String(url || '').trim();
+            if (!url) return '';
+            const sz = size || 'w400';
+            const m1 = url.match(/\/file\/d\/([^/]+)/);
+            if (m1) return `https://drive.google.com/thumbnail?id=${m1[1]}&sz=${sz}`;
+            const m2 = url.match(/[?&]id=([^&]+)/);
+            if (m2) return `https://drive.google.com/thumbnail?id=${m2[1]}&sz=${sz}`;
+            return /^https?:\/\//i.test(url) ? url : '';
+        }
+
+        // ID card popup
+        function openCard(m) {
+            const src = driveUrl(m.photo, 'w800');
+            document.getElementById('idPhoto').innerHTML = src
+                ? `<img src="${esc(src)}" data-alt="${esc(m.photo2)}" alt="${esc(m.naam)}" referrerpolicy="no-referrer" onerror="noPhoto(this)">`
+                : `<div class="no-img"><i class="fas fa-user"></i></div>`;
+            document.getElementById('idName').textContent = m.naam;
+            const idPad = document.getElementById('idPad');
+            idPad.textContent = m.pad || '';
+            idPad.style.display = m.pad ? 'block' : 'none';
+            document.getElementById('idPita').textContent = m.pita || '—';
+            document.getElementById('idPata').textContent = m.pata || '—';
+            document.getElementById('idModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+            document.getElementById('idClose').focus();
+        }
+
+        function closeCard() {
+            document.getElementById('idModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCard(); });
 
         // Escape sheet text before putting it in HTML
         const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -608,46 +813,64 @@
             try {
                 const res  = await fetch(API_URL);
                 const text = await res.text();
-                const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*?)\);/)[1]);
+                const mm = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*?)\);/);
+                if (!mm) throw new Error('Sheet public nahi hai, ya Sheet ID / tab ka naam (' + SHEET_NAME + ') galat hai');
+                const json = JSON.parse(mm[1]);
+                if (json.status === 'error') throw new Error((json.errors && json.errors[0] && json.errors[0].detailed_message) || 'Google ne error diya');
                 const rows = json.table.rows;
 
+                // find columns by header name, so column order does not matter
+                const cols = json.table.cols.map(c => String(c.label || '').trim().toLowerCase());
+                const iNaam = cols.indexOf('naam');
+                const iPita = cols.indexOf('pita');
+                const iPata = cols.indexOf('pata');
+                const iKramank = cols.indexOf('kramank');
+                const iPad = cols.indexOf('pad');
+                const iPhotoUrl  = cols.indexOf('photo_url');
+                const iPhotoPath = cols.indexOf('photo_path');
+                if (iNaam < 0 || iPita < 0 || iPata < 0) {
+                    throw new Error('Header row me naam / pita / pata nahi mila. Mile: ' + cols.join(', '));
+                }
+                const cell = (r, i) => (i >= 0 && r.c[i] && r.c[i].v != null) ? String(r.c[i].v).trim() : '';
+
                 allMembers = rows
-                    .filter(r => r.c[0] && r.c[0].v)
-                    .map((r, i) => ({
-                        naam:       r.c[0]?.v || '',
-                        pad:        r.c[1]?.v || '',
-                        pita:       r.c[2]?.v || '',
-                        aayu:       r.c[3]?.v || '',
-                        mobile:     String(r.c[4]?.v || ''),
-                        pata:       r.c[5]?.v || '',
-                        vibhag:     String(r.c[6]?.v || 'sadasya').toLowerCase().trim(),
-                        rajya:      String(r.c[7]?.v || '').toLowerCase().trim(),
-                        photo:      r.c[8]?.v || '',
-                        dept_label: r.c[9]?.v || '',
-                        sr:         i + 1,
-                        delay:      Math.min(i, 20) * 0.04
-                    }));
+                    .filter(r => cell(r, iNaam))
+                    .map((r, i) => {
+                        const signed = cell(r, iPhotoUrl);
+                        const path   = cell(r, iPhotoPath);
+                        const publicUrl = path
+                            ? `${SUPABASE_URL}/storage/v1/object/public/photos/${encodeURIComponent(path)}`
+                            : '';
+                        return {
+                            kramank: cell(r, iKramank),
+                            pad:    cell(r, iPad),
+                            group:  groupOf(cell(r, iPad)),
+                            naam:   cell(r, iNaam),
+                            pita:   cell(r, iPita),
+                            pata:   cell(r, iPata),
+                            photo:  signed || publicUrl,
+                            photo2: signed ? publicUrl : '',   // backup if the signed link has expired
+                            delay:  Math.min(i, 20) * 0.04
+                        };
+                    });
+
+                // sort by number (uses the last number in kramank, e.g. HRSS/2026/0004 -> 4); empty ones go last
+                const numOf = k => { const mm = String(k).match(/(\d+)\D*$/); return mm ? parseInt(mm[1], 10) : Infinity; };
+                allMembers.sort((a, b) =>
+                    numOf(a.kramank) - numOf(b.kramank) ||
+                    a.kramank.localeCompare(b.kramank, 'hi', { numeric: true })
+                );
+                allMembers.forEach((m, i) => { m.delay = Math.min(i, 20) * 0.04; });
 
                 document.getElementById('loadingState').style.display = 'none';
-                updateStats();
                 renderCards(allMembers);
             } catch (e) {
                 document.getElementById('loadingState').style.display = 'none';
                 document.getElementById('errorState').style.display = 'block';
                 document.getElementById('errorMsg').textContent =
-                    'डेटा लोड नहीं हो सका। Sheet ID सही है? Sheet "Anyone with link" पर public है?';
+                    'डेटा लोड नहीं हो सका। कारण: ' + ((e && e.message) ? e.message : String(e));
                 console.error(e);
             }
-        }
-
-        // Google Drive link -> direct image URL
-        function driveUrl(url) {
-            if (!url) return '';
-            const m1 = url.match(/\/file\/d\/([^/]+)/);
-            if (m1) return `https://drive.google.com/thumbnail?id=${m1[1]}&sz=w400`;
-            const m2 = url.match(/[?&]id=([^&]+)/);
-            if (m2) return `https://drive.google.com/thumbnail?id=${m2[1]}&sz=w400`;
-            return url;
         }
 
         function renderCards(members) {
@@ -661,24 +884,30 @@
             document.getElementById('emptyState').style.display = 'none';
 
             members.forEach(m => {
-                const deptLabel = m.dept_label || deptLabelMap[m.vibhag] || m.vibhag;
-                const photoSrc  = driveUrl(m.photo);
-
                 const card = document.createElement('article');
                 card.className = 'mcard';
                 card.style.animationDelay = m.delay + 's';
+
+                const photoSrc = driveUrl(m.photo, 'w400');
+                card.tabIndex = 0;
+                card.setAttribute('role', 'button');
+                card.setAttribute('aria-label', m.naam + ' का आईडी कार्ड खोलें');
+                card.addEventListener('click', () => openCard(m));
+                card.addEventListener('keydown', e => {
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCard(m); }
+                });
 
                 card.innerHTML = `
                     <div class="card-top">
                         <div class="card-photo">
                             ${photoSrc
-                                ? `<img src="${esc(photoSrc)}" alt="${esc(m.naam)}" loading="lazy" onerror="noPhoto(this)">`
+                                ? `<img src="${esc(photoSrc)}" data-alt="${esc(m.photo2)}" alt="${esc(m.naam)}" loading="lazy" referrerpolicy="no-referrer" onerror="noPhoto(this)">`
                                 : `<div class="no-img"><i class="fas fa-user"></i></div>`}
-                            <div class="photo-dept">${esc(deptLabel)}</div>
                         </div>
                         <div class="card-info">
-                            <div class="card-sr">क्रमांक <b>${String(m.sr).padStart(2, '0')}</b></div>
+                            ${m.kramank ? `<div class="card-sr">क्रमांक <b>${esc(m.kramank)}</b></div>` : ''}
                             <div class="card-name">${esc(m.naam)}</div>
+                            ${m.pad ? `<div class="card-pad">${esc(m.pad)}</div>` : ''}
                             <div class="card-row"><i class="fas fa-user"></i><div><span>पिता :</span> ${esc(m.pita)}</div></div>
                             <div class="card-row"><i class="fas fa-location-dot"></i><div>${esc(m.pata)}</div></div>
                         </div>
@@ -688,18 +917,11 @@
             });
         }
 
-        function updateStats() {
-            document.getElementById('statTotal').textContent   = allMembers.length;
-            document.getElementById('statTech').textContent    = allMembers.filter(m => m.vibhag === 'technical').length;
-            document.getElementById('statSadasya').textContent = allMembers.filter(m => m.vibhag === 'sadasya').length;
-            document.getElementById('statPad').textContent     = allMembers.filter(m => m.vibhag === 'padhadhikari').length;
-        }
-
         function filterCards() {
-            const q = document.getElementById('searchInput').value.toLowerCase();
+            const q = document.getElementById('searchInput').value.toLowerCase().trim();
             renderCards(allMembers.filter(m =>
-                (activeFilter === 'all' || m.vibhag === activeFilter) &&
-                (!q || m.naam.toLowerCase().includes(q))
+                (activeFilter === 'all' || m.group === activeFilter) &&
+                (!q || m.naam.toLowerCase().includes(q) || String(m.kramank).toLowerCase().includes(q))
             ));
         }
 
