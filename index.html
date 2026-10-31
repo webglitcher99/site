@@ -892,7 +892,7 @@
             <a href="#about">हमारे बारे में</a>
             <a href="right.html">वैध</a>
             <a href="gallery.html">गैलरी</a>
-            <a href="query.html">सदस्य</a>
+            <a href="members.html">सदस्य</a>
             <a href="#contact">संपर्क</a>
             <!-- REPLACE # WITH ACTUAL JOINING FORM LINK -->
             <a href="idcard.html" class="btn-nav" target="_blank" rel="noopener">सदस्य बनें</a>
@@ -1098,7 +1098,7 @@
             }
         });
         // Close mobile menu when a link is clicked
-        document.querySelectorAll('.nav-links a').forEach(link => {
+        document.membersSelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
                 if (isMenuOpen) toggleMenu();
             });
@@ -1112,8 +1112,8 @@
 
         // Send any form to the Google Sheet
         function bindSheetForm(form) {
-            const status = form.querySelector('.form-status');
-            const btn = form.querySelector('button[type="submit"]');
+            const status = form.membersSelector('.form-status');
+            const btn = form.membersSelector('button[type="submit"]');
             const label = btn.textContent;
 
             form.addEventListener('submit', async (e) => {
